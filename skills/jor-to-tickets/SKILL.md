@@ -16,7 +16,7 @@ Tickets are private working files: one file per ticket under `.scratch/<feature-
 
 ### 1. Gather context
 
-Work from whatever is already in the conversation context. If the user passes a reference (a spec path, a ticket URL) as an argument, read its full body and comments. When `/jor-to-spec` already wrote `.scratch/<feature-slug>/spec.md`, work from that spec and reuse its `<feature-slug>`.
+Work from whatever is already in the conversation context. If the user passes a reference (a spec path, a ticket URL) as an argument, read its full body and comments. When `.scratch/<feature-slug>/spec.md` already exists, work from that spec and reuse its `<feature-slug>`.
 
 ### 2. Explore the codebase (optional)
 
@@ -63,7 +63,7 @@ Keep `.scratch/` out of git before writing anything. Check `.git/info/exclude` (
 
 Write the approved tickets as one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order (blockers first). Each file's "Blocked by" lists the numbers/titles it depends on. Use the per-ticket file template below: one ticket per file, never a single combined file. Do not commit them.
 
-Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom. Take each ticket back through `/jor-get-ready`.
+Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom. Tell the user to run `/jor-get-ready` for each ticket.
 
 Do NOT close or modify the source ticket or spec.
 

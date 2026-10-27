@@ -1,6 +1,6 @@
 ---
 name: jor-restate
-description: Restate my goal and the problem I want solved before work starts. Use only when I explicitly invoke /jor-restate or $jor-restate, or ask to use the jor-restate skill.
+description: Restate the user's goal and the problem they want solved before work starts. Use only when the user explicitly invokes /jor-restate or $jor-restate, or asks to use the jor-restate skill.
 disable-model-invocation: true
 metadata:
   based-on: "original by Jorge (restate)"

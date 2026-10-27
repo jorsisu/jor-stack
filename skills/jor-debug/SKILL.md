@@ -29,7 +29,7 @@ Spend disproportionate effort here. **Be aggressive. Be creative. Refuse to give
 1. **Failing test** at whatever seam reaches the bug: unit, integration, e2e.
 2. **Curl / HTTP script** against a running dev server.
 3. **CLI invocation** with a fixture input, diffing stdout against a known-good snapshot.
-4. **Browser drive** through Chrome DevTools MCP (or the project's `verify-<project>` skill from `/jor-verify`), or a headless browser script (Playwright / Puppeteer), that drives the UI and asserts on DOM/console/network.
+4. **Browser drive** through Chrome DevTools MCP, or by reading `.agents/skills/verify-<project>/SKILL.md` and following it. If that file is missing, read `.cursor/skills/verify-<project>/SKILL.md` and follow that instead. Drive the UI and assert on DOM, console, and network. If neither file exists, tell the user to run `/jor-verify`.
 5. **Replay a captured trace.** Save a real network request / payload / event log to disk; replay it through the code path in isolation.
 6. **Throwaway harness.** Spin up a minimal subset of the system (one service, mocked deps) that exercises the bug code path with a single function call.
 7. **Property / fuzz loop.** If the bug is "sometimes wrong output", run 1000 random inputs and look for the failure mode.
