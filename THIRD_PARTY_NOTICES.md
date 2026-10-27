@@ -2,14 +2,14 @@
 
 jor-stack copies skill text from other MIT-licensed projects. Each notice below has the source, the commit of that project's license file, the jor skills that use it, and the full license text fetched from GitHub.
 
-Skills written here (`jor-get-ready`, `jor-restate`, `jor-browser-review`, and the `jor-mode` router text) are covered by the repository [LICENSE](LICENSE). `jor-mode`'s layout follows mattpocock/skills, so that project is listed too.
+Skills written here (`jor-get-ready`, `jor-implement`, `jor-writing-for-agents`, `jor-restate`, `jor-browser-review`, and the `jor-mode` router text) are covered by the repository [LICENSE](LICENSE). `jor-mode`'s layout follows mattpocock/skills, so that project is listed too.
 
 ## mattpocock/skills
 
 - Source: [mattpocock/skills LICENSE](https://github.com/mattpocock/skills/blob/2817544484ea89558aabd8a0360e042888fad713/LICENSE)
 - License commit: `2817544484ea89558aabd8a0360e042888fad713` (2026-03-13, "Added MIT license")
 - Copyright: Matt Pocock
-- Used by: `jor-grill-me`, `jor-to-spec`, `jor-to-tickets`, `jor-tdd`, `jor-debug`, `jor-design`, `jor-review`, `jor-pr` (the pr skill; the Summary visuals are HumanLayer, below), `jor-prototype`, `jor-retro`, `jor-handoff`, and `jor-mode` (layout only)
+- Used by: `jor-grill-me`, `jor-to-spec`, `jor-to-tickets`, `jor-tdd`, `jor-bugfix`, `jor-design`, `jor-review`, `jor-pr` (the pr skill; the Summary visuals are HumanLayer, below), `jor-prototype`, `jor-retro`, `jor-handoff`, and `jor-mode` (layout only)
 
 ```
 MIT License

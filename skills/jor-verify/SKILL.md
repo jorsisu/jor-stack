@@ -1,6 +1,6 @@
 ---
 name: jor-verify
-description: "Generate a project-local verify-<project> skill that drives the web app the way a user does through Chrome DevTools MCP, with doctor, breakpoints, and snapshot commands plus a feature map. Run once per project, or when a project has no scripted way to prove UI behavior."
+description: "Generate a project-local verification skill that drives the web app the way a user does through Chrome DevTools MCP, with doctor, breakpoints, and snapshot commands plus a feature map. Run once per project, or when a project has no scripted way to prove UI behavior."
 disable-model-invocation: true
 metadata:
   based-on: "cursor/plugins pstack/skills/create-verification-skill @ c49b37a2c0e7bede60a71ad7322e3f12c337a3da (SKILL.md, references/feature-map-example/); rebuilt on Chrome DevTools MCP"
@@ -12,7 +12,7 @@ In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the sk
 
 Every serious project needs a scripted way to drive the real app and prove behavior: open it, exercise a feature the way a user would, and capture evidence. This skill generates that as a project-local skill, `verify-<project>`, tailored to the repo and driven through **Chrome DevTools MCP**. You write the generator's output for the next agent, not for a human: it will be read cold, mid-task, by an agent that has never seen the app.
 
-Other jor skills read `.agents/skills/verify-<project>/SKILL.md` first, then `.cursor/skills/verify-<project>/SKILL.md` if the first is missing. `jor-browser-review` follows its `doctor`, `breakpoints`, and feature map. `jor-debug` can drive the bug through it. `jor-prototype` follows it to drive and screenshot UI variants. `jor-verify-maintain` uses the same two folders. If neither file exists, those skills tell the user to run `/jor-verify`.
+Other jor skills read `.agents/skills/verify-<project>/SKILL.md` first, then `.cursor/skills/verify-<project>/SKILL.md` if the first is missing. `jor-browser-review` follows its `doctor`, `breakpoints`, and feature map. `jor-bugfix` can drive the bug through it. `jor-prototype` follows it to drive and screenshot UI variants. `jor-verify-maintain` uses the same two folders. If neither file exists, those skills tell the user to run `/jor-verify`.
 
 If Chrome DevTools MCP is not available in this session, stop and report that. Don't substitute another browser tool.
 
@@ -31,6 +31,10 @@ Answer these from the codebase and only ask the user what you cannot observe:
 Ask the user one decision up front: should `verify-<project>` be **shared** (committed with the repo) or **private** (kept out of git by adding its folder to `.git/info/exclude`)? Recommend private unless the team already shares agent skills. Never edit the shared `.gitignore`.
 
 ## 2. Generate the skill
+
+Once the output folder is selected, before writing a private skill, resolve Git's local exclude file with `git rev-parse --git-path info/exclude` and add the selected skill folder. Before writing proof artifacts, ensure `.scratch/` is listed there too. Stop if private output cannot be excluded; never edit the shared `.gitignore`.
+
+Keep the generated skill manual-only in Codex too: add `agents/openai.yaml` inside its folder with `allow_implicit_invocation: false` under `policy`. Its instructions must require a browser request in the current chat, allow explicit invocation of the generated skill as that request, and preserve the server-control rule above.
 
 Write the generated skill to `.agents/skills/verify-<project>/` (`SKILL.md` in that folder). If the project already uses `.cursor/skills/`, ask which location to use before writing. Either location works: readers look in `.agents/skills/verify-<project>/` first and in `.cursor/skills/verify-<project>/` if it is not there. Give it YAML frontmatter: `name: verify-<project>`, a `description` that names the app, the surface, and when to reach for it, and `disable-model-invocation: true`. Without frontmatter the skill never registers. Then write these sections, each grounded in what the interview actually found (no placeholders left):
 

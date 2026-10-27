@@ -1,6 +1,6 @@
 ---
 name: jor-verify-maintain
-description: "Upkeep pass that keeps a project's verify-<project> skill and feature map honest: source readers per feature, one live Chrome DevTools MCP pass driving every feature, breakpoint screenshots as evidence. Run on demand or after UI-heavy sprints."
+description: "Upkeep pass that keeps a project's verification skill and feature map honest: source readers per feature, one live Chrome DevTools MCP pass driving every feature, breakpoint screenshots as evidence. Run on demand or after UI-heavy sprints."
 disable-model-invocation: true
 metadata:
   based-on: "cursor/plugins pstack/skills/maintain-verification-skill @ 6714489fa233263f00e419f6cfc4759b07c81056 (trimmed to the Chrome DevTools MCP setup)"
@@ -34,7 +34,7 @@ Only edit the verify skill's own folder (its SKILL.md, `features/`, and any help
 
 3. **Reconcile.** Every feature file has a summary. Merge overlapping recipes into as few app states as practical. Spot-check cited drift; don't re-prove clean claims. Sweep recent churn (`git log` since the last pass) for user-facing routes or screens missing from the map; require a concrete source path before calling one missing.
 
-4. **Live pass.** Required even when source looks clean. Drive serially, in one isolated browser context, against the user's running dev server. Don't start or restart it; if it's down, report the start command and stop: `blocked`. Hold three invariants the whole pass:
+4. **Live pass.** Required even when source looks clean. Drive serially, in one isolated browser context, against the user's running dev server. Start, stop, or restart it only on explicit request; if it's down and startup is not authorized, report the start command and stop: `blocked`. Hold three invariants the whole pass:
    1. Never drive an instance you haven't health-checked since it last did something surprising: `doctor` before the first drive and again after any failed drive. Where `doctor` can't see the failure (a wedged UI state on a healthy server), reset to a known state (reload, fresh isolated context) rather than hoping.
    2. Evidence survives every cleanup, checked at its named location, not assumed.
    3. Nothing a drive opened outlives its usefulness: close the pages and contexts you opened, reset emulation, restore mutated data.
@@ -45,4 +45,4 @@ Only edit the verify skill's own folder (its SKILL.md, `features/`, and any help
 
 6. **Report.** Re-read every changed file. State the outcome (clean / changed / blocked), the features covered, the breakpoint evidence location, unreachable prerequisites, confirmed drift, and product gaps found.
 
-Keep concise run notes in `.scratch/verify/` (listed in `.git/info/exclude`); don't commit them.
+Before saving evidence or concise run notes in `.scratch/verify/`, resolve Git's local exclude file with `git rev-parse --git-path info/exclude` and ensure `.scratch/` is listed. Stop if it cannot be excluded. Never edit the shared `.gitignore` or commit the notes or evidence.

@@ -93,17 +93,17 @@ Put the switcher in a single shared component so both sub-shapes can reuse it. L
 
 ### 5. Drive and screenshot every variant
 
-Before handing over, drive each variant in a real browser so the user can compare them side by side without flipping through by hand.
+When browser verification or driven screenshots were requested in the current chat, drive each variant so the user can compare them side by side. Otherwise hand over the URLs and report screenshots and browser behavior as unverified. If Chrome DevTools MCP is unavailable, report the blocker instead of substituting another browser tool.
 
 - Read `.agents/skills/verify-<project>/SKILL.md` and follow it: run its `doctor` first, then its `breakpoints` command for each `?variant=` URL. If that file is missing, read `.cursor/skills/verify-<project>/SKILL.md` and follow that instead. If neither file exists, tell the user to run `/jor-verify` and use Chrome DevTools MCP directly at the same widths.
 - Capture every variant at all five breakpoints: **360, 768, 1280, 1440, 1920** px wide. Hide or ignore the floating switcher in the comparison if it covers content.
 - Save uncommitted prototype screenshots to `.scratch/prototype-<name>/`, named `<variant>-<width>.png`. Keep `.scratch/` in `.git/info/exclude`; never edit the shared `.gitignore`.
 - Lay them out for comparison: one row per breakpoint, one column per variant (a markdown table of image links, or a single contact-sheet HTML file next to the screenshots). Note anything that breaks at a breakpoint: overflow, wrapped navigation, hidden primary actions, console errors.
-- Don't start or restart a user-controlled dev server. If the route isn't reachable, report the URL and what's missing.
+- Start, stop, or restart dev servers only on explicit request. If the route isn't reachable and startup is not authorized, report the URL, the repo's start command, and what's missing.
 
 ### 6. Hand it over
 
-Surface the URL (and the `?variant=` keys) plus the side-by-side screenshots. The user will flip through whenever they get to it. The interesting feedback is usually **"I want the header from B with the sidebar from C"**, which is the actual design they want.
+Surface the URL (and the `?variant=` keys) plus any captured side-by-side screenshots. State which variants and widths were checked or left unverified. The user will flip through whenever they get to it. The interesting feedback is usually **"I want the header from B with the sidebar from C"**, which is the actual design they want.
 
 ### 7. Capture the answer and clean up
 

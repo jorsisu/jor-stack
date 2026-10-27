@@ -1,18 +1,23 @@
 flowchart TD
-    jira["/twg-jira ticket"] --> ready["/jor-get-ready<br/>investigate and propose"]
+    task["Ticket via /twg-jira<br/>or direct request"] --> ready["/jor-get-ready<br/>investigate and propose"]
     ready --> big{"Bigger than<br/>one change?"}
     big -- yes --> spec["/jor-to-spec"]
-    spec --> tickets["/jor-to-tickets<br/>private .scratch/"]
+    spec --> tickets["/jor-to-tickets<br/>approve breakdown, write .scratch/"]
     tickets -. each ticket .-> ready
-    big -- no --> kind{"What kind<br/>of work?"}
+    big -- no --> approved["User authorizes the next step"]
+    approved --> kind{"What kind<br/>of work?"}
     kind -- feature --> implement["/jor-implement"]
-    kind -- bug --> debug["/jor-debug"]
+    kind -- bug --> bugfix["/jor-bugfix"]
     kind -- unsure of the design --> proto["/jor-prototype"]
-    proto -. chosen variant .-> implement
-    implement --> browser["/jor-browser-review"]
-    debug --> browser
-    browser --> review["/jor-review"]
+    proto -. chosen design and implementation authorized .-> implement
+    implement -- browser check requested --> browser["/jor-browser-review"]
+    bugfix -- browser check requested --> browser
+    implement -- otherwise --> review["/jor-review"]
+    bugfix -- otherwise --> review
+    browser --> review
     review --> pr["/jor-pr"]
-    pr --> close["/jor-retro · /jor-handoff"]
+    pr --> body["PR body ready<br/>publishing and merging are separate"]
+    body -. useful lesson .-> retro["/jor-retro"]
+    body -. work continues elsewhere .-> handoff["/jor-handoff"]
     verify["/jor-verify<br/>one-time setup per project"] -. drives variants .-> proto
     verify -. breakpoints, feature map .-> browser

@@ -12,6 +12,8 @@ In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the sk
 
 A prototype is **throwaway code that answers a question**. The question decides the shape.
 
+Follow project rules. Browser verification needs an explicit request in the current chat; asking for driven UI variants or screenshots includes those browser checks. Otherwise hand over the prototype and state that browser behavior is unverified. Use Chrome DevTools MCP for requested browser checks; if unavailable, report the blocker. Start, stop, or restart dev servers only on explicit request.
+
 ## Pick a branch
 
 Identify which question is being answered, using the user's prompt, the surrounding code, or by asking if the user is around:

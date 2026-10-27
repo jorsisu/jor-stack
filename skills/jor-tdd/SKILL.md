@@ -40,5 +40,5 @@ When the shape of that interface is itself in question (how deep the module is, 
 
 - **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Refactoring is not part of the loop.** It belongs to the review the user runs with `/jor-review`, not the red → green implementation cycle.
-- **Stop at green.** When the agreed seams are covered and green, stop and recommend the user run `/jor-browser-review` for UI changes, then `/jor-review`.
+- **Refactoring is not part of the loop.** Report refactoring candidates for `/jor-review`; implement accepted changes in a separate authorized pass.
+- **Stop at green.** When the agreed seams are covered and green, stop. Recommend `/jor-browser-review` when browser verification was requested in the current chat, otherwise `/jor-review`. Leave the next invocation to the user. Start, stop, or restart dev servers only on explicit request.

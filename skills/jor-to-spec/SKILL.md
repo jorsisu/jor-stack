@@ -1,12 +1,14 @@
 ---
 name: jor-to-spec
-description: "Turn the current conversation into a spec and write it to .scratch/<feature-slug>/spec.md, kept out of git via .git/info/exclude: no interview, just synthesis of what you've already discussed."
+description: "Turn the current conversation into a private spec under .scratch/, excluded locally from Git. Synthesize agreed requirements and confirm only unresolved test seams."
 disable-model-invocation: true
 metadata:
   based-on: "mattpocock/skills skills/engineering/to-spec @ 5c89081d4bbeb3d039a42093653f90bb698d780e"
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
+This skill takes the current conversation context and codebase understanding and produces a spec. Synthesize agreed requirements; do not restart the requirements interview. Confirm only unresolved testing seams in step 2. Record other open decisions under Further Notes instead of inventing answers.
 
 The spec is a private working file: it lives at `.scratch/<feature-slug>/spec.md` in the project and is never committed. No issue tracker is involved.
 
@@ -16,7 +18,7 @@ The spec is a private working file: it lives at `.scratch/<feature-slug>/spec.md
 
 2. Sketch out the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better - the ideal number is one.
 
-Check with the user that these seams match their expectations.
+Check with the user that these seams match their expectations unless the same seams are already agreed in the conversation.
 
 3. Keep `.scratch/` out of git before writing anything. Check `.git/info/exclude` (git's local-only ignore file) for a `.scratch/` line and append one if it is missing. Never touch the shared `.gitignore`. If `.git/info/exclude` can't be found (for example in a worktree, resolve it with `git rev-parse --git-path info/exclude`), stop and tell the user rather than writing an unignored file.
 

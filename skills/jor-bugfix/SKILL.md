@@ -1,5 +1,5 @@
 ---
-name: jor-debug
+name: jor-bugfix
 description: Diagnosis loop for hard bugs and performance regressions. Build a tight feedback loop first, then reproduce, minimise, hypothesise, instrument, fix with a regression test, and clean up.
 disable-model-invocation: true
 metadata:
@@ -8,11 +8,15 @@ metadata:
 
 In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
 
-# Diagnosing Bugs
+# Bugfix
 
 A discipline for hard bugs. Skip phases only when explicitly justified.
 
 When exploring the codebase, read `GLOSSARY.md` (if it exists) to get a clear mental model of the relevant modules, and check ADRs in the area you're touching.
+
+Follow project rules. Browser verification requires an explicit request in the current chat; a bug report alone does not authorize it. Start, stop, or restart dev servers only on explicit request. If the required loop is blocked, report the missing access or authorization.
+
+Keep private captures and reproduction notes in `.scratch/bugfix-<name>/`. Before writing there, resolve Git's local exclude file with `git rev-parse --git-path info/exclude` and ensure `.scratch/` is listed; never edit the shared `.gitignore` or commit these artifacts.
 
 ## Redact
 
@@ -141,3 +145,5 @@ Required before declaring done:
 - [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)
 - [ ] Throwaway prototypes deleted (or moved to a clearly-marked debug location)
 - [ ] The hypothesis that turned out correct is stated in the commit / PR message, so the next debugger learns
+
+Report the original symptom, cause, fix, exact checks and results, and any remaining limits. Recommend `/jor-browser-review` if requested, otherwise `/jor-review`. Leave the next invocation to the user; commit only when authorized.

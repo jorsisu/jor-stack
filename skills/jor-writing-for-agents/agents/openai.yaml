@@ -1,0 +1,5 @@
+interface:
+  display_name: "Jor Writing for Agents"
+  short_description: "Write clear skills and agent instructions"
+policy:
+  allow_implicit_invocation: true

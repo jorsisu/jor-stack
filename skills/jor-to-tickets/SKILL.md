@@ -1,6 +1,6 @@
 ---
 name: jor-to-tickets
-description: Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, written as one private file per ticket under .scratch/<feature-slug>/issues/ (kept out of git via .git/info/exclude).
+description: Break a plan, spec, or the current conversation into tracer-bullet tickets, each declaring its blockers, written as private files under .scratch/ and excluded locally from Git.
 disable-model-invocation: true
 metadata:
   based-on: "mattpocock/skills skills/engineering/to-tickets @ 9e2abf8611a345efbf779aacb171cff015bcdeb6"

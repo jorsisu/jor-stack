@@ -2,10 +2,16 @@
 
 ## Unreleased
 
-- Added local Codex installation through shared skill links, manual-only Codex policy for all 19 skills, and Codex command syntax guidance.
+- Aligned the README, router, and skill handoffs: explicit implementation boundaries, optional browser review, PR-body-only delivery, direct-request review coverage, private output locations, manual-only generated verify skills, and safe repeated shared-link setup. Synced the Mermaid source and removed the unused stale SVG export.
+- Removed angle-bracket placeholders from four skill descriptions for Codex validator compatibility.
+
+- Renamed the bug diagnosis skill to `jor-bugfix` across commands, metadata, docs, and flow diagrams.
+- Added `jor-implement` and `jor-writing-for-agents`, replacing the standalone skills. `jor-retro` recommends the writing skill for accepted guidance changes.
+- Added a portable plugin manifest and Codex repo marketplace sharing Cursor's skills and MCP server configuration.
+- Added local Codex installation through shared skill links and Codex command syntax guidance. `jor-writing-for-agents` allows automatic selection in Cursor and Codex; the other 20 skills remain manual-only.
 - `jor-review` includes staged, unstaged, and in-scope untracked files alongside committed changes, and reviews the current result where diffs overlap.
 - `jor-verify` restores and confirms the target UI state at every breakpoint before capturing screenshots. The Notes example follows the same steps.
-- `jor-debug` accepts a repeatable Chrome DevTools MCP sequence with an explicit pass/fail check as a feedback loop.
+- `jor-bugfix` accepts a repeatable Chrome DevTools MCP sequence with an explicit pass/fail check as a feedback loop.
 - `jor-prototype`, including `UI.md` and `LOGIC.md`, stops at the design decision unless implementation is already explicitly authorized. Prototype commits also require authorization.
 - `jor-browser-review` and generated verify skills start, stop, or restart dev servers only on explicit request, including in worktrees.
 - `jor-verify` creates its feature map inside the skill folder selected in step 2: `.agents/skills/verify-<project>/` by default, or the chosen `.cursor/skills/` location.
@@ -14,9 +20,9 @@
 ## 0.1.1 (2026-10-27)
 
 - Slash-only skills no longer invoke each other. Mid-task, a skill reads the other skill's `SKILL.md` and follows it. The user's next step is a `/jor-...` command the agent recommends.
-- `jor-verify` writes the generated skill to `.agents/skills/verify-<project>/`, and asks first if the project already uses `.cursor/skills/`. `jor-browser-review`, `jor-debug`, `jor-prototype`, and `jor-verify-maintain` look there first and fall back to `.cursor/skills/verify-<project>/`.
+- `jor-verify` writes the generated skill to `.agents/skills/verify-<project>/`, and asks first if the project already uses `.cursor/skills/`. `jor-browser-review`, `jor-bugfix`, `jor-prototype`, and `jor-verify-maintain` look there first and fall back to `.cursor/skills/verify-<project>/`.
 - `jor-get-ready` recommends `/jor-browser-review` only when the user asks for a browser check. `jor-pr` reuses screenshots from a browser review or from `.scratch/verify/`. `jor-review` states the subagent fallback once, in the spawn step. `jor-retro` names the `jor-review` skill without a slash command.
-- Removed the headless browser script option (Playwright / Puppeteer) from `jor-debug`, and dropped the Playwright and Cypress note from `jor-verify`'s line about reading existing e2e tests. Browser checks stay on Chrome DevTools MCP.
+- Removed the headless browser script option (Playwright / Puppeteer) from `jor-bugfix`, and dropped the Playwright and Cypress note from `jor-verify`'s line about reading existing e2e tests. Browser checks stay on Chrome DevTools MCP.
 - Added an MIT `LICENSE` and `THIRD_PARTY_NOTICES.md`.
 - `plugin.json` and `marketplace.json` are 0.1.1. `plugin.json` records the MIT license and the repository URL.
 - README: prerequisites, the GitHub repository URL, the self-contained rule, a collapsed copy of the flow SVG, the verify path, and links to this changelog and the license.

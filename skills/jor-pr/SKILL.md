@@ -7,6 +7,10 @@ metadata:
   credits: "Summary visuals from Dex Horthy's show-me skill (Humanlayer), https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md; see CREDITS.md"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
+Write the body for the current change using the request, review findings, and observed check results. Follow the repository's PR template when it defines the required structure; use the template below otherwise. Report missing evidence as unverified. This skill writes the body only: committing, pushing, opening, or merging a PR needs separate authorization.
+
 Use this template for writing the PR body:
 
 ```markdown
@@ -159,7 +163,7 @@ Concrete evidence that the change works. Show a before and after.
 
 Screenshots are S-tier - when the environment is set up for it and the change is visual. Reuse breakpoint screenshots already taken in a browser review, or saved under `.scratch/verify/`.
 
-Execution-based evidence is A-tier. Test results, console output. Show the exact test that now fails and passes, using pseudocode.
+Execution-based evidence is A-tier: actual test results and console output. Name the exact check and its observed before/after results. Label illustrative pseudocode as illustrative; it is not execution proof. Do not start browser checks or dev servers just to fill the body unless the user requested them.
 
 ### Merge Danger
 

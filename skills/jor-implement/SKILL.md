@@ -16,8 +16,12 @@ Follow project rules and patterns.
 
 For test-first work, read [../jor-tdd/SKILL.md](../jor-tdd/SKILL.md) and follow it at pre-agreed seams. Read supporting skills as workflow references; leave `/jor-...` invocation to the user.
 
-Run typechecking regularly, single test files regularly, and the full test suite once at the end.
+Run the smallest relevant repo checks during implementation and after the final edit. Broaden coverage when project requirements, risk, or failures justify it.
 
-Once done, recommend the user run `/jor-review` to review the work.
+When adding or repairing an automated guard, show it fails on the original fault (or a safe temporary reproduction), then passes with the fix. Remove temporary faults before finishing and verify the guard runs through the repo's normal check command, hook, or CI configuration. Distinguish local execution from CI that has only been configured.
+
+Before declaring done, report the behavior checked, exact commands and observed results, evidence paths where applicable, and any blocked or unverified scope. Re-run affected checks after later edits; earlier results do not prove changed code.
+
+Use browser verification only when requested in the current chat. Start, stop, or restart dev servers only on explicit request. When browser review was requested, recommend `/jor-browser-review`; otherwise recommend `/jor-review`. Do not invoke either on the user's behalf.
 
 Before committing work to the current branch, ask for the user's approval.
