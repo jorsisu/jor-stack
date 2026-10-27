@@ -1,0 +1,44 @@
+---
+description: This repo always uses personal GitHub account jorsisu
+alwaysApply: true
+---
+
+# Personal GitHub identity (required)
+
+This repository is personal. Every commit, push, fetch, and `gh` command uses **jorsisu** only. Never skip this for convenience, and never fall back to the active or work account.
+
+- GitHub user: `jorsisu`
+- Commit name: `Jorge Galarza`
+- Commit email: `jgalarzah@gmail.com`
+- Remote: `https://github.com/jorsisu/jor-stack.git`
+
+Do not use `Jorge-Galarza_vail`, `jorgegalarzaverndale`, `Jorge.Galarza+vail@vailresorts.com`, or any other work identity.
+
+Before every commit, `git config --local user.email` must be `jgalarzah@gmail.com` and `user.name` must be `Jorge Galarza`. If either local value is missing or wrong, restore only this repo (never `--global`):
+
+```bash
+git config --local user.name "Jorge Galarza"
+git config --local user.email "jgalarzah@gmail.com"
+```
+
+Stop and do not commit if the author would be anyone else.
+
+Before every `git push`, `git pull`, `git fetch`, or `gh` command:
+
+- Do not run `gh auth switch`.
+- Do not change `~/.gitconfig` or the active `gh` account.
+- Leave the local GitHub credential helper pinned to `jorsisu`. If it is missing, restore it:
+
+```bash
+git config --local credential.https://github.com.username jorsisu
+git config --local --replace-all credential.https://github.com.helper ""
+git config --local --add credential.https://github.com.helper '!f() { echo "username=jorsisu"; echo "password=$(gh auth token --hostname github.com --user jorsisu)"; }; f'
+```
+
+- Run `gh` with the personal token and do not print that token:
+
+```bash
+GH_TOKEN="$(gh auth token --hostname github.com --user jorsisu)" gh ...
+```
+
+If the token command fails, stop and ask the user to run `gh auth login -h github.com` for `jorsisu`. Do not use another logged-in account.
