@@ -1,6 +1,6 @@
 ---
 name: jor-grill-me
-description: A relentless interview to sharpen a plan or design.
+description: Relentless interview that sharpens a plan or design and writes no files. Use when the user starts from an idea instead of a ticket, or when a decision is still unclear.
 disable-model-invocation: true
 metadata:
   based-on: "mattpocock/skills skills/productivity/grill-me @ fcf0071560d32913c9d4f820e0d7ca467c881619 + skills/productivity/grilling @ 95249b0b49782349740fd9b8c6ce32b4e59e497a"

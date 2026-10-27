@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "Jorge's private marketplace for the jor-stack plugin",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "plugins": [
     {

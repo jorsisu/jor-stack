@@ -32,7 +32,7 @@ Use this template for writing the PR body:
 
 ## Sections
 
-Skip all preambles and keep prose brief. Use the user's domain language from `GLOSSARY.md`.
+Skip all preambles and keep prose brief. Use the user's domain language from `GLOSSARY.md`, if it exists.
 
 ### Summary
 
@@ -157,7 +157,7 @@ You may use one of these, you may use several, it is unlikely you will use all o
 
 Concrete evidence that the change works. Show a before and after.
 
-Screenshots are S-tier - when the environment is set up for it and the change is visual. Reuse the breakpoint screenshots from `/jor-browser-review` or the project's `verify-<project>` skill when you have them.
+Screenshots are S-tier - when the environment is set up for it and the change is visual. Reuse breakpoint screenshots you already have, from a browser review or from `.agents/skills/verify-<project>/`, when you have them.
 
 Execution-based evidence is A-tier. Test results, console output. Show the exact test that now fails and passes, using pseudocode.
 

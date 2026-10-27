@@ -1,6 +1,6 @@
 ---
 name: jor-retro
-description: "Conduct a retrospective on a coding session."
+description: "Retrospective that improves the agent's setup and environment, not the code. Use after a coding session, or when the user asks for a retro."
 disable-model-invocation: true
 metadata:
   based-on: "mattpocock/skills skills/engineering/retro @ a7d038f6bf7f01b516408e95e2fb56e0b338fa6f"

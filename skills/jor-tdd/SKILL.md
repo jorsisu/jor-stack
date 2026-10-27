@@ -26,7 +26,7 @@ A **seam** is the public boundary you test at: the interface where you observe b
 
 Ask: "What's the public interface, and which seams should we test?" Give each proposed seam a one-line note on what it catches and what it misses.
 
-When the shape of that interface is itself in question (how deep the module is, where the seam belongs, what the interface should expose), suggest `/jor-design` for the vocabulary.
+When the shape of that interface is itself in question (how deep the module is, where the seam belongs, what the interface should expose), read `../jor-design/SKILL.md` and follow it for the vocabulary.
 
 ## Anti-patterns
 
@@ -38,5 +38,5 @@ When the shape of that interface is itself in question (how deep the module is, 
 
 - **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Refactoring is not part of the loop.** It belongs to the review stage (`/jor-review`), not the red → green implementation cycle.
-- **Stop at green.** When the agreed seams are covered and green, stop and suggest `/jor-browser-review` for UI changes, then `/jor-review`.
+- **Refactoring is not part of the loop.** It belongs to the review the user runs with `/jor-review`, not the red → green implementation cycle.
+- **Stop at green.** When the agreed seams are covered and green, stop and recommend the user run `/jor-browser-review` for UI changes, then `/jor-review`.

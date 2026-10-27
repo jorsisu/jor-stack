@@ -3,14 +3,14 @@ name: jor-verify
 description: "Generate a project-local verify-<project> skill that drives the web app the way a user does through Chrome DevTools MCP, with doctor, breakpoints, and snapshot commands plus a feature map. Run once per project, or when a project has no scripted way to prove UI behavior."
 disable-model-invocation: true
 metadata:
-  based-on: "cursor/plugins pstack/skills/create-verification-skill @ c49b37a2c0e7bede60a71ad7322e3f12c337a3da (SKILL.md, references/feature-map-example/); rebuilt on Chrome DevTools MCP instead of Playwright"
+  based-on: "cursor/plugins pstack/skills/create-verification-skill @ c49b37a2c0e7bede60a71ad7322e3f12c337a3da (SKILL.md, references/feature-map-example/); rebuilt on Chrome DevTools MCP"
 ---
 
 # Create a verify skill
 
 Every serious project needs a scripted way to drive the real app and prove behavior: open it, exercise a feature the way a user would, and capture evidence. This skill generates that as a project-local skill, `verify-<project>`, tailored to the repo and driven through **Chrome DevTools MCP**. You write the generator's output for the next agent, not for a human: it will be read cold, mid-task, by an agent that has never seen the app.
 
-Other jor skills read it by path: `/jor-browser-review` uses its `doctor`, `breakpoints`, and feature map; `/jor-prototype` uses it to drive and screenshot UI variants; `/jor-verify-maintain` keeps it honest.
+Other jor skills read it at `.agents/skills/verify-<project>/SKILL.md`: `jor-browser-review` follows its `doctor`, `breakpoints`, and feature map; `jor-prototype` follows it to drive and screenshot UI variants. `jor-verify-maintain` looks there first, then in `.cursor/skills/verify-*/`. If no verify skill is found, those skills tell the user to run `/jor-verify`.
 
 If Chrome DevTools MCP is not available in this session, stop and report that. Don't substitute another browser tool.
 
@@ -20,7 +20,7 @@ Answer these from the codebase and only ask the user what you cannot observe:
 
 - **Surface:** which web UI does a user actually touch? A repo can have several apps; pick the primary one and note the rest.
 - **Run:** how does the app start locally? Find the repo's own documented dev command (package scripts, Makefile, README quickstart). Note the URL and port, env vars, seed data, and auth.
-- **Drive:** which stable handles exist? ARIA roles and accessible names, `data-testid` or other data attributes, route paths. Read existing e2e specs (Playwright, Cypress) for selectors and flows worth reusing, but drive with Chrome DevTools MCP.
+- **Drive:** which stable handles exist? ARIA roles and accessible names, `data-testid` or other data attributes, route paths. Read existing e2e specs for selectors and flows worth reusing, but drive with Chrome DevTools MCP.
 - **Observe:** what evidence can be captured? Screenshots, accessibility snapshots, console messages, network requests, visible side effects.
 - **Isolate:** is the dev server shared with the user's own session (same browser profile, same data)? If so, say so in the generated skill and use an isolated browser context (`new_page` with `isolatedContext`) for every run, so verification never corrupts the user's session.
 
@@ -30,7 +30,7 @@ Ask the user one decision up front: should `verify-<project>` be **shared** (com
 
 ## 2. Generate the skill
 
-Write `verify-<project>/SKILL.md` in the project's local skills folder (in Cursor, `.cursor/skills/verify-<project>/`; in another harness, its project skill folder). Give it YAML frontmatter: `name: verify-<project>`, a `description` that names the app, the surface, and when to reach for it, and `disable-model-invocation: true`. Without frontmatter the skill never registers. Then write these sections, each grounded in what the interview actually found (no placeholders left):
+Write the generated skill to `.agents/skills/verify-<project>/` (`SKILL.md` in that folder). If the project already uses `.cursor/skills/`, ask which location to use before writing. Prefer `.agents/skills/verify-<project>/`: `jor-browser-review`, `jor-debug`, and `jor-prototype` read that path, and only `jor-verify-maintain` also looks under `.cursor/skills/verify-*/`. Give it YAML frontmatter: `name: verify-<project>`, a `description` that names the app, the surface, and when to reach for it, and `disable-model-invocation: true`. Without frontmatter the skill never registers. Then write these sections, each grounded in what the interview actually found (no placeholders left):
 
 - **Target:** the base URL, how to tell the app is ready (a route that renders a known heading, a health endpoint), and the repo's start command for the user to run when it's down. Ready means usable, not just that a port answers: a page that renders a spinner forever is not ready.
 - **`doctor`:** one read-only health check that answers "is this instance worth driving?" Run it first, and again whenever anything looks off. Steps: `list_pages` / `new_page` on the base URL in an isolated context; `wait_for` the known ready text; `take_snapshot` and confirm the app identity (title, logo name, or heading); `list_console_messages` for errors on load; `list_network_requests` for failed requests (4xx/5xx, blocked) on load; confirm auth state if a feature needs a signed-in user. Report `healthy` or the exact failing check.
@@ -51,4 +51,4 @@ Run its own instructions end to end once: `doctor`, drive ONE mapped feature (on
 
 ## 5. Offer the maintenance loop
 
-Point the user at `/jor-verify-maintain` for keeping the map honest as the app changes: on demand, or after UI-heavy sprints.
+Recommend the user run `/jor-verify-maintain` for keeping the map honest as the app changes: on demand, or after UI-heavy sprints.
