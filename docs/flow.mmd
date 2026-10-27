@@ -5,11 +5,11 @@ flowchart TD
     spec --> tickets["/jor-to-tickets<br/>private .scratch/"]
     tickets -. each ticket .-> ready
     big -- no --> kind{"What kind<br/>of work?"}
-    kind -- feature --> tdd["/jor-tdd"]
+    kind -- feature --> implement["/jor-implement"]
     kind -- bug --> debug["/jor-debug"]
     kind -- unsure of the design --> proto["/jor-prototype"]
-    proto -. chosen variant .-> tdd
-    tdd --> browser["/jor-browser-review"]
+    proto -. chosen variant .-> implement
+    implement --> browser["/jor-browser-review"]
     debug --> browser
     browser --> review["/jor-review"]
     review --> pr["/jor-pr"]

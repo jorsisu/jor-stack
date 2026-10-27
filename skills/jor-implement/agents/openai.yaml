@@ -1,0 +1,5 @@
+interface:
+  display_name: "Jor Implement"
+  short_description: "Build work from a spec, tickets, or approved proposal"
+policy:
+  allow_implicit_invocation: false

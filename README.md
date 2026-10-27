@@ -4,13 +4,13 @@ jor-stack is Jorge Galarza's private collection of front-end workflow skills for
 
 ## Skills and triggers
 
-**0 automatic, all 19 manual.**
+**0 automatic, all 20 manual.**
 
 | Trigger | Skills |
 | --- | --- |
 | Automatic | None |
 | Manual — planning | `jor-mode`, `jor-get-ready`, `jor-restate`, `jor-grill-me`, `jor-to-spec`, `jor-to-tickets` |
-| Manual — implementation | `jor-tdd`, `jor-debug`, `jor-design`, `jor-domain`, `jor-prototype` |
+| Manual — implementation | `jor-implement`, `jor-tdd`, `jor-debug`, `jor-design`, `jor-domain`, `jor-prototype` |
 | Manual — verification | `jor-browser-review`, `jor-review`, `jor-verify`, `jor-verify-maintain` |
 | Manual — delivery and explanation | `jor-pr`, `jor-retro`, `jor-handoff`, `jor-teach` |
 
@@ -30,11 +30,11 @@ flowchart TD
     spec --> tickets["/jor-to-tickets<br/>private .scratch/"]
     tickets -. each ticket .-> ready
     big -- no --> kind{"What kind<br/>of work?"}
-    kind -- feature --> tdd["/jor-tdd"]
+    kind -- feature --> implement["/jor-implement"]
     kind -- bug --> debug["/jor-debug"]
     kind -- unsure of the design --> proto["/jor-prototype"]
-    proto -. chosen variant .-> tdd
-    tdd --> browser["/jor-browser-review"]
+    proto -. chosen variant .-> implement
+    implement --> browser["/jor-browser-review"]
     debug --> browser
     browser --> review["/jor-review"]
     review --> pr["/jor-pr"]
@@ -55,7 +55,7 @@ Solid arrows are the main path. Dashed arrows are loops and supporting links.
 1. **Load the ticket.** Bring the Jira ticket into the conversation with `/twg-jira`. Its description, acceptance criteria and comments set the scope.
 2. **`/jor-get-ready` investigates and proposes.** It reads the ticket and project rules, inspects the code, callers, tests and patterns, and reproduces the bug or confirms the gap. When a decision is unclear it reads the grill-me skill and follows it. It returns a proposal with evidence, the smallest complete change, risks and checks, then stops. It changes no files.
 3. **Bigger than one change?** If yes, `/jor-to-spec` writes the spec to `.scratch/<feature-slug>/spec.md`. Then `/jor-to-tickets` splits it into tracer-bullet tickets, one file each under `.scratch/<feature-slug>/issues/`, blockers first. Run `/jor-get-ready` for each ticket.
-4. **What kind of work?** For a feature, `/jor-tdd` builds it one red-green slice at a time at seams you agree on. For a bug, `/jor-debug` builds a tight feedback loop first, then reproduces, minimises, hypothesises, instruments, and fixes with a regression test. If you're unsure of the design, `/jor-prototype` builds throwaway variants, screenshots them at the project's breakpoints for side-by-side comparison, and the chosen variant goes into `/jor-tdd`.
+4. **What kind of work?** For a feature, `/jor-implement` implements the spec, tickets, or approved proposal using project rules and patterns. For test-first work, it reads `jor-tdd` and follows its red-green loop at agreed seams. For a bug, `/jor-debug` builds a tight feedback loop first, then reproduces, minimises, hypothesises, instruments, and fixes with a regression test. If you're unsure of the design, `/jor-prototype` builds throwaway variants, screenshots them at the project's breakpoints for side-by-side comparison, and the chosen variant goes into `/jor-implement`.
 5. **`/jor-browser-review` checks it in a real browser.** It uses Chrome DevTools MCP, preferably through one independent subagent. It checks the breakpoints 360, 768, 1280, 1440 and 1920, interactions, overflow, console errors and failed requests. It ends with a Human verification section of exact URLs for you to open.
 6. **`/jor-review` reviews the diff on two axes.** Standards covers the repo's coding standards plus a code-smell baseline. Spec checks against the ticket already in the conversation or the `/jor-to-spec` file. The two reports stay separate.
 7. **`/jor-pr` writes the PR body.** It shows the smallest visual that explains the change, before and after evidence (screenshots are best), and the merge danger: one-way or two-way door, and blast radius.
@@ -65,6 +65,7 @@ Solid arrows are the main path. Dashed arrows are loops and supporting links.
 
 ## Outside the main flow
 
+- **`/jor-tdd`** guides test-first development: one failing test, then the smallest implementation that passes, at agreed seams. `jor-implement` reads it when the work calls for test-first development.
 - **`/jor-grill-me`** when you start from an idea instead of a ticket. It interviews you until every decision is settled.
 - **`/jor-restate`** when you want to check the agent understood your goal before it starts.
 - **`/jor-design`** and **`/jor-domain`** while shaping code. `/jor-design` gives the vocabulary for module interfaces and seams. `/jor-domain` pushes logic into the right data structure instead of more `if` branches.
@@ -102,7 +103,7 @@ Choose one:
 - **Local folder.** Commit the plugin changes, then export `git archive HEAD` into a fresh `~/.cursor/plugins/local/jor-stack` folder and run **Developer: Reload Window**. Replace an existing install rather than overlaying it, so old private rules are removed. Export committed files instead of copying the working checkout, which can contain private local rules and `AGENTS.md`. A real folder is safest: Cursor skips symlinks that point outside `~/.cursor/plugins/local`.
 - **From GitHub.** In Cursor open **Customize → From GitHub Repository** and paste `https://github.com/jorsisu/jor-stack`. The repo root has `.cursor-plugin/marketplace.json`, which lists the single `jor-stack` plugin at the root.
 
-Open **Customize** afterwards and confirm the 19 `jor-` skills and the `chrome-devtools` MCP server are listed. The MCP server runs `npx -y chrome-devtools-mcp@latest`, so Node.js and Chrome must be installed.
+Open **Customize** afterwards and confirm the 20 `jor-` skills and the `chrome-devtools` MCP server are listed. The MCP server runs `npx -y chrome-devtools-mcp@latest`, so Node.js and Chrome must be installed.
 
 ### Codex
 

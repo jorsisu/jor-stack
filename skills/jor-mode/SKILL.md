@@ -28,9 +28,9 @@ If the user wants to check that you understood them, suggest **`/jor-restate`** 
    - **Yes** → **`/jor-to-spec`** turns the thread into a spec at `.scratch/<feature-slug>/spec.md`, then **`/jor-to-tickets`** splits it into tracer-bullet tickets under `.scratch/<feature-slug>/issues/`, each declaring its blockers. Recommend the user run `/jor-get-ready` for each ticket, blockers first.
    - **No** → go to step 4.
 4. **Branch: what kind of work?**
-   - **Feature** → **`/jor-tdd`**: one red-green slice at a time, at agreed seams.
+   - **Feature** → **`/jor-implement`**: implement the spec, tickets, or approved proposal using project rules and patterns. For test-first work, read `jor-tdd` and follow its red-green loop at agreed seams.
    - **Bug** → **`/jor-debug`**: build a tight feedback loop first, then reproduce, hypothesise, instrument, fix with a regression test.
-   - **Unsure of the design** → **`/jor-prototype`**: throwaway variants that answer one design question. Recommend the user run `/jor-tdd` with the chosen variant.
+   - **Unsure of the design** → **`/jor-prototype`**: throwaway variants that answer one design question. Recommend the user run `/jor-implement` with the chosen variant.
 5. **`/jor-browser-review`** checks the finished change in a real browser through Chrome DevTools MCP, at the project's breakpoints, and hands back URLs for human verification.
 6. **`/jor-review`** runs a two-axis review of the diff: Standards (the repo's coding standards plus a smell baseline) and Spec (the ticket or `.scratch` spec already in the conversation).
 7. **`/jor-pr`** writes the PR body: the smallest visual that shows the change, before/after evidence, and merge danger.
@@ -42,6 +42,7 @@ If the user wants to check that you understood them, suggest **`/jor-restate`** 
 
 ## Outside the main flow
 
+- **`/jor-tdd`**: test-first development at agreed seams, one failing test then the smallest implementation that passes. `jor-implement` reads it for test-first work.
 - **`/jor-grill-me`**: a relentless interview that sharpens an idea, plan, or design. Use it when you start from an idea rather than a ticket. It writes no files. When decisions are unclear, `jor-get-ready` reads `../jor-grill-me/SKILL.md` and follows it.
 - **`/jor-restate`**: an understanding check. Restates the user's goal and problem, then stops.
 - **`/jor-design`**: deep-module vocabulary (module, interface, depth, seam, adapter, leverage, locality) for shaping a module's interface while you shape code.
