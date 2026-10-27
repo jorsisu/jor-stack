@@ -1,18 +1,22 @@
 # jor-stack
 
-18 slash-only skills plus a router, one skill per job, protected from upstream overwrites; Cursor first, Codex later.
+jor-stack is Jorge Galarza's private collection of front-end workflow skills for Cursor and Codex.
 
-jor-stack is Jorge Galarza's private plugin of front-end workflow skills. Every skill runs only when you type its `/jor-...` name. Nothing triggers on its own.
+## Skills and triggers
 
-## At a glance
+**0 automatic, all 19 manual.**
 
-| | Count |
+| Trigger | Skills |
 | --- | --- |
-| Skills, including the `/jor-mode` router | 19 |
-| Jorge's own | 3 |
-| From Matt Pocock's skills | 11 |
-| From pstack | 4 |
-| Auto-triggering | 0 |
+| Automatic | None |
+| Manual — planning | `jor-mode`, `jor-get-ready`, `jor-restate`, `jor-grill-me`, `jor-to-spec`, `jor-to-tickets` |
+| Manual — implementation | `jor-tdd`, `jor-debug`, `jor-design`, `jor-domain`, `jor-prototype` |
+| Manual — verification | `jor-browser-review`, `jor-review`, `jor-verify`, `jor-verify-maintain` |
+| Manual — delivery and explanation | `jor-pr`, `jor-retro`, `jor-handoff`, `jor-teach` |
+
+Invoke with `$jor-debug` in Codex or `/jor-debug` in Cursor. Every skill sets `disable-model-invocation: true` for Cursor and `policy.allow_implicit_invocation: false` in `agents/openai.yaml` for Codex.
+
+Skill sources and exact upstream commits are in [UPSTREAM.md](UPSTREAM.md).
 
 Version 0.1.1 ships for Cursor. See [CHANGELOG.md](CHANGELOG.md). It bundles Chrome DevTools MCP for the browser skills.
 
@@ -59,32 +63,6 @@ Solid arrows are the main path. Dashed arrows are loops and supporting links.
 
 **One-time setup per project: `/jor-verify`.** It writes the project's own skill to `.agents/skills/verify-<project>/` (if the project already uses `.cursor/skills/`, it asks which). The skill runs on Chrome DevTools MCP, with `doctor` (health check), `breakpoints` (screenshots at 360, 768, 1280, 1440 and 1920) and `snapshot` (page and DOM state) commands, plus a feature map. `/jor-prototype`, `/jor-browser-review`, and `/jor-debug` read `.agents/skills/verify-<project>/SKILL.md` first, then `.cursor/skills/verify-<project>/SKILL.md`. Breakpoint screenshots from a verify run are saved under `.scratch/verify/`. If neither skill file exists, those skills recommend you run `/jor-verify`.
 
-## Skills
-
-| Skill | Based on | Job | What changed |
-| --- | --- | --- | --- |
-| `/jor-mode` | New, layout from Matt's `ask-matt` | Router: lists every jor skill, when to use it, and the main flow | New. Points to `/jor-restate` for an understanding check |
-| `/jor-get-ready` | Jorge's `get-ready` | Investigate the loaded ticket and propose, no edits | Slash-only. Reads the grill-me skill when a decision is unclear. Recommends `/jor-browser-review` only when the user asks for a browser check. Asks the user to confirm before implementing |
-| `/jor-restate` | Jorge's `restate` | Restate your goal and problem, then stop | Description is third person and says when to use it. Body unchanged |
-| `/jor-grill-me` | Matt's `grill-me` + `grilling` | Relentless interview in rounds, writes no files | Inlined the grilling text so it stands alone. Description says when to use it |
-| `/jor-browser-review` | Jorge's `browser-review` | Independent browser review with Chrome DevTools MCP | Slash-only. Reads `.agents/skills/verify-<project>/SKILL.md`, then `.cursor/skills/verify-<project>/SKILL.md`. Recommends `/jor-verify` if neither exists |
-| `/jor-to-spec` | Matt's `to-spec` | Turn the thread into a spec | Writes `.scratch/<feature-slug>/spec.md`, adds `.scratch/` to `.git/info/exclude`. No tracker, no setup skill, no triage label |
-| `/jor-to-tickets` | Matt's `to-tickets` | Split a spec into tracer-bullet tickets with blockers | Always local files under `.scratch/<feature-slug>/issues/`. Tells the user to run `/jor-get-ready` per ticket. No tracker branch, setup line or triage label |
-| `/jor-tdd` | Matt's `tdd` (+ `tests.md`, `mocking.md`) | Red-green loop at agreed seams | Trimmed. Reads the design skill for vocabulary. At green, recommends `/jor-browser-review`, then `/jor-review` |
-| `/jor-debug` | Matt's `diagnosing-bugs` (+ HITL script) | Feedback-loop-first bug diagnosis | Close to upstream. Browser loops use Chrome DevTools MCP or the verify skill in `.agents/skills/` then `.cursor/skills/` |
-| `/jor-design` | Matt's `codebase-design` (+ helpers) | Deep-module vocabulary for shaping interfaces | Close to upstream |
-| `/jor-review` | Matt's `code-review` | Two-axis review: Standards and Spec | Spec comes from the ticket in the conversation or the `/jor-to-spec` file, instead of asking. If subagents are unavailable, run each axis in turn and say so |
-| `/jor-pr` | Matt's `pr` (+ credits) | Write the PR body | Close to upstream. Slash-only. Reuses screenshots from a browser review or from `.scratch/verify/` |
-| `/jor-prototype` | Matt's `prototype` (+ `LOGIC.md`, `UI.md`) | Throwaway prototype for one design question | UI variants driven from `.agents/skills/verify-<project>/SKILL.md`, then `.cursor/skills/verify-<project>/SKILL.md`, and screenshotted at 5 breakpoints. Uncommitted screenshots go to `.scratch/prototype-<name>/` |
-| `/jor-retro` | Matt's `retro` | Retrospective on the agent's environment | Close to upstream. Dropped the `writing-for-agents` dependency. Description: setup and environment, not the code |
-| `/jor-handoff` | Matt's `handoff` | Handoff document for a fresh session | Close to upstream. Suggested skills are for the user to run next session |
-| `/jor-domain` | pstack `principle-model-the-domain` | Encode the domain in a data structure | Close to upstream. Slash-only |
-| `/jor-teach` | pstack `teach` | Explain a body of work plainly | Heavy trim. No dependency on pstack's `how`, `why` or `unslop` |
-| `/jor-verify` | pstack `create-verification-skill` (+ example map) | Generate `verify-<project>` | Rebuilt on Chrome DevTools MCP. Writes `.agents/skills/verify-<project>/` with `doctor`, `breakpoints`, `snapshot`, and a feature map. Never starts your dev server |
-| `/jor-verify-maintain` | pstack `maintain-verification-skill` | Keep the verify skill and map honest | Looks in `.agents/skills/verify-*/`, then `.cursor/skills/verify-*/`. Breakpoint screenshots are the evidence. Edits only the verify skill's folder |
-
-Exact upstream paths and commits are in [UPSTREAM.md](UPSTREAM.md).
-
 ## Outside the main flow
 
 - **`/jor-grill-me`** when you start from an idea instead of a ticket. It interviews you until every decision is settled.
@@ -100,10 +78,9 @@ Specs, tickets, verification evidence and run notes go in `.scratch/` inside the
 
 ## Rules every skill follows
 
-- **Slash-only.** Every skill has `disable-model-invocation: true`. Nothing runs unless you type it.
-- **One skill per job.** No skill does another skill's work. Mid-task it reads the other skill's file and follows it. The user's next step is a `/jor-...` command it recommends.
+- **One skill per job.** A started skill can read supporting instructions, such as `jor-get-ready` reading `jor-grill-me`. It recommends the next skill for the user to invoke.
 - **Self-contained.** No skills outside jor-stack except the `/twg-jira` entry point.
-- **Tool-neutral.** No Cursor-only features and no hardcoded model names, so packaging for Codex later is easy.
+- **Tool-neutral.** Shared instructions and resources work in Cursor and Codex, with no hardcoded model names.
 - **Upstream voice kept.** Skills marked close to upstream keep the original wording. Trims cut text rather than rewrite it.
 - **Traceable.** Each skill's frontmatter has a `metadata.based-on` line naming the upstream repo, path and commit, or "original by Jorge".
 
@@ -118,12 +95,29 @@ Specs, tickets, verification evidence and run notes go in `.scratch/` inside the
 
 Prerequisites: `/twg-jira` from twg, Node.js for chrome-devtools-mcp, and Chrome.
 
+### Cursor
+
 Choose one:
 
 - **Local folder.** Commit the plugin changes, then export `git archive HEAD` into a fresh `~/.cursor/plugins/local/jor-stack` folder and run **Developer: Reload Window**. Replace an existing install rather than overlaying it, so old private rules are removed. Export committed files instead of copying the working checkout, which can contain private local rules and `AGENTS.md`. A real folder is safest: Cursor skips symlinks that point outside `~/.cursor/plugins/local`.
 - **From GitHub.** In Cursor open **Customize → From GitHub Repository** and paste `https://github.com/jorsisu/jor-stack`. The repo root has `.cursor-plugin/marketplace.json`, which lists the single `jor-stack` plugin at the root.
 
 Open **Customize** afterwards and confirm the 19 `jor-` skills and the `chrome-devtools` MCP server are listed. The MCP server runs `npx -y chrome-devtools-mcp@latest`, so Node.js and Chrome must be installed.
+
+### Codex
+
+From this repository's root, link each skill into the shared user skill directory:
+
+```sh
+mkdir -p "$HOME/.agents/skills"
+for skill in "$PWD"/skills/jor-*; do
+  ln -s "$skill" "$HOME/.agents/skills/$(basename "$skill")"
+done
+```
+
+Existing destinations are preserved. Links use this checkout as the source, so keep it at the same path and edit skills here. Use the skill picker to select `jor-mode`; it can appear as `$jor-stack:jor-mode` when Codex adds the plugin namespace. If the skills do not appear on the next turn, restart Codex.
+
+These are standalone skills. Cursor also discovers the shared directory; use one installation method per app to avoid duplicate entries. Codex does not load this repository's `mcp.json` through skill links: browser skills require a separately configured Chrome DevTools MCP server.
 
 ## After install
 
@@ -156,7 +150,6 @@ Open **Customize** afterwards and confirm the 19 `jor-` skills and the `chrome-d
 
 ### Planned later
 
-- **Codex support.** A Codex manifest plus `agents/openai.yaml` per skill with `allow_implicit_invocation: false`.
 - **Skill doctor.** A bot that watches upstream and proposes merges without overwriting your edits.
 - **Emil Kowalski's animation skills** ([emilkowalski/skills](https://github.com/emilkowalski/skills)) as `jor-` skills. They're installed separately for now.
 

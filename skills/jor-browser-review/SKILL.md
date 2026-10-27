@@ -6,6 +6,8 @@ metadata:
   based-on: "original by Jorge (browser-review)"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # Browser review
 
 Use the active task's scope, acceptance criteria, changed files, and supplied URL or route. Follow the current project's instructions. If the target or a runnable URL cannot be determined, ask only for the missing detail.

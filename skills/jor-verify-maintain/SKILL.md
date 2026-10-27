@@ -6,6 +6,8 @@ metadata:
   based-on: "cursor/plugins pstack/skills/maintain-verification-skill @ 6714489fa233263f00e419f6cfc4759b07c81056 (trimmed to the Chrome DevTools MCP setup)"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # Maintain a verify skill
 
 A feature map rots the moment the app changes. This skill is the upkeep loop for a `verify-<project>` skill the user generated with `/jor-verify`. The unit of rigor is the feature, not every sentence: cover every feature file from source and exercise every feature live, without terminalising every bullet. Run it on demand, or after a UI-heavy sprint.

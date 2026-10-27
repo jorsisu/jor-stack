@@ -6,6 +6,8 @@ metadata:
   based-on: "mattpocock/skills skills/engineering/diagnosing-bugs @ f3fc5632f401156837ee3872f14fe33ccf1024ea (SKILL.md, scripts/hitl-loop.template.sh)"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # Diagnosing Bugs
 
 A discipline for hard bugs. Skip phases only when explicitly justified.

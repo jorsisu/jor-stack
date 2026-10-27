@@ -6,6 +6,8 @@ metadata:
   based-on: "cursor/plugins pstack/skills/create-verification-skill @ c49b37a2c0e7bede60a71ad7322e3f12c337a3da (SKILL.md, references/feature-map-example/); rebuilt on Chrome DevTools MCP"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # Create a verify skill
 
 Every serious project needs a scripted way to drive the real app and prove behavior: open it, exercise a feature the way a user would, and capture evidence. This skill generates that as a project-local skill, `verify-<project>`, tailored to the repo and driven through **Chrome DevTools MCP**. You write the generator's output for the next agent, not for a human: it will be read cold, mid-task, by an agent that has never seen the app.

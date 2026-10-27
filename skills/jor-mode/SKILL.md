@@ -6,6 +6,8 @@ metadata:
   based-on: "new; layout modeled on mattpocock/skills skills/engineering/ask-matt/SKILL.md @ 954ee7fd7f1911b79bfa82589b4d35ab6c4b13b8"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # Jor Mode
 
 You don't remember every skill, so ask.

@@ -6,6 +6,8 @@ metadata:
   based-on: "mattpocock/skills skills/engineering/tdd @ 3f599139104dfceabc7754eeb91319802f85e042 (SKILL.md, tests.md, mocking.md)"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # Test-Driven Development
 
 TDD is the red → green loop. This skill is what makes that loop produce tests worth keeping. Every section applies on every cycle: consult them before and during the loop, not after.

@@ -6,6 +6,8 @@ metadata:
   based-on: "mattpocock/skills skills/engineering/code-review @ 3da8c01116264675eeefbd6e9d59c734de9095cc"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 Two-axis review of committed changes since a fixed point the user supplies, plus staged, unstaged, and untracked work in scope:
 
 - **Standards**: does the code conform to this repo's documented coding standards?

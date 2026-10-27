@@ -6,6 +6,8 @@ metadata:
   based-on: "mattpocock/skills skills/engineering/prototype @ 321658273cb1d20b76026717d027d505790106d4 (SKILL.md, LOGIC.md, UI.md)"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # Prototype
 
 A prototype is **throwaway code that answers a question**. The question decides the shape.

@@ -6,6 +6,8 @@ metadata:
   based-on: "mattpocock/skills skills/engineering/to-tickets @ 9e2abf8611a345efbf779aacb171cff015bcdeb6"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # To Tickets
 
 Break a plan, spec, or conversation into a set of **tickets**: tracer-bullet vertical slices, each declaring the tickets that **block** it.

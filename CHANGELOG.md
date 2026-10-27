@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added local Codex installation through shared skill links, manual-only Codex policy for all 19 skills, and Codex command syntax guidance.
 - `jor-review` includes staged, unstaged, and in-scope untracked files alongside committed changes, and reviews the current result where diffs overlap.
 - `jor-verify` restores and confirms the target UI state at every breakpoint before capturing screenshots. The Notes example follows the same steps.
 - `jor-debug` accepts a repeatable Chrome DevTools MCP sequence with an explicit pass/fail check as a feedback loop.

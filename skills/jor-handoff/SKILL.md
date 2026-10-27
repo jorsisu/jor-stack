@@ -6,6 +6,8 @@ metadata:
   based-on: "mattpocock/skills skills/productivity/handoff @ 0f5e033ebc47b142f5ffa56a582ede6d9d9bada3"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS (`$TMPDIR`, else `/tmp`; `%TEMP%` on Windows) - not the current workspace.
 
 Include a "suggested skills" section in the document, naming which `/jor-...` skills the user should run next session (for example `/jor-get-ready` for the next ticket). The next agent does not run them.

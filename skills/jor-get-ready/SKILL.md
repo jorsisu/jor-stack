@@ -6,6 +6,8 @@ metadata:
   based-on: "original by Jorge (get-ready)"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # Get Ready
 
 Review the context, reproduce the problem, and return a proposal. This invocation authorizes investigation only. Do not change project files or implement the proposal. Wait for an explicit implementation request.
