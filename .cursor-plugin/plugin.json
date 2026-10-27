@@ -1,0 +1,11 @@
+{
+  "name": "jor-stack",
+  "displayName": "jor-stack",
+  "version": "0.1.0",
+  "description": "Jorge's slash-only FE workflow skills",
+  "author": {
+    "name": "Jorge Galarza"
+  },
+  "keywords": ["skills", "frontend", "workflow", "slash-commands", "chrome-devtools-mcp"],
+  "skills": "./skills/"
+}

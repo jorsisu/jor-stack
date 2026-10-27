@@ -1,0 +1,17 @@
+{
+  "name": "jor-stack",
+  "owner": {
+    "name": "Jorge Galarza"
+  },
+  "metadata": {
+    "description": "Jorge's private marketplace for the jor-stack plugin",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "jor-stack",
+      "source": "./",
+      "description": "Jorge's slash-only FE workflow skills"
+    }
+  ]
+}

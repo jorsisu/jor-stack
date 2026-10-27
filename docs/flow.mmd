@@ -1,0 +1,18 @@
+flowchart TD
+    jira["/twg-jira ticket"] --> ready["/jor-get-ready<br/>investigate and propose"]
+    ready --> big{"Bigger than<br/>one change?"}
+    big -- yes --> spec["/jor-to-spec"]
+    spec --> tickets["/jor-to-tickets<br/>private .scratch/"]
+    tickets -. each ticket .-> ready
+    big -- no --> kind{"What kind<br/>of work?"}
+    kind -- feature --> tdd["/jor-tdd"]
+    kind -- bug --> debug["/jor-debug"]
+    kind -- unsure of the design --> proto["/jor-prototype"]
+    proto -. chosen variant .-> tdd
+    tdd --> browser["/jor-browser-review"]
+    debug --> browser
+    browser --> review["/jor-review"]
+    review --> pr["/jor-pr"]
+    pr --> close["/jor-retro · /jor-handoff"]
+    verify["/jor-verify<br/>one-time setup per project"] -. drives variants .-> proto
+    verify -. breakpoints, feature map .-> browser
