@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- `jor-review` includes staged, unstaged, and in-scope untracked files alongside committed changes, and reviews the current result where diffs overlap.
+- `jor-verify` restores and confirms the target UI state at every breakpoint before capturing screenshots. The Notes example follows the same steps.
+- `jor-debug` accepts a repeatable Chrome DevTools MCP sequence with an explicit pass/fail check as a feedback loop.
+- `jor-prototype`, including `UI.md` and `LOGIC.md`, stops at the design decision unless implementation is already explicitly authorized. Prototype commits also require authorization.
+- `jor-browser-review` and generated verify skills start, stop, or restart dev servers only on explicit request, including in worktrees.
+- `jor-verify` creates its feature map inside the skill folder selected in step 2: `.agents/skills/verify-<project>/` by default, or the chosen `.cursor/skills/` location.
+- Removed the personal GitHub identity rule from tracked plugin files; retained the local rule and local `AGENTS.md` through Git's local exclude list. Local installation now uses a committed export into a fresh folder.
+
 ## 0.1.1 (2026-10-27)
 
 - Slash-only skills no longer invoke each other. Mid-task, a skill reads the other skill's `SKILL.md` and follows it. The user's next step is a `/jor-...` command the agent recommends.

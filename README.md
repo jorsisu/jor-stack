@@ -120,7 +120,7 @@ Prerequisites: `/twg-jira` from twg, Node.js for chrome-devtools-mcp, and Chrome
 
 Choose one:
 
-- **Local folder.** Copy this folder to `~/.cursor/plugins/local/jor-stack`, then run **Developer: Reload Window**. A copied folder is safest: Cursor skips symlinks that point outside `~/.cursor/plugins/local`.
+- **Local folder.** Commit the plugin changes, then export `git archive HEAD` into a fresh `~/.cursor/plugins/local/jor-stack` folder and run **Developer: Reload Window**. Replace an existing install rather than overlaying it, so old private rules are removed. Export committed files instead of copying the working checkout, which can contain private local rules and `AGENTS.md`. A real folder is safest: Cursor skips symlinks that point outside `~/.cursor/plugins/local`.
 - **From GitHub.** In Cursor open **Customize → From GitHub Repository** and paste `https://github.com/jorsisu/jor-stack`. The repo root has `.cursor-plugin/marketplace.json`, which lists the single `jor-stack` plugin at the root.
 
 Open **Customize** afterwards and confirm the 19 `jor-` skills and the `chrome-devtools` MCP server are listed. The MCP server runs `npx -y chrome-devtools-mcp@latest`, so Node.js and Chrome must be installed.
