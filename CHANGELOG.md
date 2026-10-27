@@ -3,7 +3,8 @@
 ## 0.1.1 (2026-10-27)
 
 - Slash-only skills no longer invoke each other. Mid-task, a skill reads the other skill's `SKILL.md` and follows it. The user's next step is a `/jor-...` command the agent recommends.
-- `jor-verify` writes the generated skill to `.agents/skills/verify-<project>/`, and asks first if the project already uses `.cursor/skills/`. `jor-browser-review`, `jor-debug`, and `jor-prototype` read that path. `jor-verify-maintain` looks in `.agents/skills/verify-*/` and falls back to `.cursor/skills/verify-*/`.
+- `jor-verify` writes the generated skill to `.agents/skills/verify-<project>/`, and asks first if the project already uses `.cursor/skills/`. `jor-browser-review`, `jor-debug`, `jor-prototype`, and `jor-verify-maintain` look there first and fall back to `.cursor/skills/verify-<project>/`.
+- `jor-get-ready` recommends `/jor-browser-review` only when the user asks for a browser check. `jor-pr` reuses screenshots from a browser review or from `.scratch/verify/`. `jor-review` states the subagent fallback once, in the spawn step. `jor-retro` names the `jor-review` skill without a slash command.
 - Removed the headless browser script option (Playwright / Puppeteer) from `jor-debug`, and dropped the Playwright and Cypress note from `jor-verify`'s line about reading existing e2e tests. Browser checks stay on Chrome DevTools MCP.
 - Added an MIT `LICENSE` and `THIRD_PARTY_NOTICES.md`.
 - `plugin.json` and `marketplace.json` are 0.1.1. `plugin.json` records the MIT license and the repository URL.

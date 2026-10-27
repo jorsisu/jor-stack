@@ -12,7 +12,7 @@ Review the context, reproduce the problem, and return a proposal. This invocatio
 
 1. Use the ticket and discussion already in the thread. Identify the expected result, reported behavior, acceptance criteria, and the ticket's comments. Retrieve missing context only when needed.
 2. Read applicable project rules and inspect the relevant code, callers, tests, and existing patterns. Verify that the proposed approach fits the project.
-3. For a bug, attempt reproduction with the smallest relevant existing check. For a feature, inspect the current behavior and confirm the gap. Report what was observed, what is inferred, and what could not be reproduced. Use browser verification only when the user asks for it in the current thread. Recommend the user run `/jor-browser-review`. Leave development servers under user control.
+3. For a bug, attempt reproduction with the smallest relevant existing check. For a feature, inspect the current behavior and confirm the gap. Report what was observed, what is inferred, and what could not be reproduced. Use browser verification only when the user asks for it in the current thread, and then recommend they run `/jor-browser-review`. Leave development servers under user control.
 4. If decisions or requirements remain unclear, read `../jor-grill-me/SKILL.md` and follow it. Find code facts yourself; ask the user for decisions. Continue independent investigation while answers are pending. Keep unresolved decisions explicit in any provisional proposal.
 5. Return a concise proposal with:
    - Findings and evidence, including reproduction limits.

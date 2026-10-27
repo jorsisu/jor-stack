@@ -57,26 +57,26 @@ Solid arrows are the main path. Dashed arrows are loops and supporting links.
 7. **`/jor-pr` writes the PR body.** It shows the smallest visual that explains the change, before and after evidence (screenshots are best), and the merge danger: one-way or two-way door, and blast radius.
 8. **`/jor-retro` and `/jor-handoff` close the loop.** `/jor-retro` suggests improvements to the agent's environment (checks, standards, navigation pointers), not the code. `/jor-handoff` writes a handoff file when the work continues in a fresh session, another directory, or with a colleague.
 
-**One-time setup per project: `/jor-verify`.** It writes the project's own skill to `.agents/skills/verify-<project>/` (if the project already uses `.cursor/skills/`, it asks which). The skill runs on Chrome DevTools MCP, with `doctor` (health check), `breakpoints` (screenshots at 360, 768, 1280, 1440 and 1920) and `snapshot` (page and DOM state) commands, plus a feature map. `/jor-prototype` reads that skill to drive variants. `/jor-browser-review` reads its breakpoints and feature map. If the file is missing, those skills recommend you run `/jor-verify`.
+**One-time setup per project: `/jor-verify`.** It writes the project's own skill to `.agents/skills/verify-<project>/` (if the project already uses `.cursor/skills/`, it asks which). The skill runs on Chrome DevTools MCP, with `doctor` (health check), `breakpoints` (screenshots at 360, 768, 1280, 1440 and 1920) and `snapshot` (page and DOM state) commands, plus a feature map. `/jor-prototype`, `/jor-browser-review`, and `/jor-debug` read `.agents/skills/verify-<project>/SKILL.md` first, then `.cursor/skills/verify-<project>/SKILL.md`. Breakpoint screenshots from a verify run are saved under `.scratch/verify/`. If neither skill file exists, those skills recommend you run `/jor-verify`.
 
 ## Skills
 
 | Skill | Based on | Job | What changed |
 | --- | --- | --- | --- |
 | `/jor-mode` | New, layout from Matt's `ask-matt` | Router: lists every jor skill, when to use it, and the main flow | New. Points to `/jor-restate` for an understanding check |
-| `/jor-get-ready` | Jorge's `get-ready` | Investigate the loaded ticket and propose, no edits | Slash-only. Reads the grill-me skill when a decision is unclear, and recommends `/jor-browser-review` for browser checks. Asks the user to confirm before implementing |
-| `/jor-restate` | Jorge's `restate` | Restate your goal and problem, then stop | Name only |
-| `/jor-grill-me` | Matt's `grill-me` + `grilling` | Relentless interview in rounds, writes no files | Inlined the grilling text so it stands alone |
-| `/jor-browser-review` | Jorge's `browser-review` | Independent browser review with Chrome DevTools MCP | Slash-only. Reads `.agents/skills/verify-<project>/SKILL.md` for breakpoints and the feature map. Recommends `/jor-verify` if that file is missing |
+| `/jor-get-ready` | Jorge's `get-ready` | Investigate the loaded ticket and propose, no edits | Slash-only. Reads the grill-me skill when a decision is unclear. Recommends `/jor-browser-review` only when the user asks for a browser check. Asks the user to confirm before implementing |
+| `/jor-restate` | Jorge's `restate` | Restate your goal and problem, then stop | Description is third person and says when to use it. Body unchanged |
+| `/jor-grill-me` | Matt's `grill-me` + `grilling` | Relentless interview in rounds, writes no files | Inlined the grilling text so it stands alone. Description says when to use it |
+| `/jor-browser-review` | Jorge's `browser-review` | Independent browser review with Chrome DevTools MCP | Slash-only. Reads `.agents/skills/verify-<project>/SKILL.md`, then `.cursor/skills/verify-<project>/SKILL.md`. Recommends `/jor-verify` if neither exists |
 | `/jor-to-spec` | Matt's `to-spec` | Turn the thread into a spec | Writes `.scratch/<feature-slug>/spec.md`, adds `.scratch/` to `.git/info/exclude`. No tracker, no setup skill, no triage label |
 | `/jor-to-tickets` | Matt's `to-tickets` | Split a spec into tracer-bullet tickets with blockers | Always local files under `.scratch/<feature-slug>/issues/`. Tells the user to run `/jor-get-ready` per ticket. No tracker branch, setup line or triage label |
 | `/jor-tdd` | Matt's `tdd` (+ `tests.md`, `mocking.md`) | Red-green loop at agreed seams | Trimmed. Reads the design skill for vocabulary. At green, recommends `/jor-browser-review`, then `/jor-review` |
-| `/jor-debug` | Matt's `diagnosing-bugs` (+ HITL script) | Feedback-loop-first bug diagnosis | Close to upstream. Browser loops use Chrome DevTools MCP or `.agents/skills/verify-<project>/SKILL.md` |
+| `/jor-debug` | Matt's `diagnosing-bugs` (+ HITL script) | Feedback-loop-first bug diagnosis | Close to upstream. Browser loops use Chrome DevTools MCP or the verify skill in `.agents/skills/` then `.cursor/skills/` |
 | `/jor-design` | Matt's `codebase-design` (+ helpers) | Deep-module vocabulary for shaping interfaces | Close to upstream |
-| `/jor-review` | Matt's `code-review` | Two-axis review: Standards and Spec | Spec comes from the ticket in the conversation or the `/jor-to-spec` file, instead of asking |
-| `/jor-pr` | Matt's `pr` (+ credits) | Write the PR body | Close to upstream. Slash-only |
-| `/jor-prototype` | Matt's `prototype` (+ `LOGIC.md`, `UI.md`) | Throwaway prototype for one design question | UI variants driven from `.agents/skills/verify-<project>/SKILL.md` and screenshotted at 5 breakpoints. Uncommitted screenshots go to `.scratch/prototype-<name>/` |
-| `/jor-retro` | Matt's `retro` | Retrospective on the agent's environment | Close to upstream. Dropped the `writing-for-agents` dependency |
+| `/jor-review` | Matt's `code-review` | Two-axis review: Standards and Spec | Spec comes from the ticket in the conversation or the `/jor-to-spec` file, instead of asking. If subagents are unavailable, run each axis in turn and say so |
+| `/jor-pr` | Matt's `pr` (+ credits) | Write the PR body | Close to upstream. Slash-only. Reuses screenshots from a browser review or from `.scratch/verify/` |
+| `/jor-prototype` | Matt's `prototype` (+ `LOGIC.md`, `UI.md`) | Throwaway prototype for one design question | UI variants driven from `.agents/skills/verify-<project>/SKILL.md`, then `.cursor/skills/verify-<project>/SKILL.md`, and screenshotted at 5 breakpoints. Uncommitted screenshots go to `.scratch/prototype-<name>/` |
+| `/jor-retro` | Matt's `retro` | Retrospective on the agent's environment | Close to upstream. Dropped the `writing-for-agents` dependency. Description: setup and environment, not the code |
 | `/jor-handoff` | Matt's `handoff` | Handoff document for a fresh session | Close to upstream. Suggested skills are for the user to run next session |
 | `/jor-domain` | pstack `principle-model-the-domain` | Encode the domain in a data structure | Close to upstream. Slash-only |
 | `/jor-teach` | pstack `teach` | Explain a body of work plainly | Heavy trim. No dependency on pstack's `how`, `why` or `unslop` |
@@ -130,7 +130,7 @@ Open **Customize** afterwards and confirm the 19 `jor-` skills and the `chrome-d
 1. Remove the pstack plugin.
 2. Remove Matt Pocock's skills.
 3. Remove the old `get-ready`, `restate` and `browser-review` skills, so only the `jor-` versions remain.
-4. Run `/jor-verify` once in each project. It writes `.agents/skills/verify-<project>/`.
+4. Run `/jor-verify` once in each project. It writes `.agents/skills/verify-<project>/`, or `.cursor/skills/verify-<project>/` if you already keep skills there and choose that.
 
 ## Not in v0.1 / roadmap
 

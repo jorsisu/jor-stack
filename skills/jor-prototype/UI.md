@@ -95,7 +95,7 @@ Put the switcher in a single shared component so both sub-shapes can reuse it. L
 
 Before handing over, drive each variant in a real browser so the user can compare them side by side without flipping through by hand.
 
-- Read `.agents/skills/verify-<project>/SKILL.md` and follow it: run its `doctor` first, then its `breakpoints` command for each `?variant=` URL. If that file is missing, tell the user to run `/jor-verify` and use Chrome DevTools MCP directly at the same widths.
+- Read `.agents/skills/verify-<project>/SKILL.md` and follow it: run its `doctor` first, then its `breakpoints` command for each `?variant=` URL. If that file is missing, read `.cursor/skills/verify-<project>/SKILL.md` and follow that instead. If neither file exists, tell the user to run `/jor-verify` and use Chrome DevTools MCP directly at the same widths.
 - Capture every variant at all five breakpoints: **360, 768, 1280, 1440, 1920** px wide. Hide or ignore the floating switcher in the comparison if it covers content.
 - Save uncommitted prototype screenshots to `.scratch/prototype-<name>/`, named `<variant>-<width>.png`. Keep `.scratch/` in `.git/info/exclude`; never edit the shared `.gitignore`.
 - Lay them out for comparison: one row per breakpoint, one column per variant (a markdown table of image links, or a single contact-sheet HTML file next to the screenshots). Note anything that breaks at a breakpoint: overflow, wrapped navigation, hidden primary actions, console errors.

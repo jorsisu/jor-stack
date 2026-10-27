@@ -36,7 +36,7 @@ If the user wants to check that you understood them, suggest **`/jor-restate`** 
 
 ## One-time setup per project
 
-- **`/jor-verify`** writes the project's own skill to `.agents/skills/verify-<project>/` on Chrome DevTools MCP, with `doctor`, `breakpoints` (360, 768, 1280, 1440, 1920) and `snapshot` commands plus a feature map. `jor-browser-review` and `jor-prototype` read that file. Recommend the user run `/jor-verify` once per project before relying on either.
+- **`/jor-verify`** writes the project's own skill to `.agents/skills/verify-<project>/` on Chrome DevTools MCP, with `doctor`, `breakpoints` (360, 768, 1280, 1440, 1920) and `snapshot` commands plus a feature map. If the project already uses `.cursor/skills/`, it asks which folder to use. `jor-browser-review`, `jor-debug`, and `jor-prototype` read `.agents/skills/verify-<project>/SKILL.md` first, then `.cursor/skills/verify-<project>/SKILL.md`. Recommend the user run `/jor-verify` once per project before relying on either.
 
 ## Outside the main flow
 
