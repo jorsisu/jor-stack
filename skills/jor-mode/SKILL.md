@@ -16,23 +16,22 @@ Before stating what a skill does or recommending a step be skipped, read that sk
 
 `jor-writing-for-agents` can be selected automatically for requests to create, edit, review, or consolidate skills and agent instructions. All other jor skills are **manual-only**. Recommend the next `/jor-...` command for those skills; don't run it on the user's behalf.
 
-A **flow** is a path through the skills. The main flow takes a ticket or direct request through a proposal, authorized implementation, verification, review, and a PR body. Committing, pushing, publishing, and merging require separate authorization. Other skills support a specific decision, lesson, handoff, or project setup.
+A **flow** is a path through the skills. Use investigation and planning when needed, then authorized implementation, checks, code review, requested browser review, and a PR body. Committing, pushing, publishing, and merging require separate authorization. Other skills support a specific decision, lesson, handoff, or project setup.
 
 If the user wants to check that you understood them, suggest **`/jor-restate`** rather than restating their goal yourself.
 
 ## The main flow: task → PR body
 
 1. **Load the task.** Start with the ticket in the conversation (for example via `/twg-jira`) or the user's direct request.
-2. **`/jor-get-ready`** investigates and proposes. It reads the task, discussion, project rules and code, reproduces the bug or confirms the gap, and returns a proposal. It changes nothing.
-3. **Branch: is this bigger than one change?**
-   - **Yes** → **`/jor-to-spec`** confirms unresolved test seams and writes `.scratch/<feature-slug>/spec.md`. **`/jor-to-tickets`** proposes a breakdown, then writes approved tickets under `.scratch/<feature-slug>/issues/`, each declaring its blockers. Recommend `/jor-get-ready` for each ticket whose blockers are complete. These are local files, not Jira mutations.
-   - **No** → go to step 4.
-4. **After the user authorizes the next step, choose the work:**
-   - **Feature** → **`/jor-implement`**: implement the spec, tickets, or approved proposal using project rules and patterns. For test-first work, read `jor-tdd` and follow its red-green loop at agreed seams.
-   - **Bug** → **`/jor-bugfix`**: build a tight feedback loop first, then reproduce, hypothesise, instrument, fix with a regression test.
+2. **Check context.** If the request and relevant code are already understood, skip `/jor-get-ready` and choose the route below. Otherwise, it reads the task, discussion, project rules and code, reproduces the bug or confirms the gap, and returns a proposal. It changes nothing.
+3. **Choose by uncertainty and scope:**
+   - **Unknown bug cause** → **`/jor-bugfix`**: build a tight feedback loop, reproduce, diagnose, and fix within the authorized scope. Diagnose before prescribing a spec or ticket breakdown for the fix.
+   - **One clear change** → **`/jor-implement`**: implement a feature or a bug fix whose cause and intended change are established. Accept a clear, authorized request, spec, ticket, or approved proposal. For test-first work, read `jor-tdd` and follow its red-green loop at agreed seams.
+   - **Several deliverables with understood scope** → **`/jor-to-spec`** confirms unresolved test seams and writes `.scratch/<feature-slug>/spec.md`. **`/jor-to-tickets`** proposes a breakdown, then writes approved tickets under `.scratch/<feature-slug>/issues/`, each declaring its blockers. Recommend `/jor-get-ready` for each ticket whose blockers are complete and choose its next step from the findings. These are local files, not Jira mutations.
    - **Unsure of the design** → **`/jor-prototype`**: throwaway variants that answer one design question. Recommend the user run `/jor-implement` with the chosen variant.
-5. **When requested, `/jor-browser-review`** checks the finished change through Chrome DevTools MCP at the project's breakpoints and returns URLs for human verification. Otherwise go to code review. Browser checks need an explicit request in the current chat; server start, stop, or restart also needs an explicit request.
-6. **`/jor-review`** needs a fixed point (branch, tag, or commit). It reviews committed and in-scope uncommitted work along two axes: Standards and Spec. It reads the current result, changes no files, and does not execute the feature. Accepted fixes return to an authorized implementation pass, then affected checks and review repeat.
+4. **Keep changes within authorization.** A direct implementation request supplies authorization for its stated scope. An investigation-only request stops at the findings or proposal until implementation is authorized. If diagnosis reveals several deliverables or a wider fix, recommend `/jor-to-spec` and `/jor-to-tickets` before expanding the work.
+5. **After implementation checks, `/jor-review`** needs a fixed point (branch, tag, or commit). It reviews committed and in-scope uncommitted work along two axes: Standards and Spec. It reads the current result, changes no files, and does not execute the feature. Accepted fixes return to an authorized implementation pass, then affected checks and code review repeat.
+6. **After code review, `/jor-browser-review` when requested** checks the finished change through Chrome DevTools MCP at the project's breakpoints and returns URLs for human verification. Browser checks need an explicit request in the current chat; server start, stop, or restart also needs an explicit request. If browser findings require code changes, repeat affected checks and code review, then browser review.
 7. **`/jor-pr`** writes the PR body: the smallest useful visual, actual before/after evidence, and merge danger. It does not commit, push, open, or merge a PR.
 8. **Use `/jor-retro` or `/jor-handoff` when needed.** `/jor-retro` proposes prevention for evidenced mistakes: code structure, automated checks, guidance, then human review. It makes no edits. Accepted code or check changes go to `/jor-implement`; accepted guidance changes go to `/jor-writing-for-agents`. `/jor-handoff` writes to the OS temporary directory when work moves to a fresh session, a new directory, or a colleague.
 

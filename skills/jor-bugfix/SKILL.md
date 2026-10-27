@@ -1,6 +1,6 @@
 ---
 name: jor-bugfix
-description: Diagnosis loop for hard bugs and performance regressions. Build a tight feedback loop first, then reproduce, minimise, hypothesise, instrument, fix with a regression test, and clean up.
+description: Diagnose bugs and performance regressions with an unknown cause. Build a tight feedback loop first, then reproduce, minimise, hypothesise, instrument, fix with a regression test, and clean up.
 disable-model-invocation: true
 metadata:
   based-on: "mattpocock/skills skills/engineering/diagnosing-bugs @ f3fc5632f401156837ee3872f14fe33ccf1024ea (SKILL.md, scripts/hitl-loop.template.sh)"
@@ -10,7 +10,7 @@ In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the sk
 
 # Bugfix
 
-A discipline for hard bugs. Skip phases only when explicitly justified.
+Use this when the bug's cause is unknown. If the cause and intended fix are already established, recommend `/jor-implement` instead of repeating diagnosis. Skip phases only when explicitly justified.
 
 When exploring the codebase, read `GLOSSARY.md` (if it exists) to get a clear mental model of the relevant modules, and check ADRs in the area you're touching.
 
@@ -122,6 +122,8 @@ Tool preference:
 
 ## Phase 5: Fix + regression test
 
+Keep the fix within the authorized scope. An investigation-only request stops at the findings. If diagnosis reveals several deliverables or a wider fix, report the findings and recommend `/jor-to-spec` and `/jor-to-tickets` before expanding the work.
+
 Write the regression test **before the fix**, but only if there is a **correct seam** for it.
 
 A correct seam is one where the test exercises the **real bug pattern** as it occurs at the call site. If the only available seam is too shallow (single-caller test when the bug needs multiple callers, unit test that can't replicate the chain that triggered the bug), a regression test there gives false confidence.
@@ -146,4 +148,4 @@ Required before declaring done:
 - [ ] Throwaway prototypes deleted (or moved to a clearly-marked debug location)
 - [ ] The hypothesis that turned out correct is stated in the commit / PR message, so the next debugger learns
 
-Report the original symptom, cause, fix, exact checks and results, and any remaining limits. Recommend `/jor-browser-review` if requested, otherwise `/jor-review`. Leave the next invocation to the user; commit only when authorized.
+Report the original symptom, cause, fix, exact checks and results, and any remaining limits. Recommend `/jor-review` next; requested `/jor-browser-review` follows code review and accepted fixes. Leave the next invocation to the user; commit only when authorized.

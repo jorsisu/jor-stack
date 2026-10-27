@@ -24,22 +24,22 @@ The manifests remain at version 0.1.1. The working tree also contains the update
 
 ## How work flows
 
-Read from top to bottom. Use the short path when context and scope are clear; use a spec and tickets for harder work. Invoke each skill separately.
+Read from top to bottom. Diagnose unknown bug causes, implement clear changes, and use specs and tickets for several deliverables. Invoke each skill separately.
 
 ```mermaid
 flowchart TB
     task("Describe task or load ticket"):::step --> context("Enough context?"):::decision
     context -->|No| ready("jor-get-ready<br/>Investigate and clarify"):::step
-    context -->|Yes| size("Easy or hard task?"):::decision
-    ready --> size
-    size -->|Easy: one clear change| approved("Implementation authorized<br/>for this scope"):::step
-    size -->|Hard: needs a plan and breakdown| spec("jor-to-spec<br/>Capture agreed requirements"):::step
+    context -->|Yes| route("What is needed?"):::decision
+    ready --> route
+    route -->|Unknown bug cause| diagnosis("Diagnosis and fix authorized<br/>for this scope"):::step
+    diagnosis --> bugfix("jor-bugfix<br/>Reproduce, diagnose, and fix"):::step
+    route -->|One clear change| approved("Implementation authorized<br/>for this scope"):::step
+    route -->|Several deliverables| spec("jor-to-spec<br/>Capture agreed requirements"):::step
     spec --> tickets("jor-to-tickets<br/>Approve breakdown and write tasks"):::step
     tickets --> next("jor-get-ready<br/>Assess next unblocked ticket"):::step
     next --> approved
-    approved --> kind("Type of work"):::decision
-    kind -->|Bug| bugfix("jor-bugfix"):::step
-    kind -->|Feature| implement("jor-implement"):::step
+    approved --> implement("jor-implement<br/>Build a feature or known fix"):::step
     bugfix --> checks("Run relevant checks"):::step
     implement --> checks
     checks --> review("jor-review<br/>Review code against a fixed base"):::step
@@ -57,9 +57,9 @@ flowchart TB
 The same diagram source is kept in [docs/flow.mmd](docs/flow.mmd).
 
 1. **Load the task.** Bring a Jira ticket into the conversation with `/twg-jira`, or state the request directly. The request, acceptance criteria, and relevant discussion set the scope. Jira access is only needed for Jira work.
-2. **Check context.** If the request, relevant code, and intended change are already understood, skip `/jor-get-ready`. Otherwise, it investigates the code, callers, tests, and current behavior. It reads the grill-me skill when product decisions remain unclear, then returns a proposal with evidence, risks, and checks. It changes no files.
-3. **Choose the task size.** For one clear change, go directly to implementation. For harder work that needs a plan and breakdown, use `/jor-to-spec` to capture agreed requirements and test seams in `.scratch/<feature-slug>/spec.md`. Then `/jor-to-tickets` proposes a breakdown and writes one file per ticket after approval under `.scratch/<feature-slug>/issues/`. Run `/jor-get-ready` for each ticket whose blockers are complete. These files do not create or change Jira issues.
-4. **Implement the authorized scope.** Use `/jor-implement` for a feature or `/jor-bugfix` for a bug. A direct implementation request supplies authorization for its stated scope; an investigation-only request ends at the proposal until you authorize implementation. Use `/jor-prototype` when a design question needs exploration, then authorize production edits for the chosen design.
+2. **Check context.** If the request and relevant code are already understood, skip `/jor-get-ready` and choose the route below. Otherwise, it investigates the code, callers, tests, and current behavior. It reads the grill-me skill when product decisions remain unclear, then returns a proposal with evidence, risks, and checks. It changes no files.
+3. **Choose by uncertainty and scope.** Use `/jor-bugfix` when a bug's cause is unknown. Diagnose it before planning a larger fix. Use `/jor-implement` for one clear change, including a bug fix whose cause and intended change are established. When understood work needs several deliverables, use `/jor-to-spec` to capture agreed requirements and test seams in `.scratch/<feature-slug>/spec.md`. Then `/jor-to-tickets` proposes a breakdown and writes one file per ticket after approval under `.scratch/<feature-slug>/issues/`. Run `/jor-get-ready` for each ticket whose blockers are complete and choose its next step from the findings. These files do not create or change Jira issues.
+4. **Keep changes within the authorized scope.** A direct implementation request supplies authorization for its stated scope; an investigation-only request ends at the findings or proposal until you authorize implementation. If diagnosis reveals several deliverables or a wider fix, propose the spec-and-ticket path before expanding the work. Use `/jor-prototype` when a design question needs exploration, then authorize production edits for the chosen design.
 5. **Review code, then check the browser.** After implementation checks, ask the agent to review its work with `/jor-review` against a branch, tag, or commit. Fix accepted findings in an authorized implementation pass and repeat affected checks and code review. Once code review is complete, run `/jor-browser-review` when requested. If browser findings require code changes, repeat the affected checks and code review, then check the browser again.
 6. **Prepare delivery.** `/jor-pr` writes the PR body from the current change and actual evidence. It does not commit, push, open, or merge a PR. Request those actions separately. Use `/jor-retro` for a useful lesson and `/jor-handoff` when work continues elsewhere; neither is a required step for every change.
 

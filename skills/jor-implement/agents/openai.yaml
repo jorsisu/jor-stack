@@ -1,5 +1,5 @@
 interface:
   display_name: "Jor Implement"
-  short_description: "Build work from a spec, tickets, or approved proposal"
+  short_description: "Implement clear features and known bug fixes"
 policy:
   allow_implicit_invocation: false

@@ -1,16 +1,16 @@
 flowchart TB
     task("Describe task or load ticket"):::step --> context("Enough context?"):::decision
     context -->|No| ready("jor-get-ready<br/>Investigate and clarify"):::step
-    context -->|Yes| size("Easy or hard task?"):::decision
-    ready --> size
-    size -->|Easy: one clear change| approved("Implementation authorized<br/>for this scope"):::step
-    size -->|Hard: needs a plan and breakdown| spec("jor-to-spec<br/>Capture agreed requirements"):::step
+    context -->|Yes| route("What is needed?"):::decision
+    ready --> route
+    route -->|Unknown bug cause| diagnosis("Diagnosis and fix authorized<br/>for this scope"):::step
+    diagnosis --> bugfix("jor-bugfix<br/>Reproduce, diagnose, and fix"):::step
+    route -->|One clear change| approved("Implementation authorized<br/>for this scope"):::step
+    route -->|Several deliverables| spec("jor-to-spec<br/>Capture agreed requirements"):::step
     spec --> tickets("jor-to-tickets<br/>Approve breakdown and write tasks"):::step
     tickets --> next("jor-get-ready<br/>Assess next unblocked ticket"):::step
     next --> approved
-    approved --> kind("Type of work"):::decision
-    kind -->|Bug| bugfix("jor-bugfix"):::step
-    kind -->|Feature| implement("jor-implement"):::step
+    approved --> implement("jor-implement<br/>Build a feature or known fix"):::step
     bugfix --> checks("Run relevant checks"):::step
     implement --> checks
     checks --> review("jor-review<br/>Review code against a fixed base"):::step
