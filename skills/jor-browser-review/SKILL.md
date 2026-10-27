@@ -9,7 +9,7 @@ metadata:
 # Browser review
 
 Use the active task's scope, acceptance criteria, changed files, and supplied URL or route. Follow the current project's instructions. If the target or a runnable URL cannot be determined, ask only for the missing detail.
-Do not start or restart a user-controlled server. If you are in a worktree, start the required servers within the worktree.
+Start, stop, or restart dev servers only when the user explicitly requests it, including in worktrees. If the server is down and startup is not authorized, report the repo's start command and stop the browser check.
 
 Delegate one bounded, read-only review when the harness supports subagents. Prefer a strong available model at high reasoning when available; otherwise use an available capable model and supported effort. Give the reviewer the needed task context. If subagents are unavailable, perform the review in the current agent and say that it was not independent.
 

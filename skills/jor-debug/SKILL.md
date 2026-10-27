@@ -59,14 +59,14 @@ Stop and say so explicitly. List what you tried. Ask the user for: (a) access to
 
 ### Completion criterion: a tight loop that goes red
 
-Phase 1 is done when the loop is **tight** and **red-capable**: you can name **one command** (a script path, a test invocation, a curl) that you have **already run at least once** (show the invocation and its output, redacted), and that is:
+Phase 1 is done when the loop is **tight** and **red-capable**: you have **already run at least once** either one command (a script path, a test invocation, a curl) or a repeatable Chrome DevTools MCP sequence. Show the command or tool sequence and its observed result, redacted. A browser sequence records its starting URL and state, setup/reset actions, interactions, and an explicit pass/fail check for the symptom. The loop must be:
 
 - [ ] **Red-capable**: it drives the actual bug code path and asserts the **user's exact symptom**, so it can go red on this bug and green once fixed. Not "runs without erroring"; it must be able to _catch this specific bug_.
 - [ ] **Deterministic**: same verdict every run (flaky bugs: a pinned, high reproduction rate, per above).
 - [ ] **Fast**: seconds, not minutes.
 - [ ] **Agent-runnable**: you can run it unattended; a human in the loop only via `scripts/hitl-loop.template.sh`.
 
-If you catch yourself reading code to build a theory before this command exists, **stop: jumping straight to a hypothesis is the exact failure this skill prevents.** No red-capable command, no Phase 2.
+If you catch yourself reading code to build a theory before this runnable loop exists, **stop: jumping straight to a hypothesis is the exact failure this skill prevents.** No red-capable loop, no Phase 2.
 
 ## Phase 2: Reproduce + minimise
 

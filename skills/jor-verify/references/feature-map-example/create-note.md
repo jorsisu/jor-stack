@@ -27,7 +27,7 @@ Preconditions:
 - **Confirm persistence.** `click` link `All notes`, `take_snapshot`, `click` link `Release checklist`. The editor shows both saved values.
 - **Cancel draft.** `click` `New note`, `fill` `Title` with `Discard me`, `click` `Cancel`. The note list returns and the snapshot has no `Discard me` link.
 - **Keyboard entry.** Focus the page body, `press_key` `n`. The `Note editor` form appears.
-- **Responsive.** Run `breakpoints` on `/notes` with the editor open. At 360 the `Save note` button stays visible without horizontal scroll.
+- **Responsive.** Run `breakpoints` on `/notes` with target state `new-note-editor`. After each reload, click `New note` and confirm the `Note editor` form and `Save note` button in a snapshot before taking the screenshot. At 360 the `Save note` button stays visible without horizontal scroll.
 - **Proof.** Back on `All notes`, run `snapshot`. The snapshot file and screenshot show `Release checklist`; the console list has no errors.
 
 ## Gotchas
