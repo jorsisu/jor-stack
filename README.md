@@ -24,40 +24,43 @@ The manifests remain at version 0.1.1. The working tree also contains the update
 
 ## How work flows
 
+Read from top to bottom. Use the short path when context and scope are clear; use a spec and tickets for harder work. Invoke each skill separately.
+
 ```mermaid
-flowchart TD
-    task["Ticket via /twg-jira<br/>or direct request"] --> ready["/jor-get-ready<br/>investigate and propose"]
-    ready --> big{"Bigger than<br/>one change?"}
-    big -- yes --> spec["/jor-to-spec"]
-    spec --> tickets["/jor-to-tickets<br/>approve breakdown, write .scratch/"]
-    tickets -. each ticket .-> ready
-    big -- no --> approved["User authorizes the next step"]
-    approved --> kind{"What kind<br/>of work?"}
-    kind -- feature --> implement["/jor-implement"]
-    kind -- bug --> bugfix["/jor-bugfix"]
-    kind -- unsure of the design --> proto["/jor-prototype"]
-    proto -. chosen design and implementation authorized .-> implement
-    implement -- browser check requested --> browser["/jor-browser-review"]
-    bugfix -- browser check requested --> browser
-    implement -- otherwise --> review["/jor-review"]
-    bugfix -- otherwise --> review
-    browser --> review
-    review --> pr["/jor-pr"]
-    pr --> body["PR body ready<br/>publishing and merging are separate"]
-    body -. useful lesson .-> retro["/jor-retro"]
-    body -. work continues elsewhere .-> handoff["/jor-handoff"]
-    verify["/jor-verify<br/>one-time setup per project"] -. drives variants .-> proto
-    verify -. breakpoints, feature map .-> browser
+flowchart TB
+    task("Describe task or load ticket"):::step --> context("Enough context?"):::decision
+    context -->|No| ready("jor-get-ready<br/>Investigate and clarify"):::step
+    context -->|Yes| size("Easy or hard task?"):::decision
+    ready --> size
+    size -->|Easy: one clear change| approved("Implementation authorized<br/>for this scope"):::step
+    size -->|Hard: needs a plan and breakdown| spec("jor-to-spec<br/>Capture agreed requirements"):::step
+    spec --> tickets("jor-to-tickets<br/>Approve breakdown and write tasks"):::step
+    tickets --> next("jor-get-ready<br/>Assess next unblocked ticket"):::step
+    next --> approved
+    approved --> kind("Type of work"):::decision
+    kind -->|Bug| bugfix("jor-bugfix"):::step
+    kind -->|Feature| implement("jor-implement"):::step
+    bugfix --> checks("Run relevant checks"):::step
+    implement --> checks
+    checks --> review("jor-review<br/>Review code against a fixed base"):::step
+    review --> requested("Browser check requested?"):::decision
+    requested -->|Yes| browser("jor-browser-review"):::step
+    requested -->|No| pr("jor-pr<br/>Prepare PR body"):::step
+    browser --> pr
+    pr --> publish("Separate authorization:<br/>commit, push, open or merge PR"):::step
+
+    classDef step fill:#002337,stroke:#334650,color:#58b9ef,stroke-width:1px,rx:16,ry:16
+    classDef decision fill:#002337,stroke:#58b9ef,color:#58b9ef,stroke-width:1.5px,stroke-dasharray:4 4,rx:16,ry:16
+    linkStyle default stroke:#888888,stroke-width:1.5px
 ```
 
-Solid arrows are the main path. Dashed arrows are loops and supporting links.
 The same diagram source is kept in [docs/flow.mmd](docs/flow.mmd).
 
 1. **Load the task.** Bring a Jira ticket into the conversation with `/twg-jira`, or state the request directly. The request, acceptance criteria, and relevant discussion set the scope. Jira access is only needed for Jira work.
-2. **`/jor-get-ready` investigates and proposes.** It reads the task and project rules, inspects the code, callers, tests and patterns, and reproduces the bug or confirms the gap. When a decision is unclear it reads the grill-me skill and follows it. It returns a proposal with evidence, the smallest complete change, risks and checks, then stops. It changes no files.
-3. **Bigger than one change?** If yes, `/jor-to-spec` confirms unresolved test seams and writes `.scratch/<feature-slug>/spec.md`. `/jor-to-tickets` proposes a breakdown and writes one file per ticket only after approval, under `.scratch/<feature-slug>/issues/`. Run `/jor-get-ready` for each ticket whose blockers are complete. These files do not create or change Jira issues.
-4. **Authorize the next step.** `/jor-get-ready` stops at its proposal. Once implementation is authorized, use `/jor-implement` for a feature or `/jor-bugfix` for a bug. Use `/jor-prototype` to answer a design question; a chosen design needs implementation authorization before production edits.
-5. **Verify and review.** Run the smallest relevant checks. Use `/jor-browser-review` when browser verification is requested, then `/jor-review` with a fixed point such as a branch, tag, or commit. Fix accepted findings in an authorized implementation pass and repeat the affected checks and review.
+2. **Check context.** If the request, relevant code, and intended change are already understood, skip `/jor-get-ready`. Otherwise, it investigates the code, callers, tests, and current behavior. It reads the grill-me skill when product decisions remain unclear, then returns a proposal with evidence, risks, and checks. It changes no files.
+3. **Choose the task size.** For one clear change, go directly to implementation. For harder work that needs a plan and breakdown, use `/jor-to-spec` to capture agreed requirements and test seams in `.scratch/<feature-slug>/spec.md`. Then `/jor-to-tickets` proposes a breakdown and writes one file per ticket after approval under `.scratch/<feature-slug>/issues/`. Run `/jor-get-ready` for each ticket whose blockers are complete. These files do not create or change Jira issues.
+4. **Implement the authorized scope.** Use `/jor-implement` for a feature or `/jor-bugfix` for a bug. A direct implementation request supplies authorization for its stated scope; an investigation-only request ends at the proposal until you authorize implementation. Use `/jor-prototype` when a design question needs exploration, then authorize production edits for the chosen design.
+5. **Review code, then check the browser.** After implementation checks, ask the agent to review its work with `/jor-review` against a branch, tag, or commit. Fix accepted findings in an authorized implementation pass and repeat affected checks and code review. Once code review is complete, run `/jor-browser-review` when requested. If browser findings require code changes, repeat the affected checks and code review, then check the browser again.
 6. **Prepare delivery.** `/jor-pr` writes the PR body from the current change and actual evidence. It does not commit, push, open, or merge a PR. Request those actions separately. Use `/jor-retro` for a useful lesson and `/jor-handoff` when work continues elsewhere; neither is a required step for every change.
 
 ## Verification workflow
@@ -98,8 +101,8 @@ Invoke the main steps manually. Browser checks require an explicit request in th
 | Step | Skill | Verification |
 | --- | --- | --- |
 | Build or fix | `/jor-implement` or `/jor-bugfix` | Implementation runs the smallest relevant repo checks and broadens coverage when risk, failures, or project rules require it. Bug fixing reproduces the exact symptom, checks the fix, and reruns the original scenario. |
-| Check UI when requested | `/jor-browser-review` | Prefer an independent reviewer. Use the project's health check, feature map, and breakpoints to check real interactions, layout, overflow, console errors, and failed requests. Return evidence and exact URLs for human verification. |
 | Review code | `/jor-review` | Supply a fixed point. Review committed changes plus staged, unstaged, and in-scope untracked files. Report Standards and Spec findings separately; Spec uses the ticket, spec, or current request. This read-only review does not execute or fix the feature. |
+| Check UI after code review, when requested | `/jor-browser-review` | Prefer an independent reviewer. Use the project's health check, feature map, and breakpoints to check real interactions, layout, overflow, console errors, and failed requests. Return evidence and exact URLs for human verification. |
 | Prepare delivery | `/jor-pr` | Write the PR body with the smallest useful visual, before/after evidence, rollback risk, and blast radius. |
 
 Implementation closeout reports what was checked, exact commands, observed results, evidence paths where applicable, and blocked or unverified scope. Re-run affected checks after later edits.

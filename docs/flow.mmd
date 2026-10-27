@@ -1,23 +1,25 @@
-flowchart TD
-    task["Ticket via /twg-jira<br/>or direct request"] --> ready["/jor-get-ready<br/>investigate and propose"]
-    ready --> big{"Bigger than<br/>one change?"}
-    big -- yes --> spec["/jor-to-spec"]
-    spec --> tickets["/jor-to-tickets<br/>approve breakdown, write .scratch/"]
-    tickets -. each ticket .-> ready
-    big -- no --> approved["User authorizes the next step"]
-    approved --> kind{"What kind<br/>of work?"}
-    kind -- feature --> implement["/jor-implement"]
-    kind -- bug --> bugfix["/jor-bugfix"]
-    kind -- unsure of the design --> proto["/jor-prototype"]
-    proto -. chosen design and implementation authorized .-> implement
-    implement -- browser check requested --> browser["/jor-browser-review"]
-    bugfix -- browser check requested --> browser
-    implement -- otherwise --> review["/jor-review"]
-    bugfix -- otherwise --> review
-    browser --> review
-    review --> pr["/jor-pr"]
-    pr --> body["PR body ready<br/>publishing and merging are separate"]
-    body -. useful lesson .-> retro["/jor-retro"]
-    body -. work continues elsewhere .-> handoff["/jor-handoff"]
-    verify["/jor-verify<br/>one-time setup per project"] -. drives variants .-> proto
-    verify -. breakpoints, feature map .-> browser
+flowchart TB
+    task("Describe task or load ticket"):::step --> context("Enough context?"):::decision
+    context -->|No| ready("jor-get-ready<br/>Investigate and clarify"):::step
+    context -->|Yes| size("Easy or hard task?"):::decision
+    ready --> size
+    size -->|Easy: one clear change| approved("Implementation authorized<br/>for this scope"):::step
+    size -->|Hard: needs a plan and breakdown| spec("jor-to-spec<br/>Capture agreed requirements"):::step
+    spec --> tickets("jor-to-tickets<br/>Approve breakdown and write tasks"):::step
+    tickets --> next("jor-get-ready<br/>Assess next unblocked ticket"):::step
+    next --> approved
+    approved --> kind("Type of work"):::decision
+    kind -->|Bug| bugfix("jor-bugfix"):::step
+    kind -->|Feature| implement("jor-implement"):::step
+    bugfix --> checks("Run relevant checks"):::step
+    implement --> checks
+    checks --> review("jor-review<br/>Review code against a fixed base"):::step
+    review --> requested("Browser check requested?"):::decision
+    requested -->|Yes| browser("jor-browser-review"):::step
+    requested -->|No| pr("jor-pr<br/>Prepare PR body"):::step
+    browser --> pr
+    pr --> publish("Separate authorization:<br/>commit, push, open or merge PR"):::step
+
+    classDef step fill:#002337,stroke:#334650,color:#58b9ef,stroke-width:1px,rx:16,ry:16
+    classDef decision fill:#002337,stroke:#58b9ef,color:#58b9ef,stroke-width:1.5px,stroke-dasharray:4 4,rx:16,ry:16
+    linkStyle default stroke:#888888,stroke-width:1.5px
