@@ -38,7 +38,7 @@ If the user wants to check that you understood them, suggest **`/jor-restate`** 
 
 ## One-time setup per project
 
-- **`/jor-verify`** is setup for browser work. It writes a manual-only project skill to `.agents/skills/verify-<project>/` on Chrome DevTools MCP, with `doctor`, `breakpoints` (360, 768, 1280, 1440, 1920), `snapshot`, and a feature map. The user chooses private or shared; if the project already uses `.cursor/skills/`, it asks which folder to use. `jor-browser-review`, `jor-bugfix`, `jor-prototype`, and `jor-verify-maintain` read the selected project's `.agents/skills/verify-<project>/SKILL.md` first, then `.cursor/skills/verify-<project>/SKILL.md`. Recommend `/jor-verify` before relying on that browser harness.
+- **`/jor-verify`** is setup for browser work. It writes a manual-only project skill to `.agents/skills/verify-<project>/` on Chrome DevTools MCP, with `doctor`, `breakpoints` (360, 768, 1280, 1440, 1920), `snapshot`, a feature map, and scripts for existing nonbrowser checks when available. The user chooses private or shared; if the project already uses `.cursor/skills/`, it asks which folder to use. `jor-browser-review`, `jor-bugfix`, `jor-prototype`, and `jor-verify-maintain` read the selected project's `.agents/skills/verify-<project>/SKILL.md` first, then `.cursor/skills/verify-<project>/SKILL.md`. Recommend `/jor-verify` before relying on that browser harness.
 
 ## Outside the main flow
 

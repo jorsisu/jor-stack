@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- `jor-verify` bundles a dependency-free Node.js check runner with project-specific command plans, short results, private full logs, failure/blocked exit codes, plan-bound repository selection, and worker cleanup after every check. Generation and upkeep reject source-writing commands. Implementation reuses the scripts; browser checks and CI enforcement remain separate.
 - Aligned the README, router, and skill handoffs: explicit implementation boundaries, optional browser review, PR-body-only delivery, direct-request review coverage, private output locations, manual-only generated verify skills, and safe repeated shared-link setup. Synced the Mermaid source and removed the unused stale SVG export.
 - Removed angle-bracket placeholders from four skill descriptions for Codex validator compatibility.
 

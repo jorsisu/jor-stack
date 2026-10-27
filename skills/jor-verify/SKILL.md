@@ -1,6 +1,6 @@
 ---
 name: jor-verify
-description: "Generate a project-local verification skill that drives the web app the way a user does through Chrome DevTools MCP, with doctor, breakpoints, and snapshot commands plus a feature map. Run once per project, or when a project has no scripted way to prove UI behavior."
+description: "Generate a project-local verification skill with scripts for existing repo checks, Chrome DevTools MCP browser journeys, and a feature map. Run once per project, or when a project has no repeatable verification workflow."
 disable-model-invocation: true
 metadata:
   based-on: "cursor/plugins pstack/skills/create-verification-skill @ c49b37a2c0e7bede60a71ad7322e3f12c337a3da (SKILL.md, references/feature-map-example/); rebuilt on Chrome DevTools MCP"
@@ -23,6 +23,7 @@ Answer these from the codebase and only ask the user what you cannot observe:
 - **Surface:** which web UI does a user actually touch? A repo can have several apps; pick the primary one and note the rest.
 - **Run:** how does the app start locally? Find the repo's own documented dev command (package scripts, Makefile, README quickstart). Note the URL and port, env vars, seed data, and auth.
 - **Drive:** which stable handles exist? ARIA roles and accessible names, `data-testid` or other data attributes, route paths. Read existing e2e specs for selectors and flows worth reusing, but drive with Chrome DevTools MCP.
+- **Checks:** which nonbrowser check commands already exist? Read package scripts, build tools, and CI. Identify their coverage, prerequisites, and whether they run once without starting a server or changing product source or fixtures. Inspect indirect scripts and tool defaults for write effects too; use the non-writing command rules in [scripted-checks.md](references/scripted-checks.md).
 - **Observe:** what evidence can be captured? Screenshots, accessibility snapshots, console messages, network requests, visible side effects.
 - **Isolate:** is the dev server shared with the user's own session (same browser profile, same data)? If so, say so in the generated skill and use an isolated browser context (`new_page` with `isolatedContext`) for every run, so verification never corrupts the user's session.
 
@@ -47,13 +48,15 @@ Write the generated skill to `.agents/skills/verify-<project>/` (`SKILL.md` in t
 - **Cleanup:** close only the pages and isolated contexts this run opened (`close_page`), reset emulation, and restore any data a drive mutated. Never close the user's own tabs or stop their servers. Cleanup removes pages and scratch state, never the evidence.
 - **Helpers:** if the skill ships a script (a seed or reset script, a contact-sheet builder), make it executable and show its invocation in the skill body. A helper the reader has to reverse-engineer is not a helper.
 
+When the repo has useful nonbrowser check commands, follow [scripted-checks.md](references/scripted-checks.md) to copy the bundled [runner](scripts/run-checks.mjs), generate its project-specific `scripts/checks.json`, and document a `checks` command. Keep full logs on disk and short statuses in the conversation. Missing checks stay an explicit coverage gap; never generate a placeholder success. Script results and browser evidence cover different things.
+
 ## 3. Seed the feature map
 
 Under the skill folder selected in step 2, create `features/README.md` plus one file per user-facing feature you can identify (aim for the top 3-5 to start, from routes, navigation, and docs). The default index is `.agents/skills/verify-<project>/features/README.md`; if the user chose `.cursor/skills/`, use `.cursor/skills/verify-<project>/features/README.md`. Follow the shape in [`references/feature-map-example/`](references/feature-map-example/), with a README index and one file per feature. Each file answers, from the user's point of view: what the feature is, how to reach it, how to drive it with Chrome DevTools MCP, and what observable end state proves it works. The four H2s are `Sub-features`, `How to get to it (user POV)`, `Driving it with Chrome DevTools MCP`, and `Gotchas`. Record the routes each feature lives on, so `breakpoints` can be run against them. If the seed data lacks a precondition that a journey needs, the journey reports a failure and the reason goes in that feature's `Gotchas`. Never weaken the journey to make it pass. The map is the repo's maintained verification source; a proof that drives one convenient entry point is incomplete when the map lists others.
 
 ## 4. Prove the generated skill before handing it over
 
-Run its own instructions end to end once: `doctor`, drive ONE mapped feature (one is enough; the map exists so later runs can cover the rest), `snapshot` the end state, `breakpoints` on that feature's route, clean up. After cleanup, confirm the evidence still exists at the named location: a cleanup that eats the proof fails this step. Fix what fails, and run the generated cleanup after every failed iteration too, so broken attempts don't strand pages or emulation settings. A generated skill that was never executed is a draft, not a deliverable. If the dev server wasn't running and you couldn't prove it, say so plainly and list what stays unverified.
+Run its own instructions end to end once: run `checks` when generated, `doctor`, drive ONE mapped feature (one is enough; the map exists so later runs can cover the rest), `snapshot` the end state, `breakpoints` on that feature's route, clean up. After cleanup, confirm the script logs and browser evidence still exist at their named locations: a cleanup that eats the proof fails this step. Fix what fails, and run the generated cleanup after every failed iteration too, so broken attempts don't strand pages or emulation settings. A generated skill that was never executed is a draft, not a deliverable. If checks were blocked or the dev server wasn't running and you couldn't prove it, say so plainly and list what stays unverified.
 
 ## 5. Offer the maintenance loop
 

@@ -30,6 +30,8 @@ Only edit the verify skill's own folder (its SKILL.md, `features/`, and any help
 
 1. **Index hygiene.** Read `features/README.md` and list its sibling files. Fix missing, extra, duplicate, or dead entries.
 
+   If the skill has a scripted `checks` command, follow [the scripted-check guidance](../jor-verify/references/scripted-checks.md): inspect the runner and plan, and recheck indirect package scripts, hooks, and tool defaults for write effects before execution. Run only commands that leave product source and fixtures unchanged, and retain the logs. If a command now writes those files, select a supported non-writing variant in the plan or mark the check blocked before running it. Fix stale commands only within this skill's folder and re-run them; report product failures or missing prerequisites separately. Do not remove assertions to get green. A blocked or failing scripted check prevents a `clean` outcome. Older skills without scripts report that coverage gap; do not invent a plan during upkeep.
+
 2. **Source wave.** For each feature file, explain "how does this user-facing feature work?" from source, flag likely doc drift with citations (routes, accessible names, data attributes that changed), and write one concise live recipe. Use one read-only subagent per feature in parallel when the harness supports it; readers never drive the app and never edit files.
 
 3. **Reconcile.** Every feature file has a summary. Merge overlapping recipes into as few app states as practical. Spot-check cited drift; don't re-prove clean claims. Sweep recent churn (`git log` since the last pass) for user-facing routes or screens missing from the map; require a concrete source path before calling one missing.
@@ -43,6 +45,6 @@ Only edit the verify skill's own folder (its SKILL.md, `features/`, and any help
 
 5. **Triage.** Wrong or missing user-POV description → doc drift, fix it. Working behavior the recipe can't drive (stale accessible name, new dialog in the path) → harness gap, fix it. App behavior that's actually broken → product gap; record it for the user, keep it out of the verify skill.
 
-6. **Report.** Re-read every changed file. State the outcome (clean / changed / blocked), the features covered, the breakpoint evidence location, unreachable prerequisites, confirmed drift, and product gaps found.
+6. **Report.** Re-read every changed file. State the outcome (clean / changed / blocked), the script results and log paths when present, the features covered, the breakpoint evidence location, unreachable prerequisites, confirmed drift, and product gaps found.
 
 Before saving evidence or concise run notes in `.scratch/verify/`, resolve Git's local exclude file with `git rev-parse --git-path info/exclude` and ensure `.scratch/` is listed. Stop if it cannot be excluded. Never edit the shared `.gitignore` or commit the notes or evidence.

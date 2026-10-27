@@ -18,6 +18,8 @@ For test-first work, read [../jor-tdd/SKILL.md](../jor-tdd/SKILL.md) and follow 
 
 Run the smallest relevant repo checks during implementation and after the final edit. Broaden coverage when project requirements, risk, or failures justify it.
 
+If the project's `.agents/skills/verify-*/SKILL.md` (or `.cursor/skills/verify-*/SKILL.md`) documents scripted checks that cover this change, reuse that command and its saved logs. Keep uncovered behavior explicit; a passing check plan does not establish browser or CI results.
+
 When adding or repairing an automated guard, show it fails on the original fault (or a safe temporary reproduction), then passes with the fix. Remove temporary faults before finishing and verify the guard runs through the repo's normal check command, hook, or CI configuration. Distinguish local execution from CI that has only been configured.
 
 Before declaring done, report the behavior checked, exact commands and observed results, evidence paths where applicable, and any blocked or unverified scope. Re-run affected checks after later edits; earlier results do not prove changed code.
