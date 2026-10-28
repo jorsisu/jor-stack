@@ -307,6 +307,12 @@ Generated verify skills live in the selected `.agents/skills/` or `.cursor/skill
 - **Edit only in this repo.** Never edit the installed copy in Cursor's plugin cache. It's replaced on every update. Change the repo, commit, and reinstall or refresh.
 - **Upstream updates are a manual review.** When an upstream skill changes, compare it with the recorded commit and merge by hand only what you want.
 
+## Stack checks
+
+Run `ruby scripts/validate-stack.rb` after stack edits. It uses Ruby 2.6+ and its standard libraries to check skill metadata, invocation policies, catalog coverage and counts, package JSON, inline local file links, and README/Mermaid parity. It reads current files, including new skills. It does not validate remote schemas, link anchors, installation, or live skill behavior.
+
+When changing the validator, also run `ruby scripts/validate-stack.test.rb`. Its temporary broken fixtures must fail validation and pass after restoration. These are local checks; CI is not configured by this command.
+
 ## Install
 
 Use one installation method per app to avoid duplicate entries. Jira tasks need `/twg-jira` from twg. Browser workflows need Node.js, Chrome, and Chrome DevTools MCP. Other skills do not need Jira or a browser.

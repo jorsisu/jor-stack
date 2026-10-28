@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Specs cover agreed behaviors without a fixed story-list size; bug diagnosis ranks evidence-supported hypotheses without a numeric quota.
+
+- Added a Ruby standard-library stack validator and temporary failure fixtures; `jor-dr-stack` runs it for source consistency checks.
+
+- `jor-bugfix` confirms regression tests are selected by normal checks, hooks, or CI, and separates local results from configured CI.
+
+- Direct browser checks in review, prototypes, and bug diagnosis share isolation, readiness, test-data cleanup, and evidence-retention rules, even without a generated verification skill.
+
+- `jor-design` retains useful unit tests until passing interface tests replace their coverage or the tested behavior no longer applies.
+
+- `jor-prototype` gates the whole UI prototype in development, preserves existing pages by default, and excludes throwaway routes from production.
+
 - `jor-peer-review` falls back to a labeled self-review when subagents are unavailable, retaining the same scope, fixes, and one-recheck limit.
 - `jor-handoff` returns an attachment or full Markdown in chat and includes required local-only context for another environment instead of relying on temporary paths.
 

@@ -35,7 +35,7 @@ Spend disproportionate effort here. **Be aggressive. Be creative. Refuse to give
 1. **Failing test** at whatever seam reaches the bug: unit, integration, e2e.
 2. **Curl / HTTP script** against a running dev server.
 3. **CLI invocation** with a fixture input, diffing stdout against a known-good snapshot.
-4. **Browser drive** through Chrome DevTools MCP, or by reading `.agents/skills/verify-<project>/SKILL.md` and following it. If that file is missing, read `.cursor/skills/verify-<project>/SKILL.md` and follow that instead. Drive the UI and assert on DOM, console, and network. If neither file exists, tell the user to run `/jor-verify`.
+4. **Browser drive** through Chrome DevTools MCP, or by reading `.agents/skills/verify-<project>/SKILL.md` and following it. If that file is missing, read `.cursor/skills/verify-<project>/SKILL.md` and follow that instead. Drive the UI and assert on DOM, console, and network. If neither file exists, tell the user to run `/jor-verify`. For every browser run, read and follow [browser session safety](../jor-browser-review/references/browser-session.md).
 5. **Replay a captured trace.** Save a real network request / payload / event log to disk; replay it through the code path in isolation.
 6. **Throwaway harness.** Spin up a minimal subset of the system (one service, mocked deps) that exercises the bug code path with a single function call.
 7. **Property / fuzz loop.** If the bug is "sometimes wrong output", run 1000 random inputs and look for the failure mode.
@@ -96,7 +96,7 @@ Do not proceed until you have reproduced **and** minimised.
 
 ## Phase 3: Hypothesise
 
-Generate **3–5 ranked hypotheses** before testing any of them. Single-hypothesis generation anchors on the first plausible idea.
+Rank the plausible hypotheses supported by the reproduction and source evidence. Include alternatives where the cause remains uncertain. If the evidence isolates one cause, test its prediction directly; do not invent alternatives to meet a quota.
 
 Each hypothesis must be **falsifiable**: state the prediction it makes.
 
@@ -104,7 +104,7 @@ Each hypothesis must be **falsifiable**: state the prediction it makes.
 
 If you cannot state the prediction, the hypothesis is a vibe: discard or sharpen it.
 
-**Show the ranked list to the user before testing.** They often have domain knowledge that re-ranks instantly ("we just deployed a change to #3"), or know hypotheses they've already ruled out. Cheap checkpoint, big time saver. Don't block on it; proceed with your ranking if the user is AFK.
+**Show the hypotheses and their predictions to the user before testing.** They may have evidence that changes the ranking or rules out a cause. Don't block on it; proceed with the current evidence while awaiting their input.
 
 ## Phase 4: Instrument
 
@@ -144,6 +144,7 @@ Required before declaring done:
 
 - [ ] Original repro no longer reproduces (re-run the Phase 1 loop)
 - [ ] Regression test passes (or absence of seam is documented)
+- [ ] Any added or repaired regression test is included in the repo's normal check command, hook, or CI configuration; show how it is selected and report the observed local result separately from CI that is only configured
 - [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)
 - [ ] Throwaway prototypes deleted (or moved to a clearly-marked debug location)
 - [ ] The hypothesis that turned out correct is stated in the commit / PR message, so the next debugger learns

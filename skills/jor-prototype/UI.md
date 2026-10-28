@@ -59,7 +59,10 @@ Create a single switcher component on the route:
 
 ```tsx
 // pseudo-code, adapt to the project's framework
-const variant = searchParams.get('variant') ?? 'A';
+const variant = searchParams.get('variant');
+const showPrototype = process.env.NODE_ENV === 'development'
+  && variant !== null && ['A', 'B', 'C'].includes(variant);
+if (!showPrototype) return <ExistingPage {...data} />;
 return (
   <>
     {variant === 'A' && <VariantA {...data} />}
@@ -70,9 +73,9 @@ return (
 );
 ```
 
-For sub-shape A (existing page): keep all the existing data fetching above the switcher; only the rendered subtree changes per variant.
+For sub-shape A (existing page): keep all the existing data fetching above the switcher. Preserve the original rendering in production and when `variant` is missing or invalid; show a prototype only for a valid variant in development. Adapt the illustrative `ExistingPage` name to the current rendering; no new wrapper is required.
 
-For sub-shape B (new page): the throwaway route under `/prototype/<name>` mounts the same switcher.
+For sub-shape B (new page): make the entire throwaway route unavailable in production using the framework's route guard or build exclusion. In development, default to variant A when `variant` is missing or invalid.
 
 ### 4. Build the floating switcher
 
@@ -87,13 +90,15 @@ Behaviour:
 - Clicking an arrow updates the URL search param (use the framework's router, e.g. `router.replace` on Next, `navigate` on React Router, etc) so the variant is shareable and reload-stable.
 - Keyboard: `←` and `→` arrow keys also cycle. Don't intercept arrow keys when an `<input>`, `<textarea>`, or `[contenteditable]` is focused.
 - Visually distinct from the page (e.g. high-contrast pill, subtle shadow) so it's obviously not part of the design being evaluated.
-- Hidden in production builds: gate on `process.env.NODE_ENV !== 'production'` or an equivalent check, so a stray prototype merge can't ship the bar to users.
+- Keep the bar inside the same development-only gate as the variants; hiding only the bar does not protect the page.
 
 Put the switcher in a single shared component so both sub-shapes can reuse it. Locate it wherever shared UI lives in the project.
 
 ### 5. Drive and screenshot every variant
 
 When browser verification or driven screenshots were requested in the current chat, drive each variant so the user can compare them side by side. Otherwise hand over the URLs and report screenshots and browser behavior as unverified. If Chrome DevTools MCP is unavailable, report the blocker instead of substituting another browser tool.
+
+For browser runs, read and follow [browser session safety](../jor-browser-review/references/browser-session.md), including the direct fallback below.
 
 - Read `.agents/skills/verify-<project>/SKILL.md` and follow it: run its `doctor` first, then its `breakpoints` command for each `?variant=` URL. If that file is missing, read `.cursor/skills/verify-<project>/SKILL.md` and follow that instead. If neither file exists, tell the user to run `/jor-verify` and use Chrome DevTools MCP directly at the same widths.
 - Capture every variant at all five breakpoints: **360, 768, 1280, 1440, 1920** px wide. Hide or ignore the floating switcher in the comparison if it covers content.
