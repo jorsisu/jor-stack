@@ -161,6 +161,18 @@ The same diagram source is kept in [docs/flow.mmd](docs/flow.mmd).
 
 ## Verification workflow
 
+Verification combines executable checks, code review, and requested browser checks. Each proves different behavior: passing unit tests does not establish that the UI works or CI passed. Automatic peer review is an instruction followed by the implementation agent; it is not a Git hook or required CI status.
+
+Choose the verification skill by the job:
+
+| Your need | Use | Coverage |
+| --- | --- | --- |
+| This project has no reusable verification guide | `/jor-verify` | Create a project skill and prove one mapped feature journey. |
+| Check the UI for the current change | `/jor-browser-review` | Exercise the affected features using the project skill. |
+| The existing guide may be stale | `/jor-verify-maintain` | Check the guide against source and exercise every mapped feature. |
+
+These commands run when requested; they do not schedule future checks. In Codex, use `$jor-...` or the plugin-qualified `$jor-stack:jor-...` form.
+
 ### Prevention pyramid
 
 When correcting an agent, prefer the first practical layer below. Spend most effort preventing mistakes through code and automated checks; reserve human review for remaining decisions.
@@ -176,7 +188,9 @@ The skills themselves are prose. Their outputs strengthen the top two layers whe
 
 ### Set up once per project
 
-For projects that need browser verification, run `/jor-verify` to create `.agents/skills/verify-<project>/`. If the project already uses `.cursor/skills/`, it asks which location to use. Choose whether the generated skill is private or shared. It remains manual-only in Cursor and Codex, uses Chrome DevTools MCP, and contains:
+**`jor-verify` is the generator; `verify-<project>` is the reusable skill it creates.** Run setup in the application repository you want to verify. It inspects the app's routes, start command, login and data requirements, UI controls, existing tests, and check scripts. It asks only for missing information and output choices.
+
+For projects that need browser verification, run `/jor-verify` to create `.agents/skills/verify-<project>/`. If the project already uses `.cursor/skills/`, it asks which location to use. Choose whether the generated skill is private (excluded locally from Git; recommended unless the team shares skills) or shared (eligible for an authorized commit). It remains manual-only in Cursor and Codex, uses Chrome DevTools MCP, and contains:
 
 - `doctor`: check the app is healthy before driving it.
 - `breakpoints`: capture the target UI state at 360, 768, 1280, 1440, and 1920 px wide.
@@ -184,9 +198,36 @@ For projects that need browser verification, run `/jor-verify` to create `.agent
 - A feature map: routes, real user actions, and observable results that prove each journey works.
 - `checks`, when useful repo commands exist: a Node.js runner and a project-specific plan for nonbrowser checks. It prints short results, saves full logs, and exits nonzero on failed or blocked checks. The runner supports macOS and Linux.
 
-Setup runs the scripted checks when generated, proves one mapped journey end to end, and confirms logs and browser evidence survive cleanup. An unexecuted verification skill remains a draft. Evidence goes under `.scratch/verify/`. Missing commands, prerequisites, and absent scripted coverage are reported explicitly.
+For example, a Notes app could get this structure. The `scripts/` files are included only when useful existing checks are found:
 
-For the plan format, example invocation, exit codes, and CI limits, see [scripted checks](skills/jor-verify/references/scripted-checks.md). The runner executes every configured check without streaming full logs into the chat. It does not select commands or configure required CI checks; generated plans must leave product source and fixtures unchanged and respect the server and browser boundaries.
+```text
+.agents/skills/verify-notes/
+├── SKILL.md
+├── agents/openai.yaml
+├── features/
+│   ├── README.md
+│   └── create-note.md
+└── scripts/
+    ├── run-checks.mjs
+    └── checks.json
+```
+
+The initial map aims for the top 3–5 user-facing features. A feature file records routes, prerequisites, user actions, observable results, and gotchas. For example, the [create-note journey](skills/jor-verify/references/feature-map-example/create-note.md) opens the editor, enters content, saves, and reopens the note from the list to confirm persistence. A “Saved” message alone is insufficient proof. At each breakpoint, the agent opens the editor again before capturing it; a screenshot of the closed editor does not prove the Save button is usable.
+
+Setup runs the scripted checks when generated, health-checks the app, proves one mapped journey end to end, captures its snapshot and breakpoint screenshots, and confirms evidence survives cleanup. This proves the guide can run; it does not verify every mapped feature. An unexecuted verification skill remains a draft. Evidence goes under `.scratch/verify/`. Missing commands, prerequisites, and absent scripted coverage are reported explicitly. Browser runs use an isolated context, close only their own pages, and restore data they changed.
+
+Example setup request, with a URL you know is running:
+
+```text
+Use jor-verify to create a private verification skill for this project.
+The dev server is already running at http://localhost:3000.
+```
+
+The generated skill reuses existing tests; it does not automatically create missing application tests or a browser test suite. Its browser journeys are instructions executed through Chrome DevTools MCP. `doctor`, `breakpoints`, and `snapshot` are documented operations, not necessarily terminal commands.
+
+The check runner executes every configured command sequentially from the target repository root, using command exit codes to determine success. A failed check does not skip later checks. Full logs go under `.scratch/verify/checks-*/`; chat gets short results. Exit codes are `0` for all checks passing, `1` for failure or timeout, `2` for blocked configuration, startup, or evidence storage, and `130` for interruption. See [scripted checks](skills/jor-verify/references/scripted-checks.md) for the plan format and invocation. Generated plans must leave product source and fixtures unchanged and respect the server and browser boundaries.
+
+CI reuse needs shared runner and plan files plus explicit integration into a CI job. Private skills are unavailable to CI. Setup does not configure required status checks or branch rules, and a local pass does not establish a CI result.
 
 `/jor-prototype`, `/jor-browser-review`, and `/jor-bugfix` read the generated skill from `.agents/skills/` first, then `.cursor/skills/`. If neither exists, they recommend `/jor-verify`.
 
@@ -209,7 +250,30 @@ A new or repaired automated guard must catch the original fault before passing w
 ### Improve future runs
 
 - **`/jor-retro`** after a useful lesson: you corrected the agent, review found something checks missed, a mistake repeated, or the agent wasted time finding code or using tools. It proposes prevention using the [pyramid](#prevention-pyramid) and makes no edits. Accepted code or check changes go to `/jor-implement`; accepted guidance changes go to `/jor-writing-for-agents`. Skip it when there is no useful lesson.
-- **`/jor-verify-maintain`** on demand or after UI-heavy sprints. It runs the generated scripted checks when present, reviews source and drives every mapped feature live, updates stale verification instructions, and reports product bugs separately. Outcomes are clean, changed, or blocked.
+- **`/jor-verify-maintain`** when the existing project verification guide may be stale. Use the triggers and scope below.
+
+### When to run verification maintenance
+
+Run `/jor-verify-maintain` after a UI-heavy sprint, when a verification recipe stops working, or when routes, controls, login requirements, test data, or check commands change. Newly added screens missing from the map are another trigger. For one change's UI review, use `/jor-browser-review`; maintenance covers the whole existing feature map. If there is no generated project skill yet, start with `/jor-verify`.
+
+For example, after navigation and search changes:
+
+```text
+Use jor-verify-maintain to update this project's verification skill.
+Navigation and search changed. The dev server is running at http://localhost:3000.
+```
+
+Maintenance runs existing scripted checks when present, reads source for every mapped feature, checks recent changes for missing screens, and exercises every mapped feature live with breakpoint screenshots. It requires Chrome DevTools MCP and a usable app with the required access and data. If the server is down, it reports the start command; it starts the server only when explicitly requested.
+
+It edits only the generated skill's instructions, feature map, and owned helpers. A renamed button can need a recipe update; a Save button that no longer saves is a product bug to report. It does not weaken assertions to make checks pass or fix product code. Older skills without scripted checks retain an explicit coverage gap; maintenance does not invent a check plan for them.
+
+The report includes check results, feature coverage, evidence paths, product bugs, and any missing prerequisites, with one outcome:
+
+- **clean:** source and live coverage completed for every feature; no corrections needed.
+- **changed:** proven corrections made within the verification skill's folder.
+- **blocked:** coverage could not finish or a required correction could not be made safely.
+
+Maintenance runs on request. It is not required after every small change.
 
 ## Outside the main flow
 
