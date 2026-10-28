@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- `jor-peer-review` falls back to a labeled self-review when subagents are unavailable, retaining the same scope, fixes, and one-recheck limit.
+- `jor-handoff` returns an attachment or full Markdown in chat and includes required local-only context for another environment instead of relying on temporary paths.
+
 - Added `jor-dr-stack` for stack consistency audits across skills, workflow docs, Mermaid, routing, metadata, links, provenance, and packaging. Reports by default; applies consistency fixes when requested. Available explicitly or through automatic selection for audit requests.
 - Added automatic `jor-peer-review` after implementation and bugfix checks: one independent reviewer, valid fixes within scope, affected checks, and at most one focused recheck. Browser review stays manual; full `jor-review` is optional for large changes after any requested browser review and fixes.
 - `jor-verify` bundles a dependency-free Node.js check runner with project-specific command plans, short results, private full logs, failure/blocked exit codes, plan-bound repository selection, and worker cleanup after every check. Generation and upkeep reject source-writing commands. Implementation reuses the scripts; browser checks and CI enforcement remain separate.

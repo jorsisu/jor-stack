@@ -1,5 +1,5 @@
 interface:
   display_name: "Jor Peer Review"
-  short_description: "Review task changes with an independent agent"
+  short_description: "Review task changes with a self-review fallback"
 policy:
   allow_implicit_invocation: true
