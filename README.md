@@ -4,11 +4,12 @@ jor-stack is Jorge Galarza's private collection of front-end workflow skills for
 
 ## Skills and triggers
 
-**1 automatic, 20 manual.**
+**2 automatic, 20 manual.**
 
 | Trigger | Skills |
 | --- | --- |
 | Automatic — agent guidance | `jor-writing-for-agents` |
+| Automatic — after implementation checks | `jor-peer-review` |
 | Manual — planning | `jor-mode`, `jor-get-ready`, `jor-restate`, `jor-grill-me`, `jor-to-spec`, `jor-to-tickets` |
 | Manual — implementation | `jor-implement`, `jor-tdd`, `jor-bugfix`, `jor-design`, `jor-domain`, `jor-prototype` |
 | Manual — verification | `jor-browser-review`, `jor-review`, `jor-verify`, `jor-verify-maintain` |
@@ -16,7 +17,7 @@ jor-stack is Jorge Galarza's private collection of front-end workflow skills for
 
 Commands below use Cursor's `/jor-...` syntax. In Codex, use `$jor-...`, or `$jor-stack:jor-...` when the picker shows the plugin namespace. For example: `/jor-bugfix`, `$jor-bugfix`, or `$jor-stack:jor-bugfix`.
 
-`jor-writing-for-agents` can also be selected automatically for agent guidance work. The other 20 skills set `disable-model-invocation: true` for Cursor and `policy.allow_implicit_invocation: false` in `agents/openai.yaml` for Codex. A skill can read a supporting skill's instructions within the current task; the user invokes the next workflow step.
+`jor-writing-for-agents` can be selected automatically for agent guidance work. `jor-peer-review` runs automatically after `jor-implement` or `jor-bugfix` checks pass, and can also be requested explicitly. Both allow implicit invocation in Cursor and Codex. The other 20 skills set `disable-model-invocation: true` for Cursor and `policy.allow_implicit_invocation: false` in `agents/openai.yaml` for Codex. A skill can read supporting instructions within the current task; implementation and bugfix follow the linked peer-review instructions before closeout. The user invokes other workflow steps.
 
 Skill sources and exact upstream commits are in [UPSTREAM.md](UPSTREAM.md).
 
@@ -24,44 +25,127 @@ The manifests remain at version 0.1.1. The working tree also contains the update
 
 ## How work flows
 
-Read from top to bottom. Diagnose unknown bug causes, implement clear changes, and use specs and tickets for several deliverables. Invoke each skill separately.
+Read the numbered stages from top to bottom. Diamonds show decisions; retry boxes name the stage to repeat. Peer review runs automatically as part of implementation or bug fixing. Invoke other workflow steps separately.
+
+The final verification step is optional `/jor-review` for large changes, after any requested browser review and fixes, before PR preparation.
 
 ```mermaid
 flowchart TB
-    task("Describe task or load ticket"):::step --> context("Enough context?"):::decision
-    context -->|No| ready("jor-get-ready<br/>Investigate and clarify"):::step
-    context -->|Yes| route("What is needed?"):::decision
-    ready --> pause("Report findings or proposal<br/>Wait for user request"):::step
+    task(["Initial request or ticket"]):::step
+
+    subgraph intake["1. Understand the request"]
+        direction TB
+        context{"Enough context?"}:::decision
+        ready("jor-get-ready<br/>Investigate and clarify"):::step
+        pause("Report findings or proposal<br/>Wait for user request"):::stop
+        context -->|No| ready
+        ready --> pause
+    end
+
+    subgraph work["2. Choose and authorize the work"]
+        direction TB
+        route{"What is needed?"}:::decision
+        bugfix("jor-bugfix<br/>Reproduce and diagnose<br/>Fix only within authorized scope"):::step
+        wider("Report wider scope<br/>Wait for scope approval"):::stop
+        spec("jor-to-spec<br/>Capture agreed requirements"):::step
+        tickets("jor-to-tickets<br/>Approve breakdown and write tasks"):::step
+        next("jor-get-ready<br/>Assess next unblocked ticket"):::step
+        ticketpause("Report findings or proposal<br/>Wait for user request, then repeat stage 2"):::stop
+        bugpause("Report investigation findings<br/>Wait for user request, then repeat stage 2"):::stop
+        approved{"Implementation authorized<br/>for this scope?"}:::decision
+        noauth("Report findings or proposal<br/>Wait for implementation request"):::stop
+        implement("jor-implement<br/>Build a feature or known fix"):::step
+
+        route -->|Unknown bug cause| bugfix
+        route -->|Several deliverables| spec
+        route -->|One clear change| approved
+        bugfix -->|Investigation only| bugpause
+        bugfix -->|Wider fix needed| wider
+        wider -->|Scope approved; user invokes| spec
+        spec --> tickets
+        tickets --> next
+        next --> ticketpause
+        approved -->|No| noauth
+        approved -->|Yes| implement
+    end
+
+    subgraph verification["3. Check and peer review"]
+        direction TB
+        checks("Run relevant checks"):::step
+        result{"Check result?"}:::decision
+        blocked("Report limit<br/>Stop verification"):::stop
+        checkfix("Fix within authorized scope<br/>Repeat implementation and checks in stages 2–3"):::step
+        peer("jor-peer-review<br/>Automatic: review, fix, recheck<br/>At most one focused recheck"):::step
+        peerissues{"Unresolved findings?"}:::decision
+        remaining("Report remaining findings<br/>Wait for next step"):::stop
+
+        checks --> result
+        result -->|Blocked or outside scope| blocked
+        result -->|In-scope code failure| checkfix
+        result -->|Pass| peer
+        peer --> peerissues
+        peerissues -->|Yes| remaining
+    end
+
+    subgraph browserStage["4. Optional browser review"]
+        direction TB
+        requested{"Browser check requested?"}:::decision
+        browser("jor-browser-review"):::optional
+        browserfixes{"Code changes needed?"}:::decision
+        browserretry("Authorized implementation, checks and peer review<br/>Then repeat browser review in stage 4"):::step
+
+        requested -->|Yes| browser
+        browser --> browserfixes
+        browserfixes -->|Yes| browserretry
+    end
+
+    subgraph fullStage["5. Optional final full review"]
+        direction TB
+        full{"Full review requested<br/>for a large change?"}:::decision
+        review("jor-review<br/>Review against a fixed base"):::optional
+        codefixes{"Code changes needed?"}:::decision
+        reviewretry("Authorized implementation, checks and peer review<br/>Repeat any requested browser review<br/>Full review remains user-invoked"):::step
+
+        full -->|Yes| review
+        review --> codefixes
+        codefixes -->|Yes| reviewretry
+    end
+
+    subgraph deliveryStage["6. Prepare delivery"]
+        direction TB
+        pr("jor-pr<br/>Prepare PR body"):::step
+        publish("Separate authorization:<br/>commit, push, open or merge PR"):::step
+        pr --> publish
+    end
+
+    done(["End of workflow"]):::step
+
+    task --> context
+    context -->|Yes| route
     pause -->|User requests next step| route
-    route -->|Unknown bug cause| bugfix("jor-bugfix<br/>Reproduce and diagnose<br/>Fix only within authorized scope"):::step
-    bugfix -->|Investigation only| pause
-    bugfix -->|Wider fix needed| wider("Report wider scope<br/>Wait for scope approval"):::step
-    route -->|Several deliverables| spec("jor-to-spec<br/>Capture agreed requirements"):::step
-    wider -->|Scope approved; user invokes| spec
-    route -->|One clear change| approved("Implementation authorized<br/>for this scope?"):::decision
-    approved -->|No| pause
-    spec --> tickets("jor-to-tickets<br/>Approve breakdown and write tasks"):::step
-    tickets --> next("jor-get-ready<br/>Assess next unblocked ticket"):::step
-    next --> pause
-    approved -->|Yes| implement("jor-implement<br/>Build a feature or known fix"):::step
-    bugfix -->|Scoped fix complete| checks("Run relevant checks"):::step
+    bugfix -->|Scoped fix complete| checks
     implement --> checks
-    checks --> result("Check result?"):::decision
-    result -->|Blocked or outside scope| blocked("Report limit<br/>Stop verification"):::step
-    result -->|In-scope code failure| approved
-    result -->|Pass| review("jor-review<br/>Review code against a fixed base"):::step
-    review --> codefixes("Code changes needed?"):::decision
-    codefixes -->|Yes| approved
-    codefixes -->|No| requested("Browser check requested?"):::decision
-    requested -->|Yes| browser("jor-browser-review"):::step
-    requested -->|No| pr("jor-pr<br/>Prepare PR body"):::step
-    browser --> browserfixes("Code changes needed?"):::decision
-    browserfixes -->|Yes| approved
-    browserfixes -->|No| pr
-    pr --> publish("Separate authorization:<br/>commit, push, open or merge PR"):::step
+    peerissues -->|No| requested
+    requested -->|No| full
+    browserfixes -->|No| full
+    full -->|No| pr
+    codefixes -->|No| pr
+    publish --> done
+
+    %% Invisible links keep each complete stage above the next stage.
+    ticketpause ~~~ checks
+    bugpause ~~~ checks
+    noauth ~~~ checks
+    blocked ~~~ requested
+    checkfix ~~~ requested
+    remaining ~~~ requested
+    browserretry ~~~ full
+    reviewretry ~~~ pr
 
     classDef step fill:#002337,stroke:#334650,color:#58b9ef,stroke-width:1px,rx:16,ry:16
-    classDef decision fill:#002337,stroke:#58b9ef,color:#58b9ef,stroke-width:1.5px,stroke-dasharray:4 4,rx:16,ry:16
+    classDef decision fill:#002337,stroke:#58b9ef,color:#58b9ef,stroke-width:1.5px
+    classDef optional fill:#002337,stroke:#58b9ef,color:#58b9ef,stroke-width:1.5px,stroke-dasharray:4 4,rx:16,ry:16
+    classDef stop fill:#002337,stroke:#888888,color:#c7ced3,stroke-width:1px,rx:16,ry:16
     linkStyle default stroke:#888888,stroke-width:1.5px
 ```
 
@@ -71,7 +155,7 @@ The same diagram source is kept in [docs/flow.mmd](docs/flow.mmd).
 2. **Check context.** If the request and relevant code are already understood, skip `/jor-get-ready` and choose the route below. Otherwise, it investigates the code, callers, tests, and current behavior. It reads the grill-me skill when product decisions remain unclear, then returns a proposal with evidence, risks, and checks. It changes no files.
 3. **Choose by uncertainty and scope.** Use `/jor-bugfix` when a bug's cause is unknown. Diagnose it before planning a larger fix. Use `/jor-implement` for one clear change, including a bug fix whose cause and intended change are established. When understood work needs several deliverables, use `/jor-to-spec` to capture agreed requirements and test seams in `.scratch/<feature-slug>/spec.md`. Then `/jor-to-tickets` proposes a breakdown and writes one file per ticket after approval under `.scratch/<feature-slug>/issues/`. Run `/jor-get-ready` for each ticket whose blockers are complete and choose its next step from the findings. These files do not create or change Jira issues.
 4. **Keep changes within the authorized scope.** A direct implementation request supplies authorization for its stated scope; an investigation-only request ends at the findings or proposal until you authorize implementation. If diagnosis reveals several deliverables or a wider fix, propose the spec-and-ticket path before expanding the work. Use `/jor-prototype` when a design question needs exploration, then authorize production edits for the chosen design.
-5. **Review code, then check the browser.** After implementation checks, ask the agent to review its work with `/jor-review` against a branch, tag, or commit. Fix accepted findings in an authorized implementation pass and repeat affected checks and code review. Once code review is complete, run `/jor-browser-review` when requested. If browser findings require code changes, repeat the affected checks and code review, then check the browser again.
+5. **Automatic peer review, then optional browser and full review.** After checks pass, `/jor-implement` and `/jor-bugfix` follow [jor-peer-review](skills/jor-peer-review/SKILL.md) without another request. One read-only agent reviews the task's changes and directly affected code for concrete bugs, regressions, and missed requirements. The main agent assesses findings, fixes valid issues within scope, reruns affected checks, and requests one focused recheck if fixes were made. Report remaining findings after that limit. No base commit or full standards audit is required. Run `/jor-browser-review` when requested. If browser findings need code changes, use an authorized implementation pass with its checks and peer review, then repeat the requested browser check. For large changes, optionally request full `/jor-review` after browser findings and fixes are settled; if browser review was skipped, full review can follow peer review directly.
 6. **Prepare delivery.** `/jor-pr` writes the PR body from the current change and actual evidence. It does not commit, push, open, or merge a PR. Request those actions separately. Use `/jor-retro` for a useful lesson and `/jor-handoff` when work continues elsewhere; neither is a required step for every change.
 
 ## Verification workflow
@@ -107,16 +191,17 @@ For the plan format, example invocation, exit codes, and CI limits, see [scripte
 
 ### For each change
 
-Invoke the main steps manually. Browser checks require an explicit request in the current chat; invoking a browser workflow authorizes its stated checks. Development servers stay under your control: starting, stopping, or restarting one requires an explicit request. A missing browser tool, server, or prerequisite is reported as a limit, never as a passing check.
+Invoke implementation or bugfix manually; peer review runs automatically before closeout. Browser review and full review remain manual. Browser checks require an explicit request in the current chat; invoking a browser workflow authorizes its stated checks. Development servers stay under your control: starting, stopping, or restarting one requires an explicit request. A missing browser tool, server, or prerequisite is reported as a limit, never as a passing check.
 
 | Step | Skill | Verification |
 | --- | --- | --- |
 | Build or fix | `/jor-implement` or `/jor-bugfix` | Implementation runs the smallest relevant repo checks and broadens coverage when risk, failures, or project rules require it. Bug fixing reproduces the exact symptom, checks the fix, and reruns the original scenario. |
-| Review code | `/jor-review` | Supply a fixed point. Review committed changes plus staged, unstaged, and in-scope untracked files. Report Standards and Spec findings separately; Spec uses the ticket, spec, or current request. This read-only review does not execute or fix the feature. |
-| Check UI after code review, when requested | `/jor-browser-review` | Prefer an independent reviewer. Use the project's health check, feature map, and breakpoints to check real interactions, layout, overflow, console errors, and failed requests. Return evidence and exact URLs for human verification. |
+| Automatic peer review | `/jor-peer-review` | One independent, read-only agent checks the task's changes and directly affected code. The main agent assesses findings, fixes valid issues within scope, reruns affected checks, and requests one focused recheck if needed. Report anything unresolved. |
+| Check UI after peer review, when requested | `/jor-browser-review` | Prefer an independent reviewer. Use the project's health check, feature map, and breakpoints to check real interactions, layout, overflow, console errors, and failed requests. Return evidence and exact URLs for human verification. |
+| Optional final full review for large changes | `/jor-review` | Run only when requested, after any requested browser review and fixes, before PR preparation. Supply a fixed point. Review committed changes plus staged, unstaged, and in-scope untracked files. Report Standards and Spec findings separately; Spec uses the ticket, spec, or current request. This read-only review does not execute or fix the feature. |
 | Prepare delivery | `/jor-pr` | Write the PR body with the smallest useful visual, before/after evidence, rollback risk, and blast radius. |
 
-Implementation closeout reports what was checked, exact commands, observed results, evidence paths where applicable, and blocked or unverified scope. Re-run affected checks after later edits.
+Implementation closeout reports what was checked, the peer-review outcome, exact commands, observed results, evidence paths where applicable, and blocked or unverified scope. Re-run affected checks after later edits. Missing subagents or unresolved findings are reported as peer-review limits.
 
 A new or repaired automated guard must catch the original fault before passing with the fix, and run through the repo's normal check command, hook, or CI configuration. Distinguish local execution from CI that has only been configured. UI and CI are verified only when their checks actually run.
 
@@ -143,7 +228,7 @@ Generated verify skills live in the selected `.agents/skills/` or `.cursor/skill
 
 ## Rules every skill follows
 
-- **One skill per job.** A started skill can read supporting instructions, such as `jor-get-ready` reading `jor-grill-me`. It recommends the next manual skill for the user to invoke. Automatic selection of `jor-writing-for-agents` stays within the requested guidance work.
+- **One skill per job.** A started skill can read supporting instructions, such as `jor-get-ready` reading `jor-grill-me`. Implementation and bugfix automatically follow `jor-peer-review` before closeout. Other manual steps stay with the user. Automatic selection of `jor-writing-for-agents` stays within the requested guidance work.
 - **Self-contained.** No skills outside jor-stack except the `/twg-jira` entry point.
 - **Tool-neutral.** Shared instructions and resources work in Cursor and Codex, with no hardcoded model names.
 - **Upstream voice kept.** Skills marked close to upstream keep the original wording. Trims cut text rather than rewrite it.
@@ -167,7 +252,7 @@ Choose one:
 - **Local folder.** Commit the plugin changes, then export `git archive HEAD` into a fresh `~/.cursor/plugins/local/jor-stack` folder and run **Developer: Reload Window**. Replace an existing install rather than overlaying it, so old private rules are removed. Export committed files instead of copying the working checkout, which can contain private local rules and `AGENTS.md`. A real folder is safest: Cursor skips symlinks that point outside `~/.cursor/plugins/local`.
 - **From GitHub.** In Cursor open **Customize → From GitHub Repository** and paste `https://github.com/jorsisu/jor-stack`. The repo root has `.cursor-plugin/marketplace.json`, which lists the single `jor-stack` plugin at the root.
 
-Open **Customize** afterwards and confirm the 21 `jor-` skills, including `jor-bugfix`, and the `chrome-devtools` MCP server are listed. See [Cursor's plugin guide](https://cursor.com/docs/plugins). The MCP server runs `npx -y chrome-devtools-mcp@latest`.
+Open **Customize** afterwards and confirm the 22 `jor-` skills, including `jor-peer-review`, and the `chrome-devtools` MCP server are listed. See [Cursor's plugin guide](https://cursor.com/docs/plugins). The MCP server runs `npx -y chrome-devtools-mcp@latest`.
 
 ### Codex
 

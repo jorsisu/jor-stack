@@ -148,4 +148,6 @@ Required before declaring done:
 - [ ] Throwaway prototypes deleted (or moved to a clearly-marked debug location)
 - [ ] The hypothesis that turned out correct is stated in the commit / PR message, so the next debugger learns
 
-Report the original symptom, cause, fix, exact checks and results, and any remaining limits. Recommend `/jor-review` next; requested `/jor-browser-review` follows code review and accepted fixes. Leave the next invocation to the user; commit only when authorized.
+After the fix and its checks pass, automatically read and follow [../jor-peer-review/SKILL.md](../jor-peer-review/SKILL.md) before declaring the task done. This is part of bug fixing; do not wait for a separate user request.
+
+Report the original symptom, cause, fix, peer-review outcome, exact checks and results, and any remaining limits. Leave `/jor-browser-review` and `/jor-review` invocation to the user. Full `/jor-review` is optional for large changes, after any requested browser review and fixes. Commit only when authorized.

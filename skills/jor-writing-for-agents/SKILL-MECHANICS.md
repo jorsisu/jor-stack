@@ -32,7 +32,7 @@ Check a representative matching request and a nearby request that should not tri
 
 ## Invocation
 
-`jor-writing-for-agents` allows automatic selection for agent-guidance requests in both apps: omit `disable-model-invocation` from `SKILL.md` for Cursor and set `policy.allow_implicit_invocation: true` in `agents/openai.yaml` for Codex. Other jor-stack skills remain manual-only: `disable-model-invocation: true` for Cursor and `policy.allow_implicit_invocation: false` for Codex. Recommend manual skills for the user to invoke; read supporting skills as references.
+`jor-writing-for-agents` allows automatic selection for agent-guidance requests. `jor-peer-review` allows automatic selection after `jor-implement` or `jor-bugfix` checks pass, and can also be requested explicitly. For both, omit `disable-model-invocation` from `SKILL.md` for Cursor and set `policy.allow_implicit_invocation: true` in `agents/openai.yaml` for Codex. Other jor-stack skills remain manual-only: `disable-model-invocation: true` for Cursor and `policy.allow_implicit_invocation: false` for Codex. Recommend manual skills for the user to invoke; read supporting skills as references. Implementation and bugfix must follow the linked peer-review instructions before closeout even without a separate invocation.
 
 Preserve the existing invocation policy unless the user asks to change it. For a new Codex skill, automatic selection is enabled by default. Use explicit-only invocation when the user requests it.
 

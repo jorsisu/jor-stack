@@ -1,0 +1,5 @@
+interface:
+  display_name: "Jor Peer Review"
+  short_description: "Review task changes with an independent agent"
+policy:
+  allow_implicit_invocation: true

@@ -1,12 +1,14 @@
 ---
 name: jor-review
-description: "Review committed and uncommitted changes since a fixed point (commit, branch, tag, or merge-base) along two axes: Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match the ticket in the conversation or the /jor-to-spec file?). Runs both reviews in parallel sub-agents and reports them side by side."
+description: "Optional full review for large changes, when requested: review committed and uncommitted work since a fixed point along Standards and Spec axes with two parallel sub-agents."
 disable-model-invocation: true
 metadata:
   based-on: "mattpocock/skills skills/engineering/code-review @ 3da8c01116264675eeefbd6e9d59c734de9095cc"
 ---
 
 In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
+Use this full review when the user requests it for a large change, after any requested browser review and fixes. Routine implementation and bug fixing use `jor-peer-review` automatically; this full review is not a required gate.
 
 Two-axis review of committed changes since a fixed point the user supplies, plus staged, unstaged, and untracked work in scope:
 

@@ -1,36 +1,117 @@
 flowchart TB
-    task("Describe task or load ticket"):::step --> context("Enough context?"):::decision
-    context -->|No| ready("jor-get-ready<br/>Investigate and clarify"):::step
-    context -->|Yes| route("What is needed?"):::decision
-    ready --> pause("Report findings or proposal<br/>Wait for user request"):::step
+    task(["Initial request or ticket"]):::step
+
+    subgraph intake["1. Understand the request"]
+        direction TB
+        context{"Enough context?"}:::decision
+        ready("jor-get-ready<br/>Investigate and clarify"):::step
+        pause("Report findings or proposal<br/>Wait for user request"):::stop
+        context -->|No| ready
+        ready --> pause
+    end
+
+    subgraph work["2. Choose and authorize the work"]
+        direction TB
+        route{"What is needed?"}:::decision
+        bugfix("jor-bugfix<br/>Reproduce and diagnose<br/>Fix only within authorized scope"):::step
+        wider("Report wider scope<br/>Wait for scope approval"):::stop
+        spec("jor-to-spec<br/>Capture agreed requirements"):::step
+        tickets("jor-to-tickets<br/>Approve breakdown and write tasks"):::step
+        next("jor-get-ready<br/>Assess next unblocked ticket"):::step
+        ticketpause("Report findings or proposal<br/>Wait for user request, then repeat stage 2"):::stop
+        bugpause("Report investigation findings<br/>Wait for user request, then repeat stage 2"):::stop
+        approved{"Implementation authorized<br/>for this scope?"}:::decision
+        noauth("Report findings or proposal<br/>Wait for implementation request"):::stop
+        implement("jor-implement<br/>Build a feature or known fix"):::step
+
+        route -->|Unknown bug cause| bugfix
+        route -->|Several deliverables| spec
+        route -->|One clear change| approved
+        bugfix -->|Investigation only| bugpause
+        bugfix -->|Wider fix needed| wider
+        wider -->|Scope approved; user invokes| spec
+        spec --> tickets
+        tickets --> next
+        next --> ticketpause
+        approved -->|No| noauth
+        approved -->|Yes| implement
+    end
+
+    subgraph verification["3. Check and peer review"]
+        direction TB
+        checks("Run relevant checks"):::step
+        result{"Check result?"}:::decision
+        blocked("Report limit<br/>Stop verification"):::stop
+        checkfix("Fix within authorized scope<br/>Repeat implementation and checks in stages 2–3"):::step
+        peer("jor-peer-review<br/>Automatic: review, fix, recheck<br/>At most one focused recheck"):::step
+        peerissues{"Unresolved findings?"}:::decision
+        remaining("Report remaining findings<br/>Wait for next step"):::stop
+
+        checks --> result
+        result -->|Blocked or outside scope| blocked
+        result -->|In-scope code failure| checkfix
+        result -->|Pass| peer
+        peer --> peerissues
+        peerissues -->|Yes| remaining
+    end
+
+    subgraph browserStage["4. Optional browser review"]
+        direction TB
+        requested{"Browser check requested?"}:::decision
+        browser("jor-browser-review"):::optional
+        browserfixes{"Code changes needed?"}:::decision
+        browserretry("Authorized implementation, checks and peer review<br/>Then repeat browser review in stage 4"):::step
+
+        requested -->|Yes| browser
+        browser --> browserfixes
+        browserfixes -->|Yes| browserretry
+    end
+
+    subgraph fullStage["5. Optional final full review"]
+        direction TB
+        full{"Full review requested<br/>for a large change?"}:::decision
+        review("jor-review<br/>Review against a fixed base"):::optional
+        codefixes{"Code changes needed?"}:::decision
+        reviewretry("Authorized implementation, checks and peer review<br/>Repeat any requested browser review<br/>Full review remains user-invoked"):::step
+
+        full -->|Yes| review
+        review --> codefixes
+        codefixes -->|Yes| reviewretry
+    end
+
+    subgraph deliveryStage["6. Prepare delivery"]
+        direction TB
+        pr("jor-pr<br/>Prepare PR body"):::step
+        publish("Separate authorization:<br/>commit, push, open or merge PR"):::step
+        pr --> publish
+    end
+
+    done(["End of workflow"]):::step
+
+    task --> context
+    context -->|Yes| route
     pause -->|User requests next step| route
-    route -->|Unknown bug cause| bugfix("jor-bugfix<br/>Reproduce and diagnose<br/>Fix only within authorized scope"):::step
-    bugfix -->|Investigation only| pause
-    bugfix -->|Wider fix needed| wider("Report wider scope<br/>Wait for scope approval"):::step
-    route -->|Several deliverables| spec("jor-to-spec<br/>Capture agreed requirements"):::step
-    wider -->|Scope approved; user invokes| spec
-    route -->|One clear change| approved("Implementation authorized<br/>for this scope?"):::decision
-    approved -->|No| pause
-    spec --> tickets("jor-to-tickets<br/>Approve breakdown and write tasks"):::step
-    tickets --> next("jor-get-ready<br/>Assess next unblocked ticket"):::step
-    next --> pause
-    approved -->|Yes| implement("jor-implement<br/>Build a feature or known fix"):::step
-    bugfix -->|Scoped fix complete| checks("Run relevant checks"):::step
+    bugfix -->|Scoped fix complete| checks
     implement --> checks
-    checks --> result("Check result?"):::decision
-    result -->|Blocked or outside scope| blocked("Report limit<br/>Stop verification"):::step
-    result -->|In-scope code failure| approved
-    result -->|Pass| review("jor-review<br/>Review code against a fixed base"):::step
-    review --> codefixes("Code changes needed?"):::decision
-    codefixes -->|Yes| approved
-    codefixes -->|No| requested("Browser check requested?"):::decision
-    requested -->|Yes| browser("jor-browser-review"):::step
-    requested -->|No| pr("jor-pr<br/>Prepare PR body"):::step
-    browser --> browserfixes("Code changes needed?"):::decision
-    browserfixes -->|Yes| approved
-    browserfixes -->|No| pr
-    pr --> publish("Separate authorization:<br/>commit, push, open or merge PR"):::step
+    peerissues -->|No| requested
+    requested -->|No| full
+    browserfixes -->|No| full
+    full -->|No| pr
+    codefixes -->|No| pr
+    publish --> done
+
+    %% Invisible links keep each complete stage above the next stage.
+    ticketpause ~~~ checks
+    bugpause ~~~ checks
+    noauth ~~~ checks
+    blocked ~~~ requested
+    checkfix ~~~ requested
+    remaining ~~~ requested
+    browserretry ~~~ full
+    reviewretry ~~~ pr
 
     classDef step fill:#002337,stroke:#334650,color:#58b9ef,stroke-width:1px,rx:16,ry:16
-    classDef decision fill:#002337,stroke:#58b9ef,color:#58b9ef,stroke-width:1.5px,stroke-dasharray:4 4,rx:16,ry:16
+    classDef decision fill:#002337,stroke:#58b9ef,color:#58b9ef,stroke-width:1.5px
+    classDef optional fill:#002337,stroke:#58b9ef,color:#58b9ef,stroke-width:1.5px,stroke-dasharray:4 4,rx:16,ry:16
+    classDef stop fill:#002337,stroke:#888888,color:#c7ced3,stroke-width:1px,rx:16,ry:16
     linkStyle default stroke:#888888,stroke-width:1.5px

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added automatic `jor-peer-review` after implementation and bugfix checks: one independent reviewer, valid fixes within scope, affected checks, and at most one focused recheck. Browser review stays manual; full `jor-review` is optional for large changes after any requested browser review and fixes.
 - `jor-verify` bundles a dependency-free Node.js check runner with project-specific command plans, short results, private full logs, failure/blocked exit codes, plan-bound repository selection, and worker cleanup after every check. Generation and upkeep reject source-writing commands. Implementation reuses the scripts; browser checks and CI enforcement remain separate.
 - Aligned the README, router, and skill handoffs: explicit implementation boundaries, optional browser review, PR-body-only delivery, direct-request review coverage, private output locations, manual-only generated verify skills, and safe repeated shared-link setup. Synced the Mermaid source and removed the unused stale SVG export.
 - Removed angle-bracket placeholders from four skill descriptions for Codex validator compatibility.
@@ -9,7 +10,7 @@
 - Renamed the bug diagnosis skill to `jor-bugfix` across commands, metadata, docs, and flow diagrams.
 - Added `jor-implement` and `jor-writing-for-agents`, replacing the standalone skills. `jor-retro` recommends the writing skill for accepted guidance changes.
 - Added a portable plugin manifest and Codex repo marketplace sharing Cursor's skills and MCP server configuration.
-- Added local Codex installation through shared skill links and Codex command syntax guidance. `jor-writing-for-agents` allows automatic selection in Cursor and Codex; the other 20 skills remain manual-only.
+- Added local Codex installation through shared skill links and Codex command syntax guidance. `jor-writing-for-agents` and `jor-peer-review` allow automatic selection in Cursor and Codex; the other 20 skills remain manual-only.
 - `jor-review` includes staged, unstaged, and in-scope untracked files alongside committed changes, and reviews the current result where diffs overlap.
 - `jor-verify` restores and confirms the target UI state at every breakpoint before capturing screenshots. The Notes example follows the same steps.
 - `jor-bugfix` accepts a repeatable Chrome DevTools MCP sequence with an explicit pass/fail check as a feedback loop.
