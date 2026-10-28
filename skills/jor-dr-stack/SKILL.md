@@ -31,9 +31,14 @@ Audit the current jor-stack checkout as a whole, including uncommitted and new f
 
 ## Workflow diagram layout
 
-Keep the workflow readable from top to bottom. Use `flowchart TB`, with the requirement or ticket at the top, successive phases below it, and final reviews and delivery at the bottom in their actual process order. Keep one clear main path; place optional branches beside their phase and rejoin near the next step. Keep fix/recheck loops local where possible; use clearly labeled return points when long backward edges would cross several phases. Preserve every decision and return destination when simplifying the layout.
+Preserve the established diagram style on every workflow change unless the user requests a redesign. Compare against the pre-change diagram from Git or the user's approved reference.
 
-Flag tangled paths, unnecessary crossings, or an end placed above earlier phases. `TB` alone does not prove an orderly layout. Inspect an available rendered preview when authorized; otherwise report visual layout as unverified. Keep the README and Mermaid source synchronized after corrections.
+- Keep `flowchart TB` and numbered stage subgraphs: the request or ticket at the top, successive stages below it, and the workflow end at the bottom. Place new steps in their owning stage; update stage numbers and labeled retry destinations together when inserting or moving a stage.
+- Preserve all steps, decisions, branch outcomes, stop conditions, and return destinations except those changed by the authorized request. Do not flatten the detailed flow into a linear checklist to improve readability. Keep browser review and full `jor-review` optional; when requested, full review follows any requested browser review and precedes delivery.
+- Group side branches with their stage and use labeled retry boxes for returns across stages. Preserve or update the invisible `~~~` links that keep complete stages ordered; these are layout constraints, not workflow transitions. Trace stop paths and review bypasses through visible arrows and labeled retry destinations, excluding `~~~` layout links.
+- Preserve node shapes, `classDef` styles, colors, and link styling. A workflow edit does not authorize a visual redesign. Flag unexpected node, branch, stage-group, or style removals in the diff.
+
+Before marking the diagram source consistent, check stage order, updated retry references, preserved visible paths, and exact parity between the README Mermaid block and `docs/flow.mmd`. Flag backward paths across stages, unnecessary crossings, or an end above earlier stages; `TB` alone does not prove an orderly layout. Inspect an available rendered preview when authorized; otherwise report visual layout as unverified.
 
 ## Result
 
