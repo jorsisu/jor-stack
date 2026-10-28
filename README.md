@@ -4,12 +4,13 @@ jor-stack is Jorge Galarza's private collection of front-end workflow skills for
 
 ## Skills and triggers
 
-**2 automatic, 20 manual.**
+**3 automatic, 20 manual.**
 
 | Trigger | Skills |
 | --- | --- |
 | Automatic — agent guidance | `jor-writing-for-agents` |
 | Automatic — after implementation checks | `jor-peer-review` |
+| Automatic — stack audit requests | `jor-dr-stack` |
 | Manual — planning | `jor-mode`, `jor-get-ready`, `jor-restate`, `jor-grill-me`, `jor-to-spec`, `jor-to-tickets` |
 | Manual — implementation | `jor-implement`, `jor-tdd`, `jor-bugfix`, `jor-design`, `jor-domain`, `jor-prototype` |
 | Manual — verification | `jor-browser-review`, `jor-review`, `jor-verify`, `jor-verify-maintain` |
@@ -17,7 +18,7 @@ jor-stack is Jorge Galarza's private collection of front-end workflow skills for
 
 Commands below use Cursor's `/jor-...` syntax. In Codex, use `$jor-...`, or `$jor-stack:jor-...` when the picker shows the plugin namespace. For example: `/jor-bugfix`, `$jor-bugfix`, or `$jor-stack:jor-bugfix`.
 
-`jor-writing-for-agents` can be selected automatically for agent guidance work. `jor-peer-review` runs automatically after `jor-implement` or `jor-bugfix` checks pass, and can also be requested explicitly. Both allow implicit invocation in Cursor and Codex. The other 20 skills set `disable-model-invocation: true` for Cursor and `policy.allow_implicit_invocation: false` in `agents/openai.yaml` for Codex. A skill can read supporting instructions within the current task; implementation and bugfix follow the linked peer-review instructions before closeout. The user invokes other workflow steps.
+`jor-writing-for-agents` can be selected automatically for agent guidance work. `jor-peer-review` runs automatically after `jor-implement` or `jor-bugfix` checks pass, and can also be requested explicitly. `jor-dr-stack` can be selected for stack consistency audit requests. These three allow implicit invocation in Cursor and Codex. The other 20 skills set `disable-model-invocation: true` for Cursor and `policy.allow_implicit_invocation: false` in `agents/openai.yaml` for Codex. A skill can read supporting instructions within the current task; implementation and bugfix follow the linked peer-review instructions before closeout. The user invokes other workflow steps.
 
 Skill sources and exact upstream commits are in [UPSTREAM.md](UPSTREAM.md).
 
@@ -212,6 +213,7 @@ A new or repaired automated guard must catch the original fault before passing w
 
 ## Outside the main flow
 
+- **`/jor-dr-stack`** audits this stack after skill or workflow changes: skills, README, router, Mermaid, metadata, references, provenance, and packaging. Reports findings by default; fixes consistency issues when requested. It can be selected for audit requests or called explicitly, and adds no required workflow gate.
 - **`/jor-writing-for-agents`** creates, edits, reviews, or consolidates skills and agent instructions such as `AGENTS.md` and `CLAUDE.md`. It applies automatically to these requests and includes its own skill mechanics reference. This replaces the standalone `writing-for-agents` skill.
 - **`/jor-tdd`** guides test-first development: one failing test, then the smallest implementation that passes, at existing public or user-agreed seams. `jor-implement` reads it when the work calls for test-first development.
 - **`/jor-grill-me`** when you start from an idea instead of a ticket. It interviews you until every decision is settled.
@@ -252,7 +254,7 @@ Choose one:
 - **Local folder.** Commit the plugin changes, then export `git archive HEAD` into a fresh `~/.cursor/plugins/local/jor-stack` folder and run **Developer: Reload Window**. Replace an existing install rather than overlaying it, so old private rules are removed. Export committed files instead of copying the working checkout, which can contain private local rules and `AGENTS.md`. A real folder is safest: Cursor skips symlinks that point outside `~/.cursor/plugins/local`.
 - **From GitHub.** In Cursor open **Customize → From GitHub Repository** and paste `https://github.com/jorsisu/jor-stack`. The repo root has `.cursor-plugin/marketplace.json`, which lists the single `jor-stack` plugin at the root.
 
-Open **Customize** afterwards and confirm the 22 `jor-` skills, including `jor-peer-review`, and the `chrome-devtools` MCP server are listed. See [Cursor's plugin guide](https://cursor.com/docs/plugins). The MCP server runs `npx -y chrome-devtools-mcp@latest`.
+Open **Customize** afterwards and confirm the 23 `jor-` skills, including `jor-peer-review` and `jor-dr-stack`, and the `chrome-devtools` MCP server are listed. See [Cursor's plugin guide](https://cursor.com/docs/plugins). The MCP server runs `npx -y chrome-devtools-mcp@latest`.
 
 ### Codex
 
@@ -308,7 +310,7 @@ These are standalone skills. Cursor also discovers the shared directory; use one
 
 ### Planned later
 
-- **Skill doctor.** A bot that watches upstream and proposes merges without overwriting your edits.
+- **Upstream watcher.** A bot that watches upstream and proposes merges without overwriting your edits. `jor-dr-stack` audits local consistency; it does not monitor upstream.
 - **Emil Kowalski's animation skills** ([emilkowalski/skills](https://github.com/emilkowalski/skills)) as `jor-` skills. They're installed separately for now.
 
 ## License

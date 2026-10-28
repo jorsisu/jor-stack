@@ -14,7 +14,7 @@ You don't remember every skill, so ask.
 
 Before stating what a skill does or recommending a step be skipped, read that skill's SKILL.md: the summaries here are for orientation only.
 
-`jor-writing-for-agents` can be selected automatically for requests to create, edit, review, or consolidate skills and agent instructions. `jor-peer-review` runs automatically after `jor-implement` or `jor-bugfix` checks pass, and can also be requested explicitly. All other jor skills are **manual-only**. Recommend the next `/jor-...` command for those skills; don't run it on the user's behalf.
+`jor-writing-for-agents` can be selected automatically for requests to create, edit, review, or consolidate skills and agent instructions. `jor-peer-review` runs automatically after `jor-implement` or `jor-bugfix` checks pass, and can also be requested explicitly. `jor-dr-stack` can be selected for stack consistency audit requests. All other jor skills are **manual-only**. Recommend the next `/jor-...` command for those skills; don't run it on the user's behalf.
 
 A **flow** is a path through the skills. Use investigation and planning when needed, then authorized implementation, checks, automatic peer review, requested browser review, optional full review for large changes, and a PR body. Committing, pushing, publishing, and merging require separate authorization. Other skills support a specific decision, lesson, handoff, or project setup.
 
@@ -42,6 +42,7 @@ If the user wants to check that you understood them, suggest **`/jor-restate`** 
 
 ## Outside the main flow
 
+- **`/jor-dr-stack`**: audit consistency across jor-stack skills, README, router, Mermaid, metadata, references, provenance, and packaging after stack changes. Reports by default; applies consistency fixes when requested. Can be selected for audit requests or called explicitly; not a required task-to-PR step.
 - **`/jor-writing-for-agents`**: automatically applies when creating, editing, reviewing, or consolidating skills and agent instruction files such as `AGENTS.md` and `CLAUDE.md`. Use it to apply accepted guidance changes from `/jor-retro`.
 - **`/jor-tdd`**: test-first development at existing public or user-agreed seams, one failing test then the smallest implementation that passes. `jor-implement` reads it for test-first work.
 - **`/jor-grill-me`**: a relentless interview that sharpens an idea, plan, or design. Use it when you start from an idea rather than a ticket. It writes no files. When decisions are unclear, `jor-get-ready` reads `../jor-grill-me/SKILL.md` and follows it.

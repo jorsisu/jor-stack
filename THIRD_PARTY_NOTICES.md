@@ -2,7 +2,7 @@
 
 jor-stack copies skill text from other MIT-licensed projects. Each notice below has the source, the commit of that project's license file, the jor skills that use it, and the full license text fetched from GitHub.
 
-Skills written here (`jor-get-ready`, `jor-implement`, `jor-writing-for-agents`, `jor-restate`, `jor-browser-review`, and the `jor-mode` router text) are covered by the repository [LICENSE](LICENSE). `jor-mode`'s layout follows mattpocock/skills, so that project is listed too.
+Skills written here (`jor-get-ready`, `jor-implement`, `jor-writing-for-agents`, `jor-dr-stack`, `jor-restate`, `jor-browser-review`, and the `jor-mode` router text) are covered by the repository [LICENSE](LICENSE). `jor-mode`'s layout follows mattpocock/skills, so that project is listed too.
 
 ## mattpocock/skills
 
