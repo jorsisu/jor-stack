@@ -26,7 +26,7 @@ If the user wants to check that you understood them, suggest **`/jor-restate`** 
 2. **Check context.** If the request and relevant code are already understood, skip `/jor-get-ready` and choose the route below. Otherwise, it reads the task, discussion, project rules and code, reproduces the bug or confirms the gap, and returns a proposal. It changes nothing.
 3. **Choose by uncertainty and scope:**
    - **Unknown bug cause** → **`/jor-bugfix`**: build a tight feedback loop, reproduce, diagnose, and fix within the authorized scope. Diagnose before prescribing a spec or ticket breakdown for the fix.
-   - **One clear change** → **`/jor-implement`**: implement a feature or a bug fix whose cause and intended change are established. Accept a clear, authorized request, spec, ticket, or approved proposal. For test-first work, read `jor-tdd` and follow its red-green loop at agreed seams.
+   - **One clear change** → **`/jor-implement`**: implement a feature or a bug fix whose cause and intended change are established. Accept a clear, authorized request, spec, ticket, or approved proposal. For test-first work, read `jor-tdd` and follow its red-green loop at existing public or user-agreed seams.
    - **Several deliverables with understood scope** → **`/jor-to-spec`** confirms unresolved test seams and writes `.scratch/<feature-slug>/spec.md`. **`/jor-to-tickets`** proposes a breakdown, then writes approved tickets under `.scratch/<feature-slug>/issues/`, each declaring its blockers. Recommend `/jor-get-ready` for each ticket whose blockers are complete and choose its next step from the findings. These are local files, not Jira mutations.
    - **Unsure of the design** → **`/jor-prototype`**: throwaway variants that answer one design question. Recommend the user run `/jor-implement` with the chosen variant.
 4. **Keep changes within authorization.** A direct implementation request supplies authorization for its stated scope. An investigation-only request stops at the findings or proposal until implementation is authorized. If diagnosis reveals several deliverables or a wider fix, recommend `/jor-to-spec` and `/jor-to-tickets` before expanding the work.
@@ -42,7 +42,7 @@ If the user wants to check that you understood them, suggest **`/jor-restate`** 
 ## Outside the main flow
 
 - **`/jor-writing-for-agents`**: automatically applies when creating, editing, reviewing, or consolidating skills and agent instruction files such as `AGENTS.md` and `CLAUDE.md`. Use it to apply accepted guidance changes from `/jor-retro`.
-- **`/jor-tdd`**: test-first development at agreed seams, one failing test then the smallest implementation that passes. `jor-implement` reads it for test-first work.
+- **`/jor-tdd`**: test-first development at existing public or user-agreed seams, one failing test then the smallest implementation that passes. `jor-implement` reads it for test-first work.
 - **`/jor-grill-me`**: a relentless interview that sharpens an idea, plan, or design. Use it when you start from an idea rather than a ticket. It writes no files. When decisions are unclear, `jor-get-ready` reads `../jor-grill-me/SKILL.md` and follows it.
 - **`/jor-restate`**: an understanding check. Restates the user's goal and problem, then stops.
 - **`/jor-design`**: deep-module vocabulary (module, interface, depth, seam, adapter, leverage, locality) for shaping a module's interface while you shape code.

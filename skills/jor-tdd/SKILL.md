@@ -1,6 +1,6 @@
 ---
 name: jor-tdd
-description: Test-driven development. Build a feature or fix test-first, one red-green slice at a time, at seams agreed with the user.
+description: Test-driven development. Build a feature or fix test-first, one red-green slice at a time, at existing public or user-agreed seams.
 disable-model-invocation: true
 metadata:
   based-on: "mattpocock/skills skills/engineering/tdd @ 3f599139104dfceabc7754eeb91319802f85e042 (SKILL.md, tests.md, mocking.md)"
@@ -24,9 +24,7 @@ See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking g
 
 A **seam** is the public boundary you test at: the interface where you observe behavior without reaching inside. Tests live at seams, never against internals.
 
-**Test only at pre-agreed seams.** Before writing any test, write down the seams under test and confirm them with the user. No test is written at an unconfirmed seam. You can't test everything, so agreeing the seams up front is how testing effort lands on the critical paths and complex logic instead of every edge case.
-
-Ask: "What's the public interface, and which seams should we test?" Give each proposed seam a one-line note on what it catches and what it misses.
+**Reuse existing public seams.** For a clear, authorized change, use the relevant public interface and existing test pattern without another approval. Honor seams already agreed with the user. For a new or unclear seam, state what it catches and misses, then confirm it with the user before writing tests.
 
 When the shape of that interface is itself in question (how deep the module is, where the seam belongs, what the interface should expose), read `../jor-design/SKILL.md` and follow it for the vocabulary.
 
@@ -41,4 +39,4 @@ When the shape of that interface is itself in question (how deep the module is, 
 - **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
 - **Refactoring is not part of the loop.** Report refactoring candidates for `/jor-review`; implement accepted changes in a separate authorized pass.
-- **Stop at green.** When the agreed seams are covered and green, stop. Recommend `/jor-review` next; `/jor-browser-review`, when requested in the current chat, follows code review and accepted fixes. Leave the next invocation to the user. Start, stop, or restart dev servers only on explicit request.
+- **Stop at green.** When the selected seams are covered and green, stop. Recommend `/jor-review` next; `/jor-browser-review`, when requested in the current chat, follows code review and accepted fixes. Leave the next invocation to the user. Start, stop, or restart dev servers only on explicit request.

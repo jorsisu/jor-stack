@@ -31,22 +31,33 @@ flowchart TB
     task("Describe task or load ticket"):::step --> context("Enough context?"):::decision
     context -->|No| ready("jor-get-ready<br/>Investigate and clarify"):::step
     context -->|Yes| route("What is needed?"):::decision
-    ready --> route
-    route -->|Unknown bug cause| diagnosis("Diagnosis and fix authorized<br/>for this scope"):::step
-    diagnosis --> bugfix("jor-bugfix<br/>Reproduce, diagnose, and fix"):::step
-    route -->|One clear change| approved("Implementation authorized<br/>for this scope"):::step
+    ready --> pause("Report findings or proposal<br/>Wait for user request"):::step
+    pause -->|User requests next step| route
+    route -->|Unknown bug cause| bugfix("jor-bugfix<br/>Reproduce and diagnose<br/>Fix only within authorized scope"):::step
+    bugfix -->|Investigation only| pause
+    bugfix -->|Wider fix needed| wider("Report wider scope<br/>Wait for scope approval"):::step
     route -->|Several deliverables| spec("jor-to-spec<br/>Capture agreed requirements"):::step
+    wider -->|Scope approved; user invokes| spec
+    route -->|One clear change| approved("Implementation authorized<br/>for this scope?"):::decision
+    approved -->|No| pause
     spec --> tickets("jor-to-tickets<br/>Approve breakdown and write tasks"):::step
     tickets --> next("jor-get-ready<br/>Assess next unblocked ticket"):::step
-    next --> approved
-    approved --> implement("jor-implement<br/>Build a feature or known fix"):::step
-    bugfix --> checks("Run relevant checks"):::step
+    next --> pause
+    approved -->|Yes| implement("jor-implement<br/>Build a feature or known fix"):::step
+    bugfix -->|Scoped fix complete| checks("Run relevant checks"):::step
     implement --> checks
-    checks --> review("jor-review<br/>Review code against a fixed base"):::step
-    review --> requested("Browser check requested?"):::decision
+    checks --> result("Check result?"):::decision
+    result -->|Blocked or outside scope| blocked("Report limit<br/>Stop verification"):::step
+    result -->|In-scope code failure| approved
+    result -->|Pass| review("jor-review<br/>Review code against a fixed base"):::step
+    review --> codefixes("Code changes needed?"):::decision
+    codefixes -->|Yes| approved
+    codefixes -->|No| requested("Browser check requested?"):::decision
     requested -->|Yes| browser("jor-browser-review"):::step
     requested -->|No| pr("jor-pr<br/>Prepare PR body"):::step
-    browser --> pr
+    browser --> browserfixes("Code changes needed?"):::decision
+    browserfixes -->|Yes| approved
+    browserfixes -->|No| pr
     pr --> publish("Separate authorization:<br/>commit, push, open or merge PR"):::step
 
     classDef step fill:#002337,stroke:#334650,color:#58b9ef,stroke-width:1px,rx:16,ry:16
@@ -117,7 +128,7 @@ A new or repaired automated guard must catch the original fault before passing w
 ## Outside the main flow
 
 - **`/jor-writing-for-agents`** creates, edits, reviews, or consolidates skills and agent instructions such as `AGENTS.md` and `CLAUDE.md`. It applies automatically to these requests and includes its own skill mechanics reference. This replaces the standalone `writing-for-agents` skill.
-- **`/jor-tdd`** guides test-first development: one failing test, then the smallest implementation that passes, at agreed seams. `jor-implement` reads it when the work calls for test-first development.
+- **`/jor-tdd`** guides test-first development: one failing test, then the smallest implementation that passes, at existing public or user-agreed seams. `jor-implement` reads it when the work calls for test-first development.
 - **`/jor-grill-me`** when you start from an idea instead of a ticket. It interviews you until every decision is settled.
 - **`/jor-restate`** when you want to check the agent understood your goal before it starts.
 - **`/jor-design`** and **`/jor-domain`** while shaping code. `/jor-design` gives the vocabulary for module interfaces and seams. `/jor-domain` pushes logic into the right data structure instead of more `if` branches.

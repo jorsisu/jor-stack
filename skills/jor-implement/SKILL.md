@@ -14,7 +14,7 @@ Implement the clear, authorized request, spec, tickets, or approved proposal, in
 
 Follow project rules and patterns.
 
-For test-first work, read [../jor-tdd/SKILL.md](../jor-tdd/SKILL.md) and follow it at pre-agreed seams. Read supporting skills as workflow references; leave `/jor-...` invocation to the user.
+For test-first work, read [../jor-tdd/SKILL.md](../jor-tdd/SKILL.md) and follow its seam-selection and red-green rules. Read supporting skills as workflow references; leave `/jor-...` invocation to the user.
 
 Run the smallest relevant repo checks during implementation and after the final edit. Broaden coverage when project requirements, risk, or failures justify it.
 
