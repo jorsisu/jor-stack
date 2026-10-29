@@ -2,7 +2,13 @@
 
 jor-stack copies skill text from other MIT-licensed projects. Each notice below has the source, the commit of that project's license file, the jor skills that use it, and the full license text fetched from GitHub.
 
-Skills written here (`jor-get-ready`, `jor-implement`, `jor-writing-for-agents`, `jor-dr-stack`, `jor-restate`, `jor-browser-review`, and the `jor-mode` router text) are covered by the repository [LICENSE](LICENSE). `jor-mode`'s layout follows mattpocock/skills, so that project is listed too.
+Skills written here (`jor-get-ready`, `jor-implement`, `jor-writing-for-agents`, `jor-peer-review`, `jor-dr-stack`, `jor-restate`, `jor-browser-review`, and the `jor-mode` router text) are covered by the repository [LICENSE](LICENSE). `jor-mode`'s layout follows mattpocock/skills, so that project is listed too.
+
+Keep this file and `LICENSE` with redistributed copies. When distributing individual adapted skills, include the applicable upstream license notice with them.
+
+## External runtime dependency
+
+`mcp.json` refers to [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp), licensed under [Apache-2.0](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/LICENSE). Its implementation is downloaded by npx, not copied into this repository or relicensed by jor-stack. Its own distribution carries its license and dependency notices.
 
 ## mattpocock/skills
 

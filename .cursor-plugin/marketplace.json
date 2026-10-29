@@ -4,14 +4,14 @@
     "name": "Jorge Galarza"
   },
   "metadata": {
-    "description": "Jorge's private marketplace for the jor-stack plugin",
-    "version": "0.1.1"
+    "description": "Open-source front-end workflow skills for Cursor and Codex",
+    "version": "0.2.0"
   },
   "plugins": [
     {
       "name": "jor-stack",
       "source": "./",
-      "description": "Jorge's FE workflow skills"
+      "description": "Front-end workflow skills for planning, implementation, review, and verification in Cursor and Codex"
     }
   ]
 }

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.2.0 (2026-10-29)
+
+- Prepared public plugin metadata, setup instructions, contribution guidance, private security reporting, and a Cursor Marketplace publication checklist.
+- Added CI for stack validation and existing runner tests; validation covers license notices, public metadata, and MCP privacy flags.
+- Disabled Chrome DevTools MCP usage statistics and CrUX requests in the bundled configuration; documented its browser access and external runtime dependency.
+
 - Specs cover agreed behaviors without a fixed story-list size; bug diagnosis ranks evidence-supported hypotheses without a numeric quota.
 
 - Added a Ruby standard-library stack validator and temporary failure fixtures; `jor-dr-stack` runs it for source consistency checks.

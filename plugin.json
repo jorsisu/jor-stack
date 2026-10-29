@@ -1,11 +1,12 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "jor-stack",
-  "version": "0.1.1",
-  "description": "Jorge's front-end workflow skills for Cursor and Codex",
+  "version": "0.2.0",
+  "description": "Front-end workflow skills for planning, implementation, review, and verification in Cursor and Codex",
   "author": {
     "name": "Jorge Galarza"
   },
+  "homepage": "https://github.com/jorsisu/jor-stack",
   "repository": "https://github.com/jorsisu/jor-stack",
   "license": "MIT"
 }

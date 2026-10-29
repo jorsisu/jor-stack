@@ -1,4 +1,5 @@
 require 'json'
+require 'digest'
 require 'pathname'
 require 'yaml'
 
@@ -59,10 +60,43 @@ def validate_stack(root)
   end
   versions = [parsed[0]['version'], parsed[1]['version'], parsed[2].dig('metadata', 'version')]
   raise 'Plugin version mismatch' unless versions.first.is_a?(String) && !versions.first.empty? && versions.uniq.length == 1
+  descriptions = [parsed[0]['description'], parsed[1]['description'], parsed[2].dig('plugins', 0, 'description')]
+  unless descriptions.first.is_a?(String) && !descriptions.first.strip.empty? && descriptions.uniq.length == 1
+    raise 'Plugin description mismatch'
+  end
+  parsed.first(2).each do |manifest|
+    raise 'Plugin license must be MIT' unless manifest['license'] == 'MIT'
+    raise 'Plugin repository mismatch' unless manifest['repository'] == 'https://github.com/jorsisu/jor-stack'
+  end
+  unless parsed[1]['skills'] == './skills/' &&
+         parsed[2]['plugins'].length == 1 && parsed[2].dig('plugins', 0, 'name') == 'jor-stack' &&
+         parsed[2].dig('plugins', 0, 'source') == './' &&
+         parsed[3]['plugins'].length == 1 && parsed[3].dig('plugins', 0, 'name') == 'jor-stack' &&
+         parsed[3].dig('plugins', 0, 'source') == { 'source' => 'local', 'path' => './' }
+    raise 'Plugin discovery path mismatch'
+  end
+
+  %w[LICENSE THIRD_PARTY_NOTICES.md CONTRIBUTING.md SECURITY.md docs/publishing.md].each do |path|
+    raise "Missing publication file: #{path}" unless root.join(path).file?
+  end
+  license = root.join('LICENSE').read.split.join(' ')
+  # Pin the complete MIT notice, including copyright, while allowing line wrapping.
+  expected_license_sha256 = '72d1c65e7ef48e29d92b7b307e8932dcc5131af488a17af3a1b9d9ba5fb2dcee'
+  raise 'Invalid MIT license' unless Digest::SHA256.hexdigest(license) == expected_license_sha256
+  notices = root.join('THIRD_PARTY_NOTICES.md').read.split.join(' ')
+  ['Matt Pocock', 'Lauren Tan', 'HumanLayer'].each do |holder|
+    unless notices.include?(license.sub('Jorge Galarza', holder))
+      raise "Missing complete third-party notice: #{holder}"
+    end
+  end
   mcp = JSON.parse(root.join('mcp.json').read)
   raise 'Missing Chrome DevTools MCP configuration' unless mcp.is_a?(Hash) && mcp['mcpServers'].is_a?(Hash) && mcp['mcpServers'].key?('chrome-devtools')
+  args = mcp.dig('mcpServers', 'chrome-devtools', 'args')
+  unless args.is_a?(Array) && (%w[--no-usage-statistics --no-performance-crux] - args).empty?
+    raise 'Missing MCP privacy flags'
+  end
 
-  docs = %w[README.md UPSTREAM.md CHANGELOG.md THIRD_PARTY_NOTICES.md].map { |path| root.join(path) }
+  docs = root.glob('*.md')
   docs += root.glob('skills/**/*.md') + root.glob('docs/**/*.md')
   docs.each do |path|
     source = path.read.gsub(/^```[^\n]*\n.*?^```[^\n]*(?:\n|\z)/m, '')
@@ -81,7 +115,7 @@ if $PROGRAM_NAME == __FILE__
   begin
     raise 'Usage: ruby scripts/validate-stack.rb' unless ARGV.empty?
     count = validate_stack(File.expand_path('..', __dir__))
-    puts "PASS: #{count} skills; metadata, policies, catalogs, JSON, links, and Mermaid parity"
+    puts "PASS: #{count} skills; metadata, policies, catalogs, packaging, notices, privacy flags, links, and Mermaid parity"
   rescue StandardError => error
     warn "FAIL: #{error.message}"
     exit 1

@@ -44,7 +44,7 @@ Current workflow changes add automatic `jor-peer-review` to implementation and b
 | `.cursor-plugin/marketplace.json` format | [cursor/plugin-template](https://github.com/cursor/plugin-template) | `600b993b42870a71238a0811519b06da98d1ec91` | Marketplace manifest shape (single plugin at repo root). |
 | `plugins/*/.cursor-plugin/plugin.json` format | cursor/plugin-template | tree `46216072ac5750f782f95bb325b4d12b7c3ae9c9` (main) | Plugin manifest shape. |
 | `scripts/validate-template.mjs` | cursor/plugin-template | `bf795ee9a28e6d8b2e013beb9ac47fdd6d573fb7` | Validator run against this folder (not shipped). |
-| `mcp.json` config | [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) `README.md` | `46eb546ebb13964f884847af6ffb200623426cbe` | `chrome-devtools` server config from "Getting started"; adds the Agent Plugins schema and explicit `stdio` transport for Cursor and Codex. |
+| `mcp.json` config | [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) `README.md` | `46eb546ebb13964f884847af6ffb200623426cbe` | `chrome-devtools` server config from "Getting started"; adds the Agent Plugins schema and explicit `stdio` transport for Cursor and Codex. Disables usage statistics and performance CrUX requests using upstream flags documented on 2026-10-29. The external package is Apache-2.0 and is not vendored. |
 | `plugin.json`, `.agents/plugins/marketplace.json` | [OpenAI plugin packaging guide](https://developers.openai.com/plugins/build/plugins) | n/a (documentation, checked 2026-10-27) | Portable plugin manifest and repo marketplace; share the existing `skills/` and `mcp.json`. |
 
 ## Updating from upstream

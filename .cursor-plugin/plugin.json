@@ -1,13 +1,16 @@
 {
   "name": "jor-stack",
   "displayName": "jor-stack",
-  "version": "0.1.1",
-  "description": "Jorge's FE workflow skills",
+  "version": "0.2.0",
+  "description": "Front-end workflow skills for planning, implementation, review, and verification in Cursor and Codex",
   "license": "MIT",
+  "homepage": "https://github.com/jorsisu/jor-stack",
   "repository": "https://github.com/jorsisu/jor-stack",
   "author": {
     "name": "Jorge Galarza"
   },
   "keywords": ["skills", "frontend", "workflow", "slash-commands", "chrome-devtools-mcp"],
+  "category": "developer-tools",
+  "tags": ["workflow", "planning", "review", "verification"],
   "skills": "./skills/"
 }

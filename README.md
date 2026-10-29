@@ -1,6 +1,18 @@
 # jor-stack
 
-jor-stack is Jorge Galarza's private collection of front-end workflow skills for Cursor and Codex.
+Front-end workflow skills for Cursor and Codex: understand the task, make a scoped change, check it, and prepare a PR. Built by Jorge Galarza, with adapted skills from [Matt Pocock](https://github.com/mattpocock/skills), [Lauren Tan's pstack](https://github.com/cursor/plugins/tree/main/pstack), and [HumanLayer](https://github.com/humanlayer/skills).
+
+MIT licensed. Independent community project; no affiliation with or endorsement by Cursor, OpenAI, or the upstream authors is implied.
+
+## Quick start
+
+1. [Install from source](#install). A public Cursor Marketplace listing is not yet available.
+2. Open a project and run `/jor-mode` to choose a workflow, or `/jor-get-ready` to investigate a task without edits.
+3. When the change is clear, request `/jor-implement` with the scope you want built. It runs relevant checks and peer review. Request browser verification separately.
+
+For example: `/jor-get-ready Find why the filter resets when I return to this page. Propose a fix.`
+
+In Codex, replace `/` with `$`, or select the namespaced skill from the picker. No Jira account or extra skill pack is needed. Browser workflows have [additional requirements](#install).
 
 ## Skills and triggers
 
@@ -22,7 +34,7 @@ Commands below use Cursor's `/jor-...` syntax. In Codex, use `$jor-...`, or `$jo
 
 Skill sources and exact upstream commits are in [UPSTREAM.md](UPSTREAM.md).
 
-The manifests remain at version 0.1.1. The working tree also contains the updates under **Unreleased** in [CHANGELOG.md](CHANGELOG.md); installing from GitHub or `git archive HEAD` includes only committed files. Plugin installs bundle Chrome DevTools MCP; standalone skill links do not.
+The current version is **0.2.0**. See [CHANGELOG.md](CHANGELOG.md) for versioned changes. Installing from GitHub or `git archive HEAD` includes only committed files. Plugin installs include a Chrome DevTools MCP configuration; standalone skill links do not.
 
 ## How work flows
 
@@ -152,7 +164,7 @@ flowchart TB
 
 The same diagram source is kept in [docs/flow.mmd](docs/flow.mmd).
 
-1. **Load the task.** Bring a Jira ticket into the conversation with `/twg-jira`, or state the request directly. The request, acceptance criteria, and relevant discussion set the scope. Jira access is only needed for Jira work.
+1. **Load the task.** State the request, paste an issue, or use your own tracker integration. The request, acceptance criteria, and relevant discussion set the scope. No tracker integration is required.
 2. **Check context.** If the request and relevant code are already understood, skip `/jor-get-ready` and choose the route below. Otherwise, it investigates the code, callers, tests, and current behavior. It reads the grill-me skill when product decisions remain unclear, then returns a proposal with evidence, risks, and checks. It changes no files.
 3. **Choose by uncertainty and scope.** Use `/jor-bugfix` when a bug's cause is unknown. Diagnose it before planning a larger fix. Use `/jor-implement` for one clear change, including a bug fix whose cause and intended change are established. When understood work needs several deliverables, use `/jor-to-spec` to capture agreed requirements and test seams in `.scratch/<feature-slug>/spec.md`. Then `/jor-to-tickets` proposes a breakdown and writes one file per ticket after approval under `.scratch/<feature-slug>/issues/`. Run `/jor-get-ready` for each ticket whose blockers are complete and choose its next step from the findings. These files do not create or change Jira issues.
 4. **Keep changes within the authorized scope.** A direct implementation request supplies authorization for its stated scope; an investigation-only request ends at the findings or proposal until you authorize implementation. If diagnosis reveals several deliverables or a wider fix, propose the spec-and-ticket path before expanding the work. Use `/jor-prototype` when a design question needs exploration, then authorize production edits for the chosen design.
@@ -295,7 +307,7 @@ Generated verify skills live in the selected `.agents/skills/` or `.cursor/skill
 ## Rules every skill follows
 
 - **One skill per job.** A started skill can read supporting instructions, such as `jor-get-ready` reading `jor-grill-me`. Implementation and bugfix automatically follow `jor-peer-review` before closeout. Other manual steps stay with the user. Automatic selection of `jor-writing-for-agents` stays within the requested guidance work.
-- **Self-contained.** No skills outside jor-stack except the `/twg-jira` entry point.
+- **Self-contained.** No external skill pack is required. Tracker integrations are optional.
 - **Tool-neutral.** Shared instructions and resources work in Cursor and Codex, with no hardcoded model names.
 - **Upstream voice kept.** Skills marked close to upstream keep the original wording. Trims cut text rather than rewrite it.
 - **Traceable.** Each skill's frontmatter has a `metadata.based-on` line naming the upstream repo, path and commit, or "original by Jorge".
@@ -309,22 +321,24 @@ Generated verify skills live in the selected `.agents/skills/` or `.cursor/skill
 
 ## Stack checks
 
-Run `ruby scripts/validate-stack.rb` after stack edits. It uses Ruby 2.6+ and its standard libraries to check skill metadata, invocation policies, catalog coverage and counts, package JSON, inline local file links, and README/Mermaid parity. It reads current files, including new skills. It does not validate remote schemas, link anchors, installation, or live skill behavior.
+Run `ruby scripts/validate-stack.rb` after stack edits. It uses Ruby 2.6+ and its standard libraries to check skill metadata, invocation policies, catalog coverage and counts, package metadata, license notices, browser privacy flags, inline local file links, and README/Mermaid parity. It reads current files, including new skills. It does not validate remote schemas, link anchors, installation, or live skill behavior.
 
-When changing the validator, also run `ruby scripts/validate-stack.test.rb`. Its temporary broken fixtures must fail validation and pass after restoration. These are local checks; CI is not configured by this command.
+When changing the validator, also run `ruby scripts/validate-stack.test.rb`. Its temporary broken fixtures must fail validation and pass after restoration. The [validation workflow](.github/workflows/validate.yml) runs these checks and the existing Node.js runner tests on pushes and pull requests. A local pass does not establish a passing GitHub run.
 
 ## Install
 
-Use one installation method per app to avoid duplicate entries. Jira tasks need `/twg-jira` from twg. Browser workflows need Node.js, Chrome, and Chrome DevTools MCP. Other skills do not need Jira or a browser.
+Use one installation method per app to avoid duplicate entries. Browser workflows need a supported Node.js LTS release, npm/npx, current stable Google Chrome, and permission to start Chrome DevTools MCP. Other skills do not need Jira or a browser. The optional nonbrowser check runner needs Node.js 20+ on macOS or Linux.
 
 ### Cursor
 
 Choose one:
 
 - **Local folder.** Commit the plugin changes, then export `git archive HEAD` into a fresh `~/.cursor/plugins/local/jor-stack` folder and run **Developer: Reload Window**. Replace an existing install rather than overlaying it, so old private rules are removed. Export committed files instead of copying the working checkout, which can contain private local rules and `AGENTS.md`. A real folder is safest: Cursor skips symlinks that point outside `~/.cursor/plugins/local`.
-- **From GitHub.** In Cursor open **Customize → From GitHub Repository** and paste `https://github.com/jorsisu/jor-stack`. The repo root has `.cursor-plugin/marketplace.json`, which lists the single `jor-stack` plugin at the root.
+- **Team marketplace.** If your Cursor plan supports team marketplaces, import `https://github.com/jorsisu/jor-stack` in **Dashboard → Plugins & MCPs → Add Marketplace → Import from Repo**. The repo root has `.cursor-plugin/marketplace.json`, which lists the single `jor-stack` plugin at the root. Repository access is required while the repository is private.
 
-Open **Customize** afterwards and confirm the 23 `jor-` skills, including `jor-peer-review` and `jor-dr-stack`, and the `chrome-devtools` MCP server are listed. See [Cursor's plugin guide](https://cursor.com/docs/plugins). The MCP server runs `npx -y chrome-devtools-mcp@latest`.
+Open **Customize** afterwards and confirm the 23 `jor-` skills, including `jor-peer-review` and `jor-dr-stack`, and the `chrome-devtools` MCP server are listed. Local imports must be allowed by your organization. An installed marketplace copy takes precedence over a local copy of the same plugin. See [Cursor's plugin guide](https://cursor.com/docs/plugins).
+
+The MCP configuration runs `npx -y chrome-devtools-mcp@latest --no-usage-statistics --no-performance-crux`. It downloads and executes a third-party package; the version can change independently of jor-stack. The two flags disable that server's usage statistics and CrUX requests. Browser contents remain available to the agent during browser work. See [security and privacy](SECURITY.md) before using sensitive sessions.
 
 ### Codex
 
@@ -351,12 +365,11 @@ These are standalone skills. Cursor also discovers the shared directory; use one
 
 ## After install
 
-1. Remove the pstack plugin.
-2. Remove Matt Pocock's skills.
-3. Archive the old `get-ready`, `restate`, `browser-review`, `implement` and `writing-for-agents` skills outside skill discovery, so only the `jor-` versions remain.
-4. For browser work, complete the [verification setup](#set-up-once-per-project) in the target project.
+1. Run `/jor-mode` and confirm it can read the bundled skills.
+2. If you installed an older jor-stack copy, remove only duplicate entries from that copy. Other skill packs can remain installed.
+3. For browser work, complete the [verification setup](#set-up-once-per-project) in the target project.
 
-## Not in v0.1 / roadmap
+## Scope and roadmap
 
 ### Already decided out
 
@@ -381,7 +394,11 @@ These are standalone skills. Cursor also discovers the shared directory; use one
 ### Planned later
 
 - **Upstream watcher.** A bot that watches upstream and proposes merges without overwriting your edits. `jor-dr-stack` audits local consistency; it does not monitor upstream.
-- **Emil Kowalski's animation skills** ([emilkowalski/skills](https://github.com/emilkowalski/skills)) as `jor-` skills. They're installed separately for now.
+- **Emil Kowalski's animation skills** ([emilkowalski/skills](https://github.com/emilkowalski/skills)) as `jor-` skills. Not included or required.
+
+## Contribute and publish
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for changes and checks, [SECURITY.md](SECURITY.md) for private vulnerability reports, and [the publication checklist](docs/publishing.md) for release and Cursor Marketplace submission. Report ordinary bugs through [GitHub issues](https://github.com/jorsisu/jor-stack/issues).
 
 ## License
 

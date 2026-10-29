@@ -23,13 +23,26 @@ cases = [
   ['JSON syntax', 'plugin.json', /\{/, '{broken', /./],
   ['package identity', 'plugin.json', '"name": "jor-stack"', '"name": "wrong"', /package name/],
   ['version drift', 'plugin.json', /"version": "[^"]+"/, '"version": "invalid-test-version"', /Plugin version/],
+  ['description drift', 'plugin.json', /"description": "[^"]+"/, '"description": "stale"', /Plugin description/],
+  ['license metadata', 'plugin.json', '"license": "MIT"', '"license": "UNLICENSED"', /license must be MIT/],
+  ['repository URL', '.cursor-plugin/plugin.json', '"repository": "https://github.com/jorsisu/jor-stack"', '"repository": "https://example.com"', /repository mismatch/],
+  ['Cursor discovery', '.cursor-plugin/plugin.json', '"skills": "./skills/"', '"skills": "../skills/"', /discovery path/],
+  ['Cursor marketplace', '.cursor-plugin/marketplace.json', '"source": "./"', '"source": "../"', /discovery path/],
+  ['Codex marketplace', '.agents/plugins/marketplace.json', '"path": "./"', '"path": "/tmp/"', /discovery path/],
+  ['license file', 'LICENSE', 'MIT License', 'Unlicensed', /Invalid MIT/],
+  ['truncated license', 'LICENSE', /Permission is hereby granted.*\z/m, '', /Invalid MIT/],
+  ['missing warranty', 'LICENSE', /THE SOFTWARE IS PROVIDED.*\z/m, '', /Invalid MIT/],
+  ['copyright notice', 'THIRD_PARTY_NOTICES.md', 'Copyright (c) 2026 Lauren Tan', 'Copyright removed', /third-party notice/],
+  ['permission notice', 'THIRD_PARTY_NOTICES.md', 'Permission is hereby granted', 'Permission removed', /third-party notice/],
   ['MCP configuration', 'mcp.json', '"chrome-devtools":', '"missing":', /Missing Chrome/],
+  ['MCP privacy', 'mcp.json', '--no-usage-statistics', '--usage-statistics', /Missing MCP privacy/],
+  ['publication link', 'CONTRIBUTING.md', '(SECURITY.md)', '(MISSING.md)', /missing local link/],
   ['local link', 'README.md', '(UPSTREAM.md)', '(MISSING.md)', /missing local link/]
 ]
 
 Dir.mktmpdir('jor-stack-validation-') do |directory|
   fixture = Pathname.new(directory)
-  paths = %w[README.md UPSTREAM.md CHANGELOG.md THIRD_PARTY_NOTICES.md LICENSE skills scripts docs .cursor-plugin .agents plugin.json mcp.json].map { |path| root.join(path) }
+  paths = %w[README.md UPSTREAM.md CHANGELOG.md THIRD_PARTY_NOTICES.md CONTRIBUTING.md SECURITY.md LICENSE skills scripts docs .github .cursor-plugin .agents plugin.json mcp.json].map { |path| root.join(path) }
   paths.each { |path| FileUtils.cp_r(path.to_s, directory) }
   validate_stack(fixture)
   cases.each do |label, relative, pattern, replacement, expected|
@@ -50,5 +63,7 @@ Dir.mktmpdir('jor-stack-validation-') do |directory|
     raise "#{label}: wrong failure: #{failure.message}" unless failure.message.match?(expected)
     validate_stack(fixture)
   end
+  fixture.join('LICENSE').write(root.join('LICENSE').read.gsub(/\s+/, "\r\n"))
+  validate_stack(fixture)
 end
-puts "PASS: #{cases.length} invalid fixtures rejected; restored fixtures pass"
+puts "PASS: #{cases.length} invalid fixtures rejected; restored fixtures and rewrapped license pass"
