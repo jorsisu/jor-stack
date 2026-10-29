@@ -1,6 +1,8 @@
 # jor-stack
 
-Front-end workflow skills for Cursor and Codex: understand the task, make a scoped change, check it, and prepare a PR. Built by Jorge Galarza, with adapted skills from [Matt Pocock](https://github.com/mattpocock/skills), [Lauren Tan's pstack](https://github.com/cursor/plugins/tree/main/pstack), and [HumanLayer](https://github.com/humanlayer/skills).
+Frontend workflows for AI agents: from planning to verified PR, on command or on autopilot. Built for quick fixes and ambitious features.
+
+Built by Jorge Galarza, combining his proven skills with adaptations inspired by [Matt Pocock](https://github.com/mattpocock/skills) and [Lauren Tan's pstack](https://github.com/cursor/plugins/tree/main/pstack).
 
 MIT licensed. Independent community project; no affiliation with or endorsement by Cursor, OpenAI, or the upstream authors is implied.
 
