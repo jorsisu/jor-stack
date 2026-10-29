@@ -8,7 +8,7 @@ MIT licensed. Independent community project; no affiliation with or endorsement 
 
 ## Quick start
 
-1. [Install from source](#install). A public Cursor Marketplace listing is not yet available.
+1. Install for [Codex](#codex) or [Cursor](#cursor). A public Cursor Marketplace listing is not yet available.
 2. Open a project and run `/jor-mode` to choose a workflow, or `/jor-get-ready` to investigate a task without edits.
 3. When the change is clear, request `/jor-implement` with the scope you want built. It runs relevant checks and peer review. Request browser verification separately.
 
@@ -329,27 +329,61 @@ When changing the validator, also run `ruby scripts/validate-stack.test.rb`. Its
 
 ## Install
 
-Use one installation method per app to avoid duplicate entries. Browser workflows need a supported Node.js LTS release, npm/npx, current stable Google Chrome, and permission to start Chrome DevTools MCP. Other skills do not need Jira or a browser. The optional nonbrowser check runner needs Node.js 20+ on macOS or Linux.
+Use one installation method per app to avoid duplicate entries. The shell examples below use Bash or Zsh on macOS/Linux; they are not PowerShell commands.
+
+Before you start:
+
+- Install Git and the app you want to use: Cursor or Codex. Repository access is required while this repository is private.
+- For the Codex plugin commands, [install or update Codex CLI](https://developers.openai.com/codex/cli#getting-started) and confirm `codex plugin add --help` works in your terminal.
+
+Browser workflows also need a supported Node.js LTS release, npm/npx, current stable Google Chrome, and permission to start Chrome DevTools MCP. Other skills do not need Jira or a browser. The optional nonbrowser check runner needs Node.js 20+ on macOS or Linux.
 
 ### Cursor
 
-Choose one:
+**Recommended: local plugin folder.**
 
-- **Local folder.** Commit the plugin changes, then export `git archive HEAD` into a fresh `~/.cursor/plugins/local/jor-stack` folder and run **Developer: Reload Window**. Replace an existing install rather than overlaying it, so old private rules are removed. Export committed files instead of copying the working checkout, which can contain private local rules and `AGENTS.md`. A real folder is safest: Cursor skips symlinks that point outside `~/.cursor/plugins/local`.
-- **Team marketplace.** If your Cursor plan supports team marketplaces, import `https://github.com/jorsisu/jor-stack` in **Dashboard → Plugins & MCPs → Add Marketplace → Import from Repo**. The repo root has `.cursor-plugin/marketplace.json`, which lists the single `jor-stack` plugin at the root. Repository access is required while the repository is private.
+1. Open a terminal in the folder where you want to keep the source checkout. For a first install, run:
 
-Open **Customize** afterwards and confirm the 23 `jor-` skills, including `jor-peer-review` and `jor-dr-stack`, and the `chrome-devtools` MCP server are listed. Local imports must be allowed by your organization. An installed marketplace copy takes precedence over a local copy of the same plugin. See [Cursor's plugin guide](https://cursor.com/docs/plugins).
+   ```sh
+   git clone https://github.com/jorsisu/jor-stack.git &&
+   cd jor-stack &&
+   mkdir -p "$HOME/.cursor/plugins/local" &&
+   mkdir "$HOME/.cursor/plugins/local/jor-stack" &&
+   git archive HEAD | tar -x -C "$HOME/.cursor/plugins/local/jor-stack"
+   ```
+
+2. In Cursor's Command Palette, run **Developer: Reload Window**.
+3. Open **Customize** and confirm the 23 `jor-` skills, including `jor-peer-review` and `jor-dr-stack`, and the `chrome-devtools` MCP server are listed.
+
+If you already have a checkout, open a terminal at its root and run the block from `mkdir -p` onward. The commands stop if the install folder already exists. To replace an existing install, move only `~/.cursor/plugins/local/jor-stack` to a backup location outside `~/.cursor/plugins/local`, then run those export commands from the checkout containing the desired committed version. Keep the backup until the new install passes [verification](#after-install).
+
+The export includes committed files only. Do not copy the working checkout, which can contain private local rules and `AGENTS.md`. Use a real folder: Cursor skips symlinks that point outside `~/.cursor/plugins/local`.
+
+Local imports must be allowed by your organization. An installed marketplace copy takes precedence over a local copy of the same plugin. See [Cursor's plugin guide](https://cursor.com/docs/plugins).
+
+**Alternative: team marketplace.** If your Cursor plan supports team marketplaces, import `https://github.com/jorsisu/jor-stack` in **Dashboard → Plugins & MCPs → Add Marketplace → Import from Repo**. The repo root has `.cursor-plugin/marketplace.json`, which lists the single `jor-stack` plugin at the root. Then open **Customize**, find `jor-stack` in the team marketplace, select **Install**, and choose a project or user scope. Confirm the skills and MCP server listed above appear.
 
 The MCP configuration runs `npx -y chrome-devtools-mcp@latest --no-usage-statistics --no-performance-crux`. It downloads and executes a third-party package; the version can change independently of jor-stack. The two flags disable that server's usage statistics and CrUX requests. Browser contents remain available to the agent during browser work. See [security and privacy](SECURITY.md) before using sensitive sessions.
 
 ### Codex
 
-Choose one:
+**Recommended: plugin from GitHub.**
 
-- **Plugin.** This repo includes a portable `plugin.json` and a repo marketplace at `.agents/plugins/marketplace.json`, pointing to the repo root. Add the marketplace with `codex plugin marketplace add .` from this directory, then restart the desktop app and install `jor-stack` from that marketplace. The plugin loads the same `skills/` and `mcp.json` as Cursor. See the [OpenAI plugin packaging guide](https://developers.openai.com/plugins/build/plugins).
-- **Shared skill links.** Use the commands below for standalone skills. Keep this checkout at the same path.
+1. From any terminal directory, run:
 
-From this repository's root, link each skill into the shared user skill directory:
+   ```sh
+   codex plugin marketplace add jorsisu/jor-stack &&
+   codex plugin add jor-stack@jor-stack
+   ```
+
+2. Restart the Codex desktop app or start a new Codex CLI session.
+3. Open your project and select `jor-mode` from the skill picker. It can appear as `$jor-stack:jor-mode`. Confirm it offers the workflow choices described under [After install](#after-install).
+
+This repo includes a portable `plugin.json` and a marketplace at `.agents/plugins/marketplace.json`, pointing to the repo root. The plugin loads the same `skills/` and `mcp.json` as Cursor. See the [OpenAI plugin packaging guide](https://developers.openai.com/plugins/build/plugins).
+
+**Alternative: plugin from a local checkout.** From this repository's root, run `codex plugin marketplace add .`, then restart the desktop app. Open the **Plugins Directory**, select the `jor-stack` marketplace, and install `jor-stack`.
+
+**Alternative: shared skill links.** Use these for standalone skills. First clone the repository with `git clone https://github.com/jorsisu/jor-stack.git`, then run `cd jor-stack`, or open a terminal at an existing checkout's root. Keep this checkout at the same path. Link each skill into the shared user skill directory:
 
 ```sh
 mkdir -p "$HOME/.agents/skills"
@@ -367,9 +401,22 @@ These are standalone skills. Cursor also discovers the shared directory; use one
 
 ## After install
 
-1. Run `/jor-mode` and confirm it can read the bundled skills.
+1. Open a project and run the command for your app:
+
+   | App | Command in chat | Expected result |
+   | --- | --- | --- |
+   | Cursor | `/jor-mode` | Workflow choices from the bundled skills. |
+   | Codex | `$jor-mode`, or `$jor-stack:jor-mode` selected from the picker | Workflow choices from the bundled skills. |
+
 2. If you installed an older jor-stack copy, remove only duplicate entries from that copy. Other skill packs can remain installed.
 3. For browser work, complete the [verification setup](#set-up-once-per-project) in the target project.
+
+### Troubleshooting
+
+- **`codex` not found or `plugin add` unavailable:** install or update [Codex CLI](https://developers.openai.com/codex/cli), reopen your terminal, and retry `codex plugin add --help`.
+- **Skills missing:** reload Cursor or restart Codex and start a new chat. In Cursor, check that your organization allows local plugin imports. For Codex plugins, run `codex plugin list --marketplace jor-stack` to check installation. For shared links, confirm the source checkout has not moved.
+- **Duplicate skills:** keep one install method per app. Cursor also reads `~/.agents/skills`; standalone links there can duplicate plugin skills. Remove only links or installs belonging to the old jor-stack copy.
+- **Cursor install folder already exists:** use the backup-and-replace steps under [Cursor](#cursor); do not export over the existing folder.
 
 ## Scope and roadmap
 
