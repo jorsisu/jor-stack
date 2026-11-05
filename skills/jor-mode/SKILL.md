@@ -16,11 +16,11 @@ Before stating what a skill does or recommending a step be skipped, read that sk
 
 `jor-writing-for-agents` can be selected automatically for requests to create, edit, review, or consolidate skills and agent instructions. `jor-peer-review` runs automatically after `jor-implement` or `jor-bugfix` checks pass, and can also be requested explicitly. `jor-dr-stack` can be selected for stack consistency audit requests. All other jor skills are **manual-only**. Recommend the next `/jor-...` command for those skills; don't run it on the user's behalf.
 
-A **flow** is a path through the skills. Use investigation and planning when needed, then authorized implementation, checks, automatic peer review, requested browser review, optional full review for large changes, and a PR body. Committing, pushing, publishing, and merging require separate authorization. Other skills support a specific decision, lesson, handoff, or project setup.
+A **flow** is a path through the skills. Use investigation and planning when needed, then authorized implementation, checks, automatic peer review, requested browser review, optional full review for large changes, and a PR draft. Committing, pushing, publishing, and merging require separate authorization. Other skills support a specific decision, lesson, handoff, or project setup.
 
 If the user wants to check that you understood them, suggest **`/jor-restate`** rather than restating their goal yourself.
 
-## The main flow: task → PR body
+## The main flow: task → PR draft
 
 1. **Load the task.** Start with the ticket in the conversation (for example via `/twg-jira`) or the user's direct request.
 2. **Check context.** If the request and relevant code are already understood, skip `/jor-get-ready` and choose the route below. Otherwise, it reads the task, discussion, project rules and code, reproduces the bug or confirms the gap, and returns a proposal. It changes nothing.
@@ -33,7 +33,7 @@ If the user wants to check that you understood them, suggest **`/jor-restate`** 
 5. **After implementation checks, automatic `jor-peer-review`.** `jor-implement` and `jor-bugfix` follow [../jor-peer-review/SKILL.md](../jor-peer-review/SKILL.md) before closeout. One independent, read-only agent reviews the task's changes and directly affected code; if subagents are unavailable, the current agent performs the same review and labels it self-review. The main agent fixes valid findings within scope, reruns affected checks, and gets one focused recheck when fixes were made. Report remaining findings; do not restart the loop automatically. No base commit or full standards audit is required.
 6. **After peer review, `/jor-browser-review` when requested** checks the finished change through Chrome DevTools MCP at the project's breakpoints and returns URLs for human verification. Browser checks need an explicit request in the current chat; server start, stop, or restart also needs an explicit request. If browser findings require code changes, use an authorized implementation pass with its checks and peer review, then repeat the requested browser check.
 7. **Optional `/jor-review` for large changes, when requested.** Run it after any requested browser review and fixes. It needs a fixed point (branch, tag, or commit), reviews committed and in-scope uncommitted work along Standards and Spec axes, and changes no files. Accepted fixes return to authorized implementation and affected checks; full review remains user-invoked.
-8. **`/jor-pr`** writes the PR body: the smallest useful visual, actual before/after evidence, and merge danger. It does not commit, push, open, or merge a PR.
+8. **`/jor-pr`** drafts the PR title and body from the current change, branch commits, and actual evidence. It follows the repository template, or uses the smallest useful visual, before/after evidence, and merge danger. It does not commit, push, open, or merge a PR.
 9. **Use `/jor-retro` or `/jor-handoff` when needed.** `/jor-retro` proposes prevention for evidenced mistakes: code structure, automated checks, guidance, then human review. It makes no edits. Accepted code or check changes go to `/jor-implement`; accepted guidance changes go to `/jor-writing-for-agents`. `/jor-handoff` returns an attachment or the full Markdown in chat, with required local-only context for a different or unknown environment; it keeps a temporary local copy.
 
 ## One-time setup per project

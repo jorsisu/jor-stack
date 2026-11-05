@@ -81,7 +81,7 @@ flowchart TB
 
     subgraph deliveryStage["6. Prepare delivery"]
         direction TB
-        pr("jor-pr<br/>Prepare PR body"):::step
+        pr("jor-pr<br/>Prepare PR title and body"):::step
         publish("Separate authorization:<br/>commit, push, open or merge PR"):::step
         pr --> publish
     end

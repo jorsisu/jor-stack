@@ -128,7 +128,7 @@ flowchart TB
 
     subgraph deliveryStage["6. Prepare delivery"]
         direction TB
-        pr("jor-pr<br/>Prepare PR body"):::step
+        pr("jor-pr<br/>Prepare PR title and body"):::step
         publish("Separate authorization:<br/>commit, push, open or merge PR"):::step
         pr --> publish
     end
@@ -171,7 +171,7 @@ The same diagram source is kept in [docs/flow.mmd](docs/flow.mmd).
 3. **Choose by uncertainty and scope.** Use `/jor-bugfix` when a bug's cause is unknown. Diagnose it before planning a larger fix. Use `/jor-implement` for one clear change, including a bug fix whose cause and intended change are established. When understood work needs several deliverables, use `/jor-to-spec` to capture agreed requirements and test seams in `.scratch/<feature-slug>/spec.md`. Then `/jor-to-tickets` proposes a breakdown and writes one file per ticket after approval under `.scratch/<feature-slug>/issues/`. Run `/jor-get-ready` for each ticket whose blockers are complete and choose its next step from the findings. These files do not create or change Jira issues.
 4. **Keep changes within the authorized scope.** A direct implementation request supplies authorization for its stated scope; an investigation-only request ends at the findings or proposal until you authorize implementation. If diagnosis reveals several deliverables or a wider fix, propose the spec-and-ticket path before expanding the work. Use `/jor-prototype` when a design question needs exploration, then authorize production edits for the chosen design.
 5. **Automatic peer review, then optional browser and full review.** After checks pass, `/jor-implement` and `/jor-bugfix` follow [jor-peer-review](skills/jor-peer-review/SKILL.md) without another request. One independent, read-only agent reviews the task's changes and directly affected code for concrete bugs, regressions, and missed requirements; if subagents are unavailable, the current agent performs the same review and labels it self-review. The main agent assesses findings, fixes valid issues within scope, reruns affected checks, and requests one focused recheck if fixes were made. Report remaining findings after that limit. No base commit or full standards audit is required. Run `/jor-browser-review` when requested. If browser findings need code changes, use an authorized implementation pass with its checks and peer review, then repeat the requested browser check. For large changes, optionally request full `/jor-review` after browser findings and fixes are settled; if browser review was skipped, full review can follow peer review directly.
-6. **Prepare delivery.** `/jor-pr` writes the PR body from the current change and actual evidence. It does not commit, push, open, or merge a PR. Request those actions separately. Use `/jor-retro` for a useful lesson and `/jor-handoff` when work continues elsewhere; neither is a required step for every change.
+6. **Prepare delivery.** `/jor-pr` drafts the PR title and body from the current change, branch commits, and actual evidence. It does not commit, push, open, or merge a PR. Request those actions separately. Use `/jor-retro` for a useful lesson and `/jor-handoff` when work continues elsewhere; neither is a required step for every change.
 
 ## Verification workflow
 
@@ -255,7 +255,7 @@ Invoke implementation or bugfix manually; peer review runs automatically before 
 | Automatic peer review | `/jor-peer-review` | One independent, read-only agent checks the task's changes and directly affected code; the current agent performs a labeled self-review if subagents are unavailable. The main agent assesses findings, fixes valid issues within scope, reruns affected checks, and requests one focused recheck if needed. Report anything unresolved. |
 | Check UI after peer review, when requested | `/jor-browser-review` | Prefer an independent reviewer. Use the project's health check, feature map, and breakpoints to check real interactions, layout, overflow, console errors, and failed requests. Return evidence and exact URLs for human verification. |
 | Optional final full review for large changes | `/jor-review` | Run only when requested, after any requested browser review and fixes, before PR preparation. Supply a fixed point. Review committed changes plus staged, unstaged, and in-scope untracked files. Report Standards and Spec findings separately; Spec uses the ticket, spec, or current request. This read-only review does not execute or fix the feature. |
-| Prepare delivery | `/jor-pr` | Write the PR body with the smallest useful visual, before/after evidence, rollback risk, and blast radius. |
+| Prepare delivery | `/jor-pr` | Draft title and body from commits and current change; follow the repository template or show a visual, before/after evidence, and merge danger. |
 
 Implementation closeout reports what was checked, the peer-review outcome, exact commands, observed results, evidence paths where applicable, and blocked or unverified scope. Re-run affected checks after later edits. Missing subagents or unresolved findings are reported as peer-review limits.
 
