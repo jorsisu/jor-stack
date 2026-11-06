@@ -4,7 +4,7 @@ description: "Draft a PR title or body from the current change, branch commits, 
 disable-model-invocation: true
 metadata:
   based-on: "mattpocock/skills skills/engineering/pr @ e484a8095543718ced436b9b49a8160ed4554000 (SKILL.md, CREDITS.md)"
-  credits: "Summary visuals from Dex Horthy's show-me skill (Humanlayer), https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md; see CREDITS.md"
+  credits: "Optional visual guidance inspired by Dex Horthy's show-me skill (Humanlayer), https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md; see CREDITS.md"
   merged-from: "Jorge's generate-pr-message skill"
 ---
 
@@ -15,165 +15,16 @@ Draft a PR title and body in chat by default. If the user asks for only one, dra
 ## Draft
 
 1. Use the user's stated base, then an existing PR's base if available, then the repository's default branch. When revising an open PR, read its title and body and preserve still-relevant context. Inspect commits unique to the branch, reading subjects and short bodies as needed. Check the branch diff, staged and unstaged changes, and in-scope untracked files. Use `git` for local history and `gh` for existing PR context when available under repository rules. If no base resolves, use available changes without claiming full branch coverage.
-2. For the title, write one concise line covering the relevant changes. In the body, summarize all relevant commits and include observed evidence the commits cannot provide. If commit subjects start with issue codes such as `ABC-123`, include each relevant code with its change in the body. Keep multiple codes distinct and use the template's issue field when it has one.
-3. Before presenting, check that the requested title or body is copy-paste-ready Markdown, covers the relevant changes, follows the repository template, and labels unverified evidence. Use `##` headings in the fallback body below; do not override a repository template's headings. Output only the requested PR artifact.
+2. For the title, write one concise line covering the relevant changes. In the body, cover relevant changes across commits without listing each commit. Include observed evidence the commits cannot provide. If commit subjects start with issue codes such as `ABC-123`, include each relevant code with its change in the body. Keep multiple codes distinct and use the template's issue field when it has one.
+3. Before presenting, check that the requested title or body is copy-paste-ready Markdown, explains the change in plain language, follows the repository template, and labels unverified evidence. Output only the requested PR artifact.
 
-Use this template for writing the PR body:
+## Body
 
-```markdown
-## Summary
+Without a repository template, use H2 Summary and Verification headings. Add Risks only when a material risk or follow-up affects the merge decision. Use the project's domain terms from GLOSSARY.md when it exists.
 
-<diagram, diff-sketch, or tree>
+- **Summary:** In one or two sentences, state the problem, change, and user-visible result. Lead with plain language.
+- **Verification:** Name the relevant checks that ran, their results, and the environment or surface. Keep UAT, Storybook, local, and production evidence distinct. When environments differ, list the original observation and local check separately without Before/After labels. Include measurements only when they define acceptance or demonstrate the fault. State remaining unverified behavior.
+- **Risks:** When material, name the affected scope and remaining verification in plain language. Do not use fixed Door or Blast Radius labels.
+- **Visuals:** Use a diagram or diff sketch when requested or when it explains complex behavior more clearly than prose. Put the plain summary first. Label an illustrative sketch so readers do not mistake it for the actual code diff.
 
-## Evidence
-
-- **Before:** <screenshot/output/failing test run>
-  **After:** <screenshot/output/passing test run>
-
-## Merge Danger
-
-**Door:** <one-way or two-way>
-
-<optional: description>
-
-**Blast Radius:** <one-word description>
-
-<optional: potential ramifications of merge>
-```
-
-## Sections
-
-Skip all preambles and keep prose brief. Use the user's domain language from `GLOSSARY.md`, if it exists.
-
-### Summary
-
-Pick the smallest view that makes the key point clear.
-
-- Show logic or an algorithm as pseudocode:
-
-```text
-on(save)
-  if content is unchanged
-    return cached result
-  write new content
-  return fresh result
-```
-
-- Show runtime control flow as a call tree:
-
-```text
-submitForm
-  createSession
-    persistPrompt
-    launchAgent
-  navigateToSession
-```
-
-- Show UI structure as a component tree, including state and module boundaries that matter:
-
-```text
-<SessionPage> (apps/example/src/routes/session.tsx)
-  useSessionEvents()
-  <SessionToolbar>
-    <RunSkillButton> (packages/ui)
-```
-
-- Show file responsibility or a broad refactor as a shallow file tree:
-
-```text
-src/
-├── commands/       # parses user actions
-├── sessions/       # owns session state
-└── transport/      # sends API requests
-```
-
-- Show component interaction, control flow, or data flow with Mermaid:
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant UI
-    participant Daemon
-    User->>UI: choose command
-    UI->>Daemon: send expanded prompt
-    Daemon-->>UI: stream result
-```
-
-- Use `diff` when the point is what changes and the surrounding shape already exists. Match the diff shape to the topic.
-
-For a component change:
-
-```diff
- <SessionPage>
-   useSessionEvents()
-   <SessionToolbar>
-+    <RunSkillButton />
-   <SessionTimeline>
-+    <SkillResultCard />
-```
-
-For a file-layout change:
-
-```diff
- src/
- ├── commands/
-+│   └── show-me.ts       # expands the slash command
- ├── sessions/
--└── transport.ts
-+└── transport/
-+    ├── client.ts
-+    └── stream.ts
-```
-
-For a call-tree or call-stack change:
-
-```diff
- submitForm
-   createSession
-     persistPrompt
-+    expandSkillMention
-     launchAgent
--  navigateToSession
-+  navigateToSession
-+    subscribeToEvents
-```
-
-For a state or control-flow change:
-
-```diff
- on(save)
--  write content
-+  if content is unchanged
-+    return cached result
-+  write new content
-+  invalidate cache
-```
-
-- Show the whole block when most of it is new, when omitted context would hide ownership or order, or when the user needs a copyable target shape:
-
-```ts
-function expandSkill(command: string): string {
-  const skillName = command.slice(1);
-  return `use the ${skillName} skill`;
-}
-```
-
-#### Guidance
-
-Place each visual next to the short text it supports. Keep only the calls, files, props, states, and boundaries needed to answer the user's current question or the options to resolve the current discussion point.
-
-You may use one of these, you may use several, it is unlikely you will use all of them. Use your judgement and don't overwhelm the user.
-
-### Evidence
-
-Concrete evidence that the change works. Show a before and after.
-
-Screenshots are S-tier - when the environment is set up for it and the change is visual. Reuse breakpoint screenshots already taken in a browser review, or saved under `.scratch/verify/`.
-
-Execution-based evidence is A-tier: actual test results and console output. Name the exact check and its observed before/after results. Label illustrative pseudocode as illustrative; it is not execution proof. Do not start browser checks or dev servers just to fill the body unless the user requested them.
-
-### Merge Danger
-
-Describe whether it's a one-way or two-way door. You can walk back through two-way doors, but not one-way doors. A PR that is cheap to roll back is lower risk. Changes that involve destructive actions or hard-to-reverse decisions are one-way doors.
-
-The blast radius is the potential impact or scope of the changes introduced by this PR. Consider all possibilities. Examples are layout shift, breakages for consumers, mobile responsiveness, etc.
+Reuse existing screenshots when useful. Do not start browser checks or development servers just to fill the body.
