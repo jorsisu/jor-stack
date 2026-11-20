@@ -23,7 +23,7 @@ Use this template for writing the PR body:
 ```markdown
 ## Summary
 
-<diagram, diff-sketch, or tree>
+- <brief summary of changes>
 
 ## Evidence
 
@@ -47,7 +47,7 @@ Skip all preambles and keep prose brief. Use the user's domain language from `GL
 
 ### Summary
 
-Pick the smallest view that makes the key point clear.
+Use concise bullets by default. Do not include diffs, diff sketches, or `+`/`-` before/after lists. Add a visual below only when it helps explain the change.
 
 - Show logic or an algorithm as pseudocode:
 
@@ -97,56 +97,6 @@ sequenceDiagram
     User->>UI: choose command
     UI->>Daemon: send expanded prompt
     Daemon-->>UI: stream result
-```
-
-- Use `diff` when the point is what changes and the surrounding shape already exists. Match the diff shape to the topic.
-
-For a component change:
-
-```diff
- <SessionPage>
-   useSessionEvents()
-   <SessionToolbar>
-+    <RunSkillButton />
-   <SessionTimeline>
-+    <SkillResultCard />
-```
-
-For a file-layout change:
-
-```diff
- src/
- ├── commands/
-+│   └── show-me.ts       # expands the slash command
- ├── sessions/
--└── transport.ts
-+└── transport/
-+    ├── client.ts
-+    └── stream.ts
-```
-
-For a call-tree or call-stack change:
-
-```diff
- submitForm
-   createSession
-     persistPrompt
-+    expandSkillMention
-     launchAgent
--  navigateToSession
-+  navigateToSession
-+    subscribeToEvents
-```
-
-For a state or control-flow change:
-
-```diff
- on(save)
--  write content
-+  if content is unchanged
-+    return cached result
-+  write new content
-+  invalidate cache
 ```
 
 - Show the whole block when most of it is new, when omitted context would hide ownership or order, or when the user needs a copyable target shape:
