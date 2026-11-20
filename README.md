@@ -399,6 +399,10 @@ Existing files, folders, and links are preserved. After a skill rename, replace 
 
 These are standalone skills. Cursor also discovers the shared directory; use one installation method per app to avoid duplicate entries. Codex does not load this repository's `mcp.json` through skill links: browser skills require a separately configured Chrome DevTools MCP server.
 
+### T3 Code, Claude Code, and Antigravity
+
+For standalone skill-link setup in T3 Code (Claude and Antigravity models), Claude Code, and Antigravity, see [the T3 Code, Claude Code, and Antigravity install guide](docs/t3code-install.md).
+
 ## After install
 
 1. Open a project and run the command for your app:
