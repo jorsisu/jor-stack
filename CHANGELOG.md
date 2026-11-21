@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- `jor-grill-me` states the one-question-per-message rule as its own section: count the `❓` markers before sending, keep the design tree private, and never list, count, or tease the decisions queued behind the current one. Adds the Codex invocation note the other skills carry.
+
 - The stack validator and its tests read files as UTF-8 instead of trusting the ambient locale, so they no longer fail with `invalid byte sequence in US-ASCII` in shells without `LANG` or `LC_ALL`.
 
 - Reviewed the four pstack-sourced skills against upstream `main` (2026-11-21). `jor-domain` adopts upstream's shortened text while keeping the no-structure-fits fallback, the module-ownership prescription, and temporal decomposition as a skip-signal; `jor-teach` keeps its body because upstream only removed a sentence this trim had already dropped; `jor-verify` and `jor-verify-maintain` were already current.

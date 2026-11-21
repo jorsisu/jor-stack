@@ -6,13 +6,29 @@ metadata:
   based-on: "mattpocock/skills skills/productivity/grill-me @ fcf0071560d32913c9d4f820e0d7ca467c881619 + skills/productivity/grilling @ 95249b0b49782349740fd9b8c6ce32b4e59e497a"
 ---
 
-Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
 
-Work the tree **one question at a time**. The **frontier** is every unresolved decision whose prerequisites are already settled. Choose the question that unblocks the most important next decisions. Ask only that question, give your recommended answer, then wait for the user's response.
+Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it. That tree is your private working model. Never render it to the user.
 
-Each question must cover one decision. Do not bundle subquestions, preview a list of upcoming questions, or send another question while the current one is unanswered. If using a question tool, send exactly one question per call and wait for the response before asking another.
+Work the tree **one question at a time**. The **frontier** is every unresolved decision whose prerequisites are already settled. Choose the one question that unblocks the most important next decisions. Ask only that question, give your recommended answer, then wait for the user's response.
 
-Format each question like so, increasing its number only when moving to a new decision:
+## One question per message
+
+**Every reply you send contains exactly one question.** Before sending, count the `❓` markers in your draft. If there is more than one, keep the first and delete the rest. They belong to later turns, not this one.
+
+This holds however many frontier decisions are ready. A settled prerequisite makes a question *askable*, never *askable now*. Independent questions still queue behind the current one.
+
+Never, in any message:
+
+- send two questions, whether numbered, bulleted, or separated by rules
+- bundle subquestions inside one question, or append "and also", "plus", "same question for"
+- list, name, count, or tease the decisions you plan to raise next, such as "then we'll cover scope, budget, and timing"
+- summarize the open frontier, or say how many questions remain
+- send a question while an earlier one is still unanswered
+
+If using a question tool, send exactly one question per call and wait for the response before asking another.
+
+Format the question like so, increasing its number only when moving to a new decision:
 
 ```
 ❓ **Q1** - **<question title>**: <one focused question, with choices if useful>
@@ -20,7 +36,9 @@ Format each question like so, increasing its number only when moving to a new de
 ➡️ <your recommended answer>
 ```
 
-Word each question so "yes" accepts your recommended answer.
+Word the question so "yes" accepts your recommended answer. End the message there, with no trailing preview of what comes next.
+
+Findings that motivate the question belong above it, as briefly as they can be stated. A long preamble is not a license to add a second question.
 
 If the user asks for an explanation, challenges the recommendation, or gives an unclear answer, stay on the current decision. Answer their follow-up and clarify only that decision if needed. Do not treat a follow-up or silence as acceptance. Once the user settles the decision, update the tree and choose the next question from the new frontier.
 
