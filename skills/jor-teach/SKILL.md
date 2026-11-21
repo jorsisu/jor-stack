@@ -3,7 +3,7 @@ name: jor-teach
 description: "Explain a body of work plainly so a person actually understands it: what it is, how it works, and why it's built that way. Use for 'teach me this', 'help me really understand X', 'explain this change or subsystem to me'."
 disable-model-invocation: true
 metadata:
-  based-on: "cursor/plugins pstack/skills/teach @ d7cde2b84eadbcd6fd890302c876f4436ccb6d82 (heavy trim; no how/why/unslop dependency)"
+  based-on: "cursor/plugins pstack/skills/teach @ bf0c7cd80abdbf7fe47b634978a7d1b4071f71a7 (heavy trim; no how/why/unslop dependency)"
 ---
 
 # Teach

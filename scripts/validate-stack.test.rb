@@ -47,7 +47,7 @@ Dir.mktmpdir('jor-stack-validation-') do |directory|
   validate_stack(fixture)
   cases.each do |label, relative, pattern, replacement, expected|
     path = fixture.join(relative)
-    original = path.read
+    original = read_text(path)
     changed = original.gsub(pattern, replacement)
     raise "#{label}: fixture mutation did not apply" if changed == original
     path.write(changed)
@@ -63,7 +63,7 @@ Dir.mktmpdir('jor-stack-validation-') do |directory|
     raise "#{label}: wrong failure: #{failure.message}" unless failure.message.match?(expected)
     validate_stack(fixture)
   end
-  fixture.join('LICENSE').write(root.join('LICENSE').read.gsub(/\s+/, "\r\n"))
+  fixture.join('LICENSE').write(read_text(root.join('LICENSE')).gsub(/\s+/, "\r\n"))
   validate_stack(fixture)
 end
 puts "PASS: #{cases.length} invalid fixtures rejected; restored fixtures and rewrapped license pass"

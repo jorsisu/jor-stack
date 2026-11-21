@@ -48,7 +48,7 @@ If the user wants to check that you understood them, suggest **`/jor-restate`** 
 - **`/jor-grill-me`**: a relentless interview that sharpens an idea, plan, or design. Use it when you start from an idea rather than a ticket. It writes no files. When decisions are unclear, `jor-get-ready` reads `../jor-grill-me/SKILL.md` and follows it.
 - **`/jor-restate`**: an understanding check. Restates the user's goal and problem, then stops.
 - **`/jor-design`**: deep-module vocabulary (module, interface, depth, seam, adapter, leverage, locality) for shaping a module's interface while you shape code.
-- **`/jor-domain`**: encode the domain in a data structure (state machine, discriminated union, lookup table) instead of scattered conditionals, while you shape code.
+- **`/jor-domain`**: encode the domain in a data structure (state machine, discriminated union, registry) instead of scattered conditionals, while you shape code.
 - **`/jor-teach`**: explain a body of work plainly so the user actually understands it.
 - **`/jor-verify-maintain`**: keep the `verify-<project>` skill and its feature map honest. Recommend the user run it on demand or after UI-heavy sprints. It looks in `.agents/skills/verify-*/`, then `.cursor/skills/verify-*/`.
 - **`/jor-mode`**: this router.
