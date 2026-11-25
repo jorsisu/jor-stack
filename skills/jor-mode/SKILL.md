@@ -47,6 +47,7 @@ If the user wants to check that you understood them, suggest **`/jor-restate`** 
 - **`/jor-tdd`**: test-first development at existing public or user-agreed seams, one failing test then the smallest implementation that passes. `jor-implement` reads it for test-first work.
 - **`/jor-grill-me`**: a relentless interview that sharpens an idea, plan, or design. Use it when you start from an idea rather than a ticket. It writes no files. When decisions are unclear, `jor-get-ready` reads `../jor-grill-me/SKILL.md` and follows it.
 - **`/jor-restate`**: an understanding check. Restates the user's goal and problem, then stops.
+- **`/jor-reframe`**: teaches the expert words for what the user is building, borrows terms from neighboring fields, and rewrites their description with them. Changes no files. Use it before `/jor-grill-me` or `/jor-to-spec` when the user has an idea but not the words for it.
 - **`/jor-design`**: deep-module vocabulary (module, interface, depth, seam, adapter, leverage, locality) for shaping a module's interface while you shape code.
 - **`/jor-domain`**: encode the domain in a data structure (state machine, discriminated union, registry) instead of scattered conditionals, while you shape code.
 - **`/jor-teach`**: explain a body of work plainly so the user actually understands it.
