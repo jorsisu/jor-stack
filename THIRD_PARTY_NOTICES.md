@@ -46,7 +46,7 @@ SOFTWARE.
 - Source: [cursor/plugins pstack/LICENSE](https://github.com/cursor/plugins/blob/24bd6eb895d63a6e76fabfea2cb344384d177d79/pstack/LICENSE)
 - License commit: `24bd6eb895d63a6e76fabfea2cb344384d177d79` (2026-05-23, "Add pstack plugin")
 - Copyright: Lauren Tan
-- Used by: `jor-domain`, `jor-teach`, `jor-verify`, `jor-verify-maintain`
+- Used by: `jor-domain`, `jor-reframe`, `jor-teach`, `jor-verify`, `jor-verify-maintain`
 
 ```
 MIT License

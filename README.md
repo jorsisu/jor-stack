@@ -18,21 +18,21 @@ In Codex, replace `/` with `$`, or select the namespaced skill from the picker. 
 
 ## Skills and triggers
 
-**3 automatic, 20 manual.**
+**3 automatic, 21 manual.**
 
 | Trigger | Skills |
 | --- | --- |
 | Automatic — agent guidance | `jor-writing-for-agents` |
 | Automatic — after implementation checks | `jor-peer-review` |
 | Automatic — stack audit requests | `jor-dr-stack` |
-| Manual — planning | `jor-mode`, `jor-get-ready`, `jor-restate`, `jor-grill-me`, `jor-to-spec`, `jor-to-tickets` |
+| Manual — planning | `jor-mode`, `jor-get-ready`, `jor-restate`, `jor-reframe`, `jor-grill-me`, `jor-to-spec`, `jor-to-tickets` |
 | Manual — implementation | `jor-implement`, `jor-tdd`, `jor-bugfix`, `jor-design`, `jor-domain`, `jor-prototype` |
 | Manual — verification | `jor-browser-review`, `jor-review`, `jor-verify`, `jor-verify-maintain` |
 | Manual — delivery and explanation | `jor-pr`, `jor-retro`, `jor-handoff`, `jor-teach` |
 
 Commands below use Cursor's `/jor-...` syntax. In Codex, use `$jor-...`, or `$jor-stack:jor-...` when the picker shows the plugin namespace. For example: `/jor-bugfix`, `$jor-bugfix`, or `$jor-stack:jor-bugfix`.
 
-`jor-writing-for-agents` can be selected automatically for agent guidance work. `jor-peer-review` runs automatically after `jor-implement` or `jor-bugfix` checks pass, and can also be requested explicitly. `jor-dr-stack` can be selected for stack consistency audit requests. These three allow implicit invocation in Cursor and Codex. The other 20 skills set `disable-model-invocation: true` for Cursor and `policy.allow_implicit_invocation: false` in `agents/openai.yaml` for Codex. A skill can read supporting instructions within the current task; implementation and bugfix follow the linked peer-review instructions before closeout. The user invokes other workflow steps.
+`jor-writing-for-agents` can be selected automatically for agent guidance work. `jor-peer-review` runs automatically after `jor-implement` or `jor-bugfix` checks pass, and can also be requested explicitly. `jor-dr-stack` can be selected for stack consistency audit requests. These three allow implicit invocation in Cursor and Codex. The other 21 skills set `disable-model-invocation: true` for Cursor and `policy.allow_implicit_invocation: false` in `agents/openai.yaml` for Codex. A skill can read supporting instructions within the current task; implementation and bugfix follow the linked peer-review instructions before closeout. The user invokes other workflow steps.
 
 Skill sources and exact upstream commits are in [UPSTREAM.md](UPSTREAM.md).
 
@@ -296,6 +296,7 @@ Maintenance runs on request. It is not required after every small change.
 - **`/jor-tdd`** guides test-first development: one failing test, then the smallest implementation that passes, at existing public or user-agreed seams. `jor-implement` reads it when the work calls for test-first development.
 - **`/jor-grill-me`** when you start from an idea instead of a ticket. It interviews you until every decision is settled.
 - **`/jor-restate`** when you want to check the agent understood your goal before it starts.
+- **`/jor-reframe`** when you have an idea but not the expert words for it. It teaches the terms, borrows from neighboring fields, and rewrites your description, ready for `/jor-grill-me` or `/jor-to-spec`.
 - **`/jor-design`** and **`/jor-domain`** while shaping code. `/jor-design` gives the vocabulary for module interfaces and seams. `/jor-domain` pushes logic into the right data structure instead of more `if` branches.
 - **`/jor-mode`** when you don't remember which skill fits.
 - **`/jor-teach`** when you want to really understand a change or subsystem.
@@ -353,7 +354,7 @@ Browser workflows also need a supported Node.js LTS release, npm/npx, current st
    ```
 
 2. In Cursor's Command Palette, run **Developer: Reload Window**.
-3. Open **Customize** and confirm the 23 `jor-` skills, including `jor-peer-review` and `jor-dr-stack`, and the `chrome-devtools` MCP server are listed.
+3. Open **Customize** and confirm the 24 `jor-` skills, including `jor-peer-review` and `jor-dr-stack`, and the `chrome-devtools` MCP server are listed.
 
 If you already have a checkout, open a terminal at its root and run the block from `mkdir -p` onward. The commands stop if the install folder already exists. To replace an existing install, move only `~/.cursor/plugins/local/jor-stack` to a backup location outside `~/.cursor/plugins/local`, then run those export commands from the checkout containing the desired committed version. Keep the backup until the new install passes [verification](#after-install).
 

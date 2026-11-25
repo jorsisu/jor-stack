@@ -26,7 +26,7 @@ Keep versions in `plugin.json`, `.cursor-plugin/plugin.json`, and `.cursor-plugi
 
 Follow the README's [local installation steps](../README.md#cursor) using a committed export. Record the commit, Cursor version, operating system, and results:
 
-- Confirm all 23 skills and the Chrome DevTools MCP configuration appear in Customize. Verify no personal rules are included.
+- Confirm all 24 skills and the Chrome DevTools MCP configuration appear in Customize. Verify no personal rules are included.
 - Invoke `/jor-mode` and `/jor-get-ready` on a harmless sample project; confirm skill references resolve and investigation does not edit files.
 - Test one authorized implementation and its peer-review or self-review path. Manual skills should not run without the user's request.
 - With an explicit browser-check request, confirm the MCP server starts with the bundled privacy flags and completes a harmless check in an isolated context. Confirm no development server is started without a request.

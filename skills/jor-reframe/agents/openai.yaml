@@ -1,0 +1,5 @@
+interface:
+  display_name: "Jor Reframe"
+  short_description: "Learn the expert words for what you're building"
+policy:
+  allow_implicit_invocation: false
