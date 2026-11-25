@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor To Spec"
+  short_description: "Turn the conversation into a private spec"
 policy:
   allow_implicit_invocation: false

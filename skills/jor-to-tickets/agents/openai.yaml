@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor To Tickets"
+  short_description: "Break a plan or spec into tracer-bullet tickets"
 policy:
   allow_implicit_invocation: false

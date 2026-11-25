@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Added branded jor-stack logo assets, then kept only `assets/jor-stack-logo.svg` (now the Cursor manifest `logo`) and `assets/jor-stack-with-text.png`. Removed the unused drafts and duplicates (about 56 MB that every export shipped) and the tracked `.DS_Store` files; added a `.gitignore` for `.DS_Store`.
+
+- `jor-pr` summaries use concise bullets by default, with an optional visual and no diff sketches.
+
+- Added the T3 Code, Claude Code, and Antigravity install guide. Antigravity setup now links each `jor-*` skill individually instead of symlinking all of `~/.agents/skills`, and notes that an existing directory symlink exposes every skill there.
+
+- Skills that write `.scratch/` or private verify skills resolve Git's local exclude file with `git rev-parse --git-path info/exclude` instead of assuming `.git/info/exclude`, so they work in worktrees.
+
+- Removed references to a private tracker skill; ticket sources are described as pasted or loaded through a tracker integration.
+
+- Every skill carries the Codex invocation note and a Codex `interface` display name and short description. `jor-tdd` reports refactoring candidates in its closeout instead of routing them to the optional full review; `jor-get-ready` leaves browser checks to `/jor-browser-review`.
+
 - `jor-grill-me` states the one-question-per-message rule as its own section: count the `❓` markers before sending, keep the design tree private, and never list, count, or tease the decisions queued behind the current one. Adds the Codex invocation note the other skills carry.
 
 - The stack validator and its tests read files as UTF-8 instead of trusting the ambient locale, so they no longer fail with `invalid byte sequence in US-ASCII` in shells without `LANG` or `LC_ALL`.

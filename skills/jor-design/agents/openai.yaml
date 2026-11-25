@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Design"
+  short_description: "Design deep modules with clean seams"
 policy:
   allow_implicit_invocation: false

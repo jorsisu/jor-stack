@@ -37,12 +37,11 @@ for skill in "$HOME/.agents/skills"/jor-*; do
   fi
 done
 
-# 3. Antigravity: link ~/.gemini/config/skills to ~/.agents/skills
-mkdir -p "$HOME/.gemini/config"
+# 3. Antigravity: link each jor-* skill into ~/.gemini/config/skills/ (leaves an existing symlink alone)
 gemini_skills="$HOME/.gemini/config/skills"
-if [ ! -e "$gemini_skills" ] && [ ! -L "$gemini_skills" ]; then
-  ln -s "$HOME/.agents/skills" "$gemini_skills"
-elif [ -d "$gemini_skills" ] && [ ! -L "$gemini_skills" ]; then
+if [ -L "$gemini_skills" ]; then
+  echo "Skipping $gemini_skills: already symlinked to $(readlink "$gemini_skills")"
+elif mkdir -p "$gemini_skills"; then
   for skill in "$HOME/.agents/skills"/jor-*; do
     [ -e "$skill" ] || continue
     target="$gemini_skills/$(basename "$skill")"
@@ -50,8 +49,6 @@ elif [ -d "$gemini_skills" ] && [ ! -L "$gemini_skills" ]; then
       ln -s "$skill" "$target"
     fi
   done
-elif [ -L "$gemini_skills" ] && [ "$(readlink "$gemini_skills")" != "$HOME/.agents/skills" ]; then
-  echo "Skipping $gemini_skills: already symlinked to $(readlink "$gemini_skills")"
 fi
 
 # 4. Existing T3 Code Antigravity profiles (if any exist yet)
@@ -105,6 +102,7 @@ Then start a new thread (or reload T3 Code) and type `/jor` in both a Claude thr
 ## Notes and troubleshooting
 
 - **Keep the checkout path stable:** symlinks resolve back to this repository, so edits here take effect immediately and moving the repo breaks the links.
-- **Adding or renaming skills later:** if `~/.gemini/config/skills` is a directory symlink to `~/.agents/skills`, Antigravity sees new skills in `~/.agents/skills` automatically; Claude (`~/.claude/skills`) still needs a symlink for any new skill folder. Re-run the setup block to add missing links, and remove stale links manually after a rename.
+- **Adding or renaming skills later:** re-run the setup block to add missing links in all three targets, and remove stale links manually after a rename.
+- **Existing `~/.gemini/config/skills` symlink:** setup leaves it unchanged. If it points to `~/.agents/skills`, Antigravity and every T3 Code Antigravity profile see every skill there, not only `jor-*`.
 - **Avoid duplicates in Cursor and Codex:** Cursor and Codex also read `~/.agents/skills/`. Use one install method per app; see [Install](../README.md#install) for plugin installs.
 - **Why not `skills.json` for Antigravity:** Antigravity's runtime reads `skills.json`, but T3 Code's `/` command picker scans `~/.gemini/config/skills/` directly and ignores `skills.json`.

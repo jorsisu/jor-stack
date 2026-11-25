@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Verify Maintain"
+  short_description: "Keep a project's verification skill current"
 policy:
   allow_implicit_invocation: false

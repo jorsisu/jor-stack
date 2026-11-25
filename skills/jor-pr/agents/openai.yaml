@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor PR"
+  short_description: "Draft a PR title or body from the change"
 policy:
   allow_implicit_invocation: false

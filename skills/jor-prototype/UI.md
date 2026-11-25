@@ -102,7 +102,7 @@ For browser runs, read and follow [browser session safety](../jor-browser-review
 
 - Read `.agents/skills/verify-<project>/SKILL.md` and follow it: run its `doctor` first, then its `breakpoints` command for each `?variant=` URL. If that file is missing, read `.cursor/skills/verify-<project>/SKILL.md` and follow that instead. If neither file exists, tell the user to run `/jor-verify` and use Chrome DevTools MCP directly at the same widths.
 - Capture every variant at all five breakpoints: **360, 768, 1280, 1440, 1920** px wide. Hide or ignore the floating switcher in the comparison if it covers content.
-- Save uncommitted prototype screenshots to `.scratch/prototype-<name>/`, named `<variant>-<width>.png`. Keep `.scratch/` in `.git/info/exclude`; never edit the shared `.gitignore`.
+- Save uncommitted prototype screenshots to `.scratch/prototype-<name>/`, named `<variant>-<width>.png`. Keep `.scratch/` in Git's local exclude file (`git rev-parse --git-path info/exclude`); never edit the shared `.gitignore`.
 - Lay them out for comparison: one row per breakpoint, one column per variant (a markdown table of image links, or a single contact-sheet HTML file next to the screenshots). Note anything that breaks at a breakpoint: overflow, wrapped navigation, hidden primary actions, console errors.
 - Start, stop, or restart dev servers only on explicit request. If the route isn't reachable and startup is not authorized, report the URL, the repo's start command, and what's missing.
 

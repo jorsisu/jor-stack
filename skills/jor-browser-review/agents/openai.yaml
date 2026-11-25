@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Browser Review"
+  short_description: "Review the finished change in the browser"
 policy:
   allow_implicit_invocation: false

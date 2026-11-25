@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Review"
+  short_description: "Run an optional full review for large changes"
 policy:
   allow_implicit_invocation: false

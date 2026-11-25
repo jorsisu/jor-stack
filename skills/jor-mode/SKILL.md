@@ -22,7 +22,7 @@ If the user wants to check that you understood them, suggest **`/jor-restate`** 
 
 ## The main flow: task → PR draft
 
-1. **Load the task.** Start with the ticket in the conversation (for example via `/twg-jira`) or the user's direct request.
+1. **Load the task.** Start with the ticket in the conversation (pasted or loaded through a tracker integration) or the user's direct request.
 2. **Check context.** If the request and relevant code are already understood, skip `/jor-get-ready` and choose the route below. Otherwise, it reads the task, discussion, project rules and code, reproduces the bug or confirms the gap, and returns a proposal. It changes nothing.
 3. **Choose by uncertainty and scope:**
    - **Unknown bug cause** → **`/jor-bugfix`**: build a tight feedback loop, reproduce, diagnose, and fix within the authorized scope. Diagnose before prescribing a spec or ticket breakdown for the fix.
@@ -59,4 +59,4 @@ A **phase** is a chunk of work inside a session: the investigation, the implemen
 
 ## Private working files
 
-Specs and tickets live in `.scratch/` inside the project. `/jor-to-spec` and `/jor-to-tickets` make sure `.scratch/` is listed in `.git/info/exclude` (git's local-only ignore) and never touch the shared `.gitignore`. These files are never committed.
+Specs and tickets live in `.scratch/` inside the project. `/jor-to-spec` and `/jor-to-tickets` make sure `.scratch/` is listed in Git's local exclude file (resolved with `git rev-parse --git-path info/exclude`) and never touch the shared `.gitignore`. These files are never committed.

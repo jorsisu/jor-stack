@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Retro"
+  short_description: "Propose ways to prevent repeated agent mistakes"
 policy:
   allow_implicit_invocation: false

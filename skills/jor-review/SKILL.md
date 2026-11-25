@@ -38,7 +38,7 @@ Stop for an empty review only when all three diffs and the in-scope untracked li
 
 Take the spec from what this workflow already produced. Don't ask the user for it:
 
-1. The ticket already loaded in the conversation (for example by `/twg-jira`), including its acceptance criteria and comments.
+1. The ticket already in the conversation (pasted or loaded through a tracker integration), including its acceptance criteria and comments.
 2. The `/jor-to-spec` file at `.scratch/<feature-slug>/spec.md`, plus the matching ticket file under `.scratch/<feature-slug>/issues/` when the work is one ticket of a larger spec.
 3. A path the user passed as an argument.
 4. The user's current request and agreed acceptance criteria, when there is no separate ticket or spec.

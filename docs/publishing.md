@@ -20,7 +20,7 @@ git diff --check
 
 Validate `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json` against Cursor's [plugin schema](https://raw.githubusercontent.com/cursor/plugins/main/schemas/plugin.schema.json) and [marketplace schema](https://raw.githubusercontent.com/cursor/plugins/main/schemas/marketplace.schema.json). Validate the portable `plugin.json` and `mcp.json` against their declared schemas. The local validator covers project invariants, not the full remote schemas.
 
-Keep versions in `plugin.json`, `.cursor-plugin/plugin.json`, and `.cursor-plugin/marketplace.json` aligned. Version 0.2.0 is recorded in the changelog; tagging and publication follow the checks below. Keep the single-entry marketplace for team imports. A logo is optional; if one is added, use an owned or licensed asset and a relative path in the Cursor manifest.
+Keep versions in `plugin.json`, `.cursor-plugin/plugin.json`, and `.cursor-plugin/marketplace.json` aligned. Version 0.2.0 is recorded in the changelog; tagging and publication follow the checks below. Keep the single-entry marketplace for team imports. The Cursor manifest's `logo` points to `assets/jor-stack-logo.svg`; replace it only with an owned or licensed asset at a relative path, and keep unused drafts out of the repository because every export ships them.
 
 ## Test the actual package
 

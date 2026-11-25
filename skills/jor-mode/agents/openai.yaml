@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Mode"
+  short_description: "Find the jor skill or flow that fits"
 policy:
   allow_implicit_invocation: false
