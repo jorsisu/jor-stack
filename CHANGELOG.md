@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- `jor-get-ready` makes step 4 an explicit gate before step 5: when product, behavior, or scope decisions cannot be settled from code and design, stop to follow `jor-grill-me` and interview the user until settled instead of bundling unresolved decisions into the proposal. Skips the interview (and lists unresolved decisions in step 5) only when the user explicitly asks for a single-turn provisional proposal without questions.
+
 - Added `jor-reframe`, adapted from pstack `reframe`: teaches the expert words for what you're building, borrows terms from neighboring fields, and rewrites your description with them. Asks for 5 to 8 terms, marks sources unverified when the session can't open links, and stops before `/jor-grill-me` or `/jor-to-spec`.
 
 - Added branded jor-stack logo assets, then kept only `assets/jor-stack-logo.svg` (now the Cursor manifest `logo`) and `assets/jor-stack-with-text.png`. Removed the unused drafts and duplicates (about 56 MB that every export shipped) and the tracked `.DS_Store` files; added a `.gitignore` for `.DS_Store`.
