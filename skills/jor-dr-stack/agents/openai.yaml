@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Dr Stack"
+  short_description: "Audit jor-stack consistency"
 policy:
   allow_implicit_invocation: true

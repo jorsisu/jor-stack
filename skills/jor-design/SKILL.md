@@ -6,6 +6,8 @@ metadata:
   based-on: "mattpocock/skills skills/engineering/codebase-design @ d80fa0f4ebe0c5714af0adf8670336065233ecc6 (SKILL.md, DEEPENING.md, DESIGN-IT-TWICE.md)"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # Codebase Design
 
 Design **deep modules**: a lot of behaviour behind a small interface, placed at a clean seam, testable through that interface. Use this language and these principles wherever code is being designed or restructured. The aim is leverage for callers, locality for maintainers, and testability for everyone.

@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor TDD"
+  short_description: "Build features or fixes test-first"
 policy:
   allow_implicit_invocation: false

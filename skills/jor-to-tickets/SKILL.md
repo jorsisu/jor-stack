@@ -61,7 +61,7 @@ Iterate until the user approves the breakdown.
 
 ### 5. Write the tickets to `.scratch/`
 
-Keep `.scratch/` out of git before writing anything. Check `.git/info/exclude` (git's local-only ignore file) for a `.scratch/` line and append one if it is missing. Never touch the shared `.gitignore`. If `.git/info/exclude` can't be found (for example in a worktree, resolve it with `git rev-parse --git-path info/exclude`), stop and tell the user rather than writing unignored files.
+Keep `.scratch/` out of git before writing anything. Resolve Git's local exclude file with `git rev-parse --git-path info/exclude` and append a `.scratch/` line if it is missing. If that fails, stop and tell the user rather than writing unignored files. Never touch the shared `.gitignore`.
 
 Write the approved tickets as one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order (blockers first). Each file's "Blocked by" lists the numbers/titles it depends on. Use the per-ticket file template below: one ticket per file, never a single combined file. Do not commit them.
 

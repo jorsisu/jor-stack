@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Handoff"
+  short_description: "Compact the conversation into a handoff document"
 policy:
   allow_implicit_invocation: false

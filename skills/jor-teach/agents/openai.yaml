@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Teach"
+  short_description: "Explain how and why a body of work works"
 policy:
   allow_implicit_invocation: false

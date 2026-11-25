@@ -6,6 +6,8 @@ metadata:
   based-on: "original by Jorge (restate)"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # Restate
 
 Use the current conversation to restate, in your own words:

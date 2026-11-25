@@ -4,6 +4,7 @@
   "version": "0.2.0",
   "description": "Front-end workflow skills for planning, implementation, review, and verification in Cursor and Codex",
   "license": "MIT",
+  "logo": "assets/jor-stack-logo.svg",
   "homepage": "https://github.com/jorsisu/jor-stack",
   "repository": "https://github.com/jorsisu/jor-stack",
   "author": {

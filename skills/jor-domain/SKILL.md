@@ -6,6 +6,8 @@ metadata:
   based-on: "cursor/plugins pstack/skills/principle-model-the-domain @ 2f87c854fe3e2fcda44ca86b46ede35aad3c46b7"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # Model the Domain
 
 Encode the domain in a data structure instead of scattering it across conditionals. The right structure makes invalid states unrepresentable and deletes branches.

@@ -20,7 +20,7 @@ The spec is a private working file: it lives at `.scratch/<feature-slug>/spec.md
 
 Check with the user that these seams match their expectations unless the same seams are already agreed in the conversation.
 
-3. Keep `.scratch/` out of git before writing anything. Check `.git/info/exclude` (git's local-only ignore file) for a `.scratch/` line and append one if it is missing. Never touch the shared `.gitignore`. If `.git/info/exclude` can't be found (for example in a worktree, resolve it with `git rev-parse --git-path info/exclude`), stop and tell the user rather than writing an unignored file.
+3. Keep `.scratch/` out of git before writing anything. Resolve Git's local exclude file with `git rev-parse --git-path info/exclude` and append a `.scratch/` line if it is missing. If that fails, stop and tell the user rather than writing an unignored file. Never touch the shared `.gitignore`.
 
 4. Pick a short kebab-case `<feature-slug>` for the feature (reuse an existing `.scratch/<feature-slug>/` if one matches). Write the spec using the template below to `.scratch/<feature-slug>/spec.md`, creating the directory if needed. Tell the user the path. Do not commit it.
 

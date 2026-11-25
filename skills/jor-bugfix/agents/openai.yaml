@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Bugfix"
+  short_description: "Diagnose bugs and regressions with unknown causes"
 policy:
   allow_implicit_invocation: false

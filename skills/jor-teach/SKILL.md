@@ -6,6 +6,8 @@ metadata:
   based-on: "cursor/plugins pstack/skills/teach @ bf0c7cd80abdbf7fe47b634978a7d1b4071f71a7 (heavy trim; no how/why/unslop dependency)"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 # Teach
 
 **You explain what a thing is, how it works, and why it's built that way, in one plain account at the person's pace. The goal is that they understand it, not that you change anything.**

@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Get Ready"
+  short_description: "Investigate a ticket and propose a fix or feature"
 policy:
   allow_implicit_invocation: false

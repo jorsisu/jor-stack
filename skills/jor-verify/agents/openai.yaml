@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Verify"
+  short_description: "Generate a project-local verification skill"
 policy:
   allow_implicit_invocation: false

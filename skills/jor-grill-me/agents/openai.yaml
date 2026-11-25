@@ -1,2 +1,5 @@
+interface:
+  display_name: "Jor Grill Me"
+  short_description: "Sharpen a plan one question at a time"
 policy:
   allow_implicit_invocation: false

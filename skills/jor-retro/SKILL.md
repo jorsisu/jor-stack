@@ -6,6 +6,8 @@ metadata:
   based-on: "mattpocock/skills skills/engineering/retro @ a7d038f6bf7f01b516408e95e2fb56e0b338fa6f"
 ---
 
+In Codex, use `$jor-...` for these commands, or `$jor-stack:jor-...` when the skill picker shows the plugin namespace.
+
 The user has asked for a **retrospective**. Propose improvements that prevent the mistakes supported by session evidence. This skill proposes changes; it does not authorize edits.
 
 ## Steps
